@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_amazon_clone_bloc/src/config/router/app_route_constants.dart';
 import 'package:flutter_amazon_clone_bloc/src/data/models/order.dart';
-import 'package:flutter_amazon_clone_bloc/src/logic/blocs/account/bloc/fetch_orders_bloc.dart';
+import 'package:flutter_amazon_clone_bloc/src/data/repositories/account_repository.dart';
+import 'package:flutter_amazon_clone_bloc/src/logic/blocs/account/fetch_orders_bloc/fetch_orders_bloc.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/widgets/account/account_screen_app_bar.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/widgets/account/keep_shopping_for.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/widgets/account/name_bar.dart';
-import 'package:flutter_amazon_clone_bloc/src/presentation/widgets/account/orders.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/widgets/account/single_product.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/widgets/account/top_buttons.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/widgets/account/wish_list.dart';
@@ -12,6 +13,7 @@ import 'package:flutter_amazon_clone_bloc/src/presentation/widgets/common_widget
 import 'package:flutter_amazon_clone_bloc/src/utils/constants/constants.dart';
 import 'package:flutter_amazon_clone_bloc/src/utils/utils.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class AccountScreen extends StatefulWidget {
   static const routeName = '/account-screen';
@@ -22,28 +24,9 @@ class AccountScreen extends StatefulWidget {
   State<AccountScreen> createState() => _AccountScreenState();
 }
 
-// List<Order>? orders;
-// final AccountServices accountServices = AccountServices();
-
 class _AccountScreenState extends State<AccountScreen> {
-  // void fetchOrders() async {
-  //   orders = await accountServices.fetchMyOrders(context: context);
-  //   orders = orders!.reversed.toList();
-  //   if (context.mounted) {
-  //     setState(() {});
-  //   }
-  // }
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   fetchOrders();
-  // }
-
   @override
   Widget build(BuildContext context) {
-    // final userProvider = Provider.of<UserProvider>(context, listen: false);
-
     return Scaffold(
       appBar: const PreferredSize(
         preferredSize: Size.fromHeight(50),
@@ -89,6 +72,7 @@ class _AccountScreenState extends State<AccountScreen> {
               ),
             ),
 
+            // your orders
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12),
               child: Column(
@@ -102,9 +86,10 @@ class _AccountScreenState extends State<AccountScreen> {
                             fontSize: 18, fontWeight: FontWeight.w400),
                       ),
                       TextButton(
-                          onPressed: () {}
-                          // Navigator.pushNamed(context, YourOrders.routeName)
-                          ,
+                          onPressed: () {
+                            context.pushNamed(
+                                AppRouteConstants.yourOrdersScreenRoute.name);
+                          },
                           child: Text(
                             'See all',
                             style: TextStyle(
@@ -133,7 +118,12 @@ class _AccountScreenState extends State<AccountScreen> {
                               itemCount: state.ordersList.length,
                               itemBuilder: (context, index) {
                                 return InkWell(
-                                  onTap: () {},
+                                  onTap: () {
+                                    context.pushNamed(
+                                        AppRouteConstants
+                                            .orderDetailsScreenRoute.name,
+                                        extra: state.ordersList[index]);
+                                  },
                                   child: Container(
                                       width: 200,
                                       margin: const EdgeInsets.all(8),
@@ -143,32 +133,26 @@ class _AccountScreenState extends State<AccountScreen> {
                                             color: Colors.black12, width: 1.5),
                                         borderRadius: BorderRadius.circular(5),
                                       ),
-                                      child:
-                                          //  state.ordersList.length == 1
-                                          // ?
-                                          SingleProduct(
-                                        image:
-                                            'https://res.cloudinary.com/dthljz11q/image/upload/v1697986312/iPhone%2014%20Pro%20Purple%20Edition/dnjmhlnte4dfm7hceo8y.jpg',
-
-                                        // state
-                                        // .ordersList[index].products[0].images[0],
-                                      )
-                                      // : Row(
-                                      //     children: [
-                                      //       SingleProduct(
-                                      //         image: state.ordersList[index]
-                                      //             .products[0].images[0],
-                                      //       ),
-                                      //       Text(
-                                      //         '+ ${state.ordersList[index].products.length - 1}',
-                                      //         style: TextStyle(
-                                      //           fontSize: 16,
-                                      //           color: Colors.grey.shade500,
-                                      //         ),
-                                      //       )
-                                      //     ],
-                                      // )
-                                      ),
+                                      child: state.ordersList.length == 1
+                                          ? SingleProduct(
+                                              image: state.ordersList[index]
+                                                  .products[0].images[0],
+                                            )
+                                          : Row(
+                                              children: [
+                                                SingleProduct(
+                                                  image: state.ordersList[index]
+                                                      .products[0].images[0],
+                                                ),
+                                                Text(
+                                                  '+ ${state.ordersList[index].products.length - 1}',
+                                                  style: TextStyle(
+                                                    fontSize: 16,
+                                                    color: Colors.grey.shade500,
+                                                  ),
+                                                )
+                                              ],
+                                            )),
                                 );
                               }),
                         );
@@ -185,16 +169,16 @@ class _AccountScreenState extends State<AccountScreen> {
               sB2Height: 0,
             ),
             // userProvider.user.keepShoppingFor.isNotEmpty
-            // const Column(
-            //   children: [
-            //     KeepShoppingFor(),
-            //     DividerWithSizedBox(
-            //       thickness: 4,
-            //       sB1Height: 15,
-            //       sB2Height: 4,
-            //     ),
-            //   ],
-            // ),
+            const Column(
+              children: [
+                KeepShoppingFor(),
+                DividerWithSizedBox(
+                  thickness: 4,
+                  sB1Height: 15,
+                  sB2Height: 4,
+                ),
+              ],
+            ),
             // const WishList(),
 
             const SizedBox(height: 20),
@@ -212,28 +196,23 @@ class OrdersLoadingWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        print('loading');
-      },
-      child: SizedBox(
-        height: 170,
-        child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: 5,
-            itemBuilder: (context, index) {
-              return Container(
-                width: 200,
-                margin: const EdgeInsets.all(8),
-                padding: const EdgeInsets.all(4),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(color: Colors.black12, width: 1.5),
-                  borderRadius: BorderRadius.circular(5),
-                ),
-              );
-            }),
-      ),
+    return SizedBox(
+      height: 170,
+      child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: 5,
+          itemBuilder: (context, index) {
+            return Container(
+              width: 200,
+              margin: const EdgeInsets.all(8),
+              padding: const EdgeInsets.all(4),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(color: Colors.black12, width: 1.5),
+                borderRadius: BorderRadius.circular(5),
+              ),
+            );
+          }),
     );
   }
 }

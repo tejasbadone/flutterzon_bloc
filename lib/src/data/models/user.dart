@@ -1,6 +1,8 @@
 import 'dart:convert';
 
-class User {
+import 'package:equatable/equatable.dart';
+
+class User extends Equatable {
   final String id;
   final String name;
   final String email;
@@ -105,4 +107,19 @@ class User {
       wishList: wishList ?? this.wishList,
     );
   }
+
+  @override
+  List<Object?> get props => [
+        id,
+        name,
+        email,
+        password,
+        address,
+        type,
+        token,
+        cart,
+        saveForLater,
+        keepShoppingFor,
+        wishList
+      ];
 }

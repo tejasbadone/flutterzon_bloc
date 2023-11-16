@@ -11,6 +11,7 @@ class FetchOrdersBloc extends Bloc<FetchOrdersEvent, FetchOrdersState> {
 
   FetchOrdersBloc(this.accountRepository) : super(FetchOrdersLoadingS()) {
     on<FetchOrdersEvent>(_fetchOrderHandler);
+    on<FetchSearchedOrdersEvent>(_fetchSearchedOrdersHandler);
   }
 
   void _fetchOrderHandler(event, emit) async {
@@ -23,9 +24,24 @@ class FetchOrdersBloc extends Bloc<FetchOrdersEvent, FetchOrdersState> {
 
       ordersList.reversed.toList();
 
-      print(ordersList[0]);
-
       emit(FetchOrdersSuccessS(ordersList: ordersList));
+    } catch (e) {
+      emit(FetchOrdersErrorS(errorString: e.toString()));
+    }
+  }
+
+  void _fetchSearchedOrdersHandler(event, emit) async {
+    try {
+      List<Order> searchedOrdersList;
+
+      emit(FetchOrdersLoadingS());
+
+      searchedOrdersList =
+          await accountRepository.fetchsearchedOrders(event.orderQuery);
+
+      searchedOrdersList.reversed.toList();
+
+      emit(FetchOrdersSuccessS(ordersList: searchedOrdersList));
     } catch (e) {
       emit(FetchOrdersErrorS(errorString: e.toString()));
     }

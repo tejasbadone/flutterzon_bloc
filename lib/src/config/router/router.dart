@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_amazon_clone_bloc/src/config/router/app_route_constants.dart';
+import 'package:flutter_amazon_clone_bloc/src/data/models/order.dart';
 import 'package:flutter_amazon_clone_bloc/src/data/repositories/account_repository.dart';
 import 'package:flutter_amazon_clone_bloc/src/data/repositories/category_products_repository.dart';
 import 'package:flutter_amazon_clone_bloc/src/data/repositories/search_products_repository.dart';
-import 'package:flutter_amazon_clone_bloc/src/logic/blocs/account/bloc/fetch_orders_bloc.dart';
+import 'package:flutter_amazon_clone_bloc/src/logic/blocs/account/fetch_orders_bloc/fetch_orders_bloc.dart';
+import 'package:flutter_amazon_clone_bloc/src/logic/blocs/account/product_rating/product_rating_bloc.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/category_products/fetch_category_products_bloc/fetch_category_products_bloc.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/search/bloc/search_bloc.dart';
+import 'package:flutter_amazon_clone_bloc/src/presentation/views/account/orders/order_details.dart';
+import 'package:flutter_amazon_clone_bloc/src/presentation/views/account/orders/search_orders_screen.dart';
+import 'package:flutter_amazon_clone_bloc/src/presentation/views/account/orders/your_orders.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/views/another_screen.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/views/auth/auth_screen.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/views/bottom_navigation_bar/bottom_bar.dart';
@@ -44,6 +49,31 @@ final router = GoRouter(initialLocation: '/', routes: [
     },
   ),
   GoRoute(
+    name: AppRouteConstants.orderDetailsScreenRoute.name,
+    path: AppRouteConstants.orderDetailsScreenRoute.path,
+    pageBuilder: (context, state) {
+      final order = state.extra as Order;
+
+      return MaterialPage(
+          child: BlocProvider.value(
+        value: ProductRatingBloc(AccountRepository())
+          ..add(GetProductRatingEvent(order: order)),
+        child: OrderDetailsScreen(order: order),
+      ));
+    },
+  ),
+  GoRoute(
+      path: AppRouteConstants.yourOrdersScreenRoute.path,
+      name: AppRouteConstants.yourOrdersScreenRoute.name,
+      pageBuilder: (context, state) {
+        return MaterialPage(
+            child: BlocProvider.value(
+          value: FetchOrdersBloc(AccountRepository())
+            ..add(const FetchAccountOrdersEvent()),
+          child: const YourOrders(),
+        ));
+      }),
+  GoRoute(
     name: AppRouteConstants.anotherScreenRoute.name,
     path: AppRouteConstants.anotherScreenRoute.path,
     pageBuilder: (context, state) {
@@ -77,6 +107,19 @@ final router = GoRouter(initialLocation: '/', routes: [
           child: BlocProvider.value(
         value: _searchProductBloc..add(SearchEvent(searchQuery: searchQuery!)),
         child: SearchScreen(searchQuery: searchQuery),
+      ));
+    },
+  ),
+  GoRoute(
+    name: AppRouteConstants.searchOrdersScreenRoute.name,
+    path: '${AppRouteConstants.searchOrdersScreenRoute.path}/:orderQuery',
+    pageBuilder: (context, state) {
+      final orderQuery = state.pathParameters['orderQuery'];
+      return MaterialPage(
+          child: BlocProvider.value(
+        value: FetchOrdersBloc(AccountRepository())
+          ..add(FetchSearchedOrdersEvent(orderQuery: orderQuery!)),
+        child: SearchOrderScreeen(orderQuery: orderQuery),
       ));
     },
   ),

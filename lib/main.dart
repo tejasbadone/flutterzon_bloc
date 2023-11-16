@@ -5,7 +5,8 @@ import 'package:flutter_amazon_clone_bloc/src/data/repositories/account_reposito
 import 'package:flutter_amazon_clone_bloc/src/data/repositories/auth_repository.dart';
 import 'package:flutter_amazon_clone_bloc/src/data/repositories/category_products_repository.dart';
 import 'package:flutter_amazon_clone_bloc/src/data/repositories/search_products_repository.dart';
-import 'package:flutter_amazon_clone_bloc/src/logic/blocs/account/bloc/fetch_orders_bloc.dart';
+import 'package:flutter_amazon_clone_bloc/src/logic/blocs/account/fetch_orders_bloc/fetch_orders_bloc.dart';
+import 'package:flutter_amazon_clone_bloc/src/logic/blocs/account/product_rating/product_rating_bloc.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/auth_bloc/auth_bloc.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/bottom_bar/bottom_bar_bloc.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/category_products/fetch_category_products_bloc/fetch_category_products_bloc.dart';
@@ -30,9 +31,6 @@ class MyApp extends StatelessWidget {
           create: (context) => AuthBloc(AuthRepository()),
         ),
         BlocProvider(
-          create: (context) => FetchOrdersBloc(AccountRepository()),
-        ),
-        BlocProvider(
           create: (context) => BottomBarBloc(),
         ),
         BlocProvider(
@@ -44,6 +42,12 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => SearchBloc(SearchProductsRepository()),
+        ),
+        BlocProvider(
+          create: (context) => FetchOrdersBloc(AccountRepository()),
+        ),
+        BlocProvider(
+          create: (context) => ProductRatingBloc(AccountRepository()),
         ),
       ],
       child: MaterialApp.router(

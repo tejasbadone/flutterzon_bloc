@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_amazon_clone_bloc/src/config/router/app_route_constants.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/views/account/wish_list_screen.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/widgets/account/account_button.dart';
+import 'package:go_router/go_router.dart';
 
 class TopButtons extends StatelessWidget {
   const TopButtons({super.key});
@@ -12,7 +14,12 @@ class TopButtons extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            AccountButton(buttonName: 'Your Orders', onPressed: () {}
+            AccountButton(
+                buttonName: 'Your Orders',
+                onPressed: () {
+                  context
+                      .pushNamed(AppRouteConstants.yourOrdersScreenRoute.name);
+                }
                 // Navigator.pushNamed(context, YourOrders.routeName)
                 ),
             const SizedBox(

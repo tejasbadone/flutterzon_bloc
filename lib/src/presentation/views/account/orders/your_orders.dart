@@ -1,22 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_amazon_clone_bloc/src/presentation/widgets/account/order_list_single.dart';
+import 'package:flutter_amazon_clone_bloc/src/config/router/app_route_constants.dart';
+import 'package:flutter_amazon_clone_bloc/src/logic/blocs/account/fetch_orders_bloc/fetch_orders_bloc.dart';
+import 'package:flutter_amazon_clone_bloc/src/presentation/widgets/account/orders/order_list_single.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/widgets/common_widgets/custom_app_bar.dart';
 import 'package:flutter_amazon_clone_bloc/src/utils/constants/constants.dart';
+import 'package:flutter_amazon_clone_bloc/src/utils/utils.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
-class YourOrders extends StatefulWidget {
-  static const String routeName = 'your-orders';
+class YourOrders extends StatelessWidget {
   const YourOrders({super.key});
-
-  @override
-  State<YourOrders> createState() => _YourOrdersState();
-}
-
-class _YourOrdersState extends State<YourOrders> {
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   fetchOrders();
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -49,9 +42,12 @@ class _YourOrdersState extends State<YourOrders> {
               ),
               child: Center(
                 child: TextFormField(
-                  onFieldSubmitted: (query) {
-                    // Navigator.pushNamed(context, SearchOrderScreeen.routeName,
-                    //     arguments: query);
+                  onFieldSubmitted: (orderQuery) {
+                    context.pushNamed(
+                        AppRouteConstants.searchOrdersScreenRoute.name,
+                        pathParameters: {
+                          'orderQuery': orderQuery,
+                        });
                   },
                   decoration: InputDecoration(
                       prefixIcon: const Icon(
@@ -100,15 +96,35 @@ class _YourOrdersState extends State<YourOrders> {
             const SizedBox(
               height: 10,
             ),
-            // ListView.builder(
-            //     shrinkWrap: true,
-            //     physics: const NeverScrollableScrollPhysics(),
-            //     itemCount: 3,
-            //     itemBuilder: ((context, index) {
-            //       return OrderListSingle(
-            //         order: null,
-            //       );
-            //     }))
+            BlocConsumer<FetchOrdersBloc, FetchOrdersState>(
+              listener: (context, state) {
+                if (state is FetchOrdersErrorS) {
+                  showSnackBar(context, state.errorString);
+                }
+              },
+              builder: (context, state) {
+                if (state is FetchOrdersLoadingS) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+
+                if (state is FetchOrdersSuccessS) {
+                  return ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: state.ordersList.length,
+                    itemBuilder: ((context, index) {
+                      return OrderListSingle(
+                        order: state.ordersList[index],
+                      );
+                    }),
+                  );
+                }
+
+                return const SizedBox();
+              },
+            )
           ],
         ),
       ),

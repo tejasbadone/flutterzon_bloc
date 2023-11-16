@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_amazon_clone_bloc/src/config/router/router.dart';
 import 'package:flutter_amazon_clone_bloc/src/data/repositories/account_repository.dart';
-import 'package:flutter_amazon_clone_bloc/src/logic/blocs/account/bloc/fetch_orders_bloc.dart';
+import 'package:flutter_amazon_clone_bloc/src/logic/blocs/account/fetch_orders_bloc/fetch_orders_bloc.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/bottom_bar/bottom_bar_bloc.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/views/account/account_screen.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/views/another_screen.dart';
@@ -27,7 +27,11 @@ class BottomBar extends StatelessWidget {
 
   List<Widget> pages = [
     const HomeScreen(),
-    const AccountScreen(),
+    BlocProvider.value(
+      value: FetchOrdersBloc(AccountRepository())
+        ..add(const FetchAccountOrdersEvent()),
+      child: const AccountScreen(),
+    ),
     const AnotherScreen(appBarTitle: 'More Screen'),
     const AnotherScreen(appBarTitle: 'Cart Screen'),
     const MenuScreen(),
@@ -102,14 +106,6 @@ class BottomBar extends StatelessWidget {
                         : _lastIndex = _lastIndex;
 
                     _currentIndex = page;
-
-                    if (page == 1) {
-                      final fetchOrderBloc =
-                          FetchOrdersBloc(AccountRepository());
-
-                      BlocProvider.value(
-                          value: fetchOrderBloc..add(const FetchOrdersEvent()));
-                    }
 
                     if (page == 2) {
                       isOpen = !isOpen;
