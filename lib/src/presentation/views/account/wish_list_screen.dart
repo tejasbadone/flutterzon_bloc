@@ -1,19 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_amazon_clone_bloc/src/data/models/product.dart';
+import 'package:flutter_amazon_clone_bloc/src/logic/blocs/account/wish_list/wish_list_cubit.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/widgets/account/single_wish_list_product.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/widgets/common_widgets/custom_app_bar.dart';
 import 'package:flutter_amazon_clone_bloc/src/utils/utils.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class WishListScreen extends StatefulWidget {
-  static const String routeName = '/wish-list-screen';
-
+class WishListScreen extends StatelessWidget {
   const WishListScreen({super.key});
 
-  @override
-  State<WishListScreen> createState() => _WishListScreenState();
-}
-
-class _WishListScreenState extends State<WishListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,17 +30,39 @@ class _WishListScreenState extends State<WishListScreen> {
                     color: Colors.black87),
               ),
               const SizedBox(height: 10),
-              ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: 3,
-                  itemBuilder: ((context, index) {
-                    // Product product = Product.fromMap(
-                    //     userProvider.user.wishList[index]['product']);
+              BlocConsumer<WishListCubit, WishListState>(
+                listener: (context, state) {
+                  if (state is GetWishListErrorS) {
+                    showSnackBar(context, state.errorString);
+                  }
+                },
+                builder: (context, state) {
+                  if (state is GetWishListLoadingS) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
 
-                    return SingleWishListProduct(
-                        product: null, deliveryDate: getDeliveryDate());
-                  })),
+                  if (state is GetWishListSuccessS) {
+                    return ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: state.wishList.length,
+                        itemBuilder: ((context, index) {
+                          Product product = state.wishList[index];
+                          double averageRating = state.averageRatingList[index];
+
+                          return SingleWishListProduct(
+                            product: product,
+                            deliveryDate: getDeliveryDate(),
+                            averageRating: averageRating,
+                          );
+                        }));
+                  }
+
+                  return const SizedBox();
+                },
+              ),
             ],
           ),
         ),

@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_amazon_clone_bloc/src/data/models/product.dart';
-import 'package:flutter_amazon_clone_bloc/src/presentation/widgets/common_widgets/you_might_also_like_single.dart';
 
 class YouMightAlsoLikeBlock extends StatelessWidget {
   const YouMightAlsoLikeBlock({

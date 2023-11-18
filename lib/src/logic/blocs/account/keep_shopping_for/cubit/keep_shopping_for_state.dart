@@ -1,4 +1,4 @@
-part of 'keep_shopping_for_bloc.dart';
+part of 'keep_shopping_for_cubit.dart';
 
 sealed class KeepShoppingForState extends Equatable {
   const KeepShoppingForState();
@@ -7,12 +7,15 @@ sealed class KeepShoppingForState extends Equatable {
   List<Object> get props => [];
 }
 
+// Keep Shopping for
 final class KeepShoppingForLoadingS extends KeepShoppingForState {}
 
 final class KeepShoppingForSuccessS extends KeepShoppingForState {
   final List<Product> productList;
+  final List<double> averageRatingList;
 
-  const KeepShoppingForSuccessS({required this.productList});
+  const KeepShoppingForSuccessS(
+      {required this.productList, required this.averageRatingList});
 
   @override
   List<Object> get props => [productList];

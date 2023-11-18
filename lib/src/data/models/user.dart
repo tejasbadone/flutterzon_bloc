@@ -15,7 +15,7 @@ class User extends Equatable {
   final List<dynamic> keepShoppingFor;
   final List<dynamic> wishList;
 
-  User({
+  const User({
     required this.id,
     required this.name,
     required this.email,

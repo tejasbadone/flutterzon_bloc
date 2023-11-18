@@ -33,4 +33,13 @@ class AppRouteConstants {
 
   static const orderDetailsScreenRoute =
       AppRoute(name: 'order-details-screen', path: '/order-details-screen');
+
+  static const yourWishListScreenRoute =
+      AppRoute(name: 'your-wish-list-screen', path: '/your-wish-list-screen');
+
+  static const browsingHistoryScreenRoute = AppRoute(
+      name: 'browsing-history-screen', path: '/browsing-history-screen');
+
+  static const productDetailsScreenRoute =
+      AppRoute(name: 'product-details-screen', path: '/product-details-screen');
 }

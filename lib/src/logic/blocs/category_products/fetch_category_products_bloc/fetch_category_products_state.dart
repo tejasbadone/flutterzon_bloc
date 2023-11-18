@@ -11,11 +11,13 @@ final class FetchCategoryProductsLoadingS extends FetchCategoryProductsState {}
 
 final class FetchCategoryProductsSuccessS extends FetchCategoryProductsState {
   final List<Product> productList;
+  final List<double> averageRatingList;
 
-  const FetchCategoryProductsSuccessS({required this.productList});
+  const FetchCategoryProductsSuccessS(
+      {required this.productList, required this.averageRatingList});
 
   @override
-  List<Object> get props => [productList];
+  List<Object> get props => [productList, averageRatingList];
 }
 
 final class FetchCategoryProductsErrorS extends FetchCategoryProductsState {

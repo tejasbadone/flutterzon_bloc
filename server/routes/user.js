@@ -316,29 +316,71 @@ userRouter.post("/api/keep-shopping-for", auth , async (req, res) => {
             user.keepShoppingFor.push({product});
         } else { 
 
-            let productExist = false;
+            // let productExist = false;
 
             for(let i=0; i<user.keepShoppingFor.length; i++){
                 if(user.keepShoppingFor[i].product._id.equals(product._id)){
-                    productExist = true;
-                    break;
+                    user.keepShoppingFor.splice(i,1);
+                    // productExist = true;
+                    // break;
                 }
             } 
 
+            user.keepShoppingFor.push({product});
 
-            if(!productExist){
-                user.keepShoppingFor.push({product});
-            }
+
+            // if(!productExist){
+            //     user.keepShoppingFor.push({product});
+            // }
         }
 
         user = await user.save();
-        res.json(user);
+        const keepShoppingFor = user.keepShoppingFor;
+        res.json(keepShoppingFor);
         
     } catch (e) {
         res.status(500).json({error : e.message});
     }
 });
 
+
+userRouter.get("/api/get-keep-shopping-for", auth , async (req, res) => {
+
+    try {
+        let user = await User.findById(req.user);
+        let productList = [];
+
+        for(let i = 0; i<user.keepShoppingFor.length ; i++){
+            productList.push(user.keepShoppingFor[i]['product']);
+
+        }
+
+        res.json(productList);
+        
+    } catch (e) {
+        res.status(500).json({error : e.message});
+    }
+});
+
+
+userRouter.get("/api/get-wish-list", auth, async (req, res ) =>{
+
+    try {
+        let wishList = [];
+        let user = await User.findById(req.user);
+
+        for(let i=0; i<user.wishList.length; i++){
+            wishList.push(user.wishList[i]['product']);
+        }
+
+        
+
+        res.json(wishList);
+
+    } catch (e) {
+        res.status(500).json({error: e.message});
+    }
+});
 
 userRouter.post("/api/add-to-wish-list", auth, async (req, res ) =>{
 

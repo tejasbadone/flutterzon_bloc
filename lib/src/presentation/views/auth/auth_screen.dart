@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_amazon_clone_bloc/src/config/router/app_route_constants.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/auth_bloc/auth_bloc.dart';
+import 'package:flutter_amazon_clone_bloc/src/logic/blocs/user_cubit/user_cubit.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/widgets/common_widgets/custom_elevated_button.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/widgets/common_widgets/custom_textfield.dart';
 import 'package:flutter_amazon_clone_bloc/src/utils/constants/constants.dart';
@@ -23,7 +24,6 @@ class _AuthScreenState extends State<AuthScreen> {
   Auth _auth = Auth.signUp;
   final _signUpFormKey = GlobalKey<FormState>();
   final _signInFormKey = GlobalKey<FormState>();
-  // final AuthService authService = AuthService();
 
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -36,21 +36,6 @@ class _AuthScreenState extends State<AuthScreen> {
     _passwordController.dispose();
     _nameController.dispose();
   }
-
-  // void signUpUser() {
-  //   authService.signUpUser(
-  //       context: context,
-  //       name: _nameController.text,
-  //       email: _emailController.text,
-  //       password: _passwordController.text);
-  // }
-
-  // void signInUser() {
-  //   authService.signInUser(
-  //       context: context,
-  //       email: _emailController.text,
-  //       password: _passwordController.text);
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -311,6 +296,11 @@ class _AuthScreenState extends State<AuthScreen> {
                                     context.goNamed(
                                         AppRouteConstants.bottomBarRoute.name);
                                   }
+                                  if (state is UpdateUserData) {
+                                    debugPrint('ran through update user');
+                                    BlocProvider.of<UserCubit>(context)
+                                        .setUser(state.user);
+                                  }
                                 },
                                 builder: (context, state) {
                                   if (state is AuthLoadingState) {
@@ -332,7 +322,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                     );
                                   }
                                 },
-                              )
+                              ),
                             ],
                           ),
                         ),

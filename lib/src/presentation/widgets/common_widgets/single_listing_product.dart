@@ -1,46 +1,26 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_amazon_clone_bloc/src/config/router/app_route_constants.dart';
 import 'package:flutter_amazon_clone_bloc/src/data/models/product.dart';
 import 'package:flutter_amazon_clone_bloc/src/utils/constants/constants.dart';
 import 'package:flutter_amazon_clone_bloc/src/utils/utils.dart';
+import 'package:go_router/go_router.dart';
 
 import 'stars.dart';
 
-class SingleListingProduct extends StatefulWidget {
+class SingleListingProduct extends StatelessWidget {
   const SingleListingProduct({
     super.key,
     required this.product,
     required this.deliveryDate,
+    required this.averageRating,
   });
 
   final Product? product;
   final String? deliveryDate;
+  final double? averageRating;
 
-  @override
-  State<SingleListingProduct> createState() => _SingleListingProductState();
-}
-
-class _SingleListingProductState extends State<SingleListingProduct> {
-  // final ProductDetailsServices productDetailsServices =
-  //     ProductDetailsServices();
-
-  double averageRating = 0;
-
-  String? price;
-
-  // getAverageRating() async {
-  //   averageRating = await productDetailsServices.getAverageRating(
-  //       context: context, product: widget.product!);
-  //   setState(() {});
-  // }
-
-  @override
-  void initState() {
-    super.initState();
-    price = formatPrice(widget.product!.price);
-    // getAverageRating();
-  }
-
+  // @override
   @override
   Widget build(BuildContext context) {
     const productTextStyle = TextStyle(
@@ -48,11 +28,12 @@ class _SingleListingProductState extends State<SingleListingProduct> {
 
     return GestureDetector(
       onTap: () {
-        // Navigator.pushNamed(context, ProductDetailsScreen.routeName,
-        //     arguments: {
-        //       'product': widget.product,
-        //       'deliveryDate': widget.deliveryDate,
-        //     });
+        context.pushNamed(AppRouteConstants.productDetailsScreenRoute.name,
+            extra: {
+              "product": product,
+              "deliveryDate": deliveryDate,
+              "averageRating": averageRating
+            });
       },
       child: Container(
         height: 180,
@@ -70,7 +51,7 @@ class _SingleListingProductState extends State<SingleListingProduct> {
               child: Padding(
                 padding: const EdgeInsets.all(15),
                 child: CachedNetworkImage(
-                  imageUrl: widget.product!.images[0],
+                  imageUrl: product!.images[0],
                   fit: BoxFit.contain,
                 ),
               ),
@@ -85,7 +66,7 @@ class _SingleListingProductState extends State<SingleListingProduct> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Text(
-                      widget.product!.name,
+                      product!.name,
                       maxLines: 2,
                       style: const TextStyle(
                           fontSize: 16, overflow: TextOverflow.ellipsis),
@@ -94,17 +75,17 @@ class _SingleListingProductState extends State<SingleListingProduct> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
-                          averageRating.toStringAsFixed(1),
+                          averageRating!.toStringAsFixed(1),
                           style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w500,
                               color: Constants.selectedNavBarColor),
                         ),
                         Stars(
-                          rating: averageRating,
+                          rating: averageRating!,
                           size: 20,
                         ),
-                        Text('(${widget.product!.rating!.length})',
+                        Text('(${product!.rating!.length})',
                             style: productTextStyle.copyWith(fontSize: 14)),
                       ],
                     ),
@@ -119,7 +100,7 @@ class _SingleListingProductState extends State<SingleListingProduct> {
                               fontWeight: FontWeight.w400),
                         ),
                         Text(
-                          price!,
+                          formatPrice(product!.price),
                           style: const TextStyle(
                               fontSize: 24, fontWeight: FontWeight.w400),
                         ),
@@ -132,7 +113,7 @@ class _SingleListingProductState extends State<SingleListingProduct> {
                           style: productTextStyle,
                           children: [
                             TextSpan(
-                              text: widget.deliveryDate,
+                              text: deliveryDate,
                               style: const TextStyle(
                                   fontSize: 12,
                                   fontWeight: FontWeight.bold,

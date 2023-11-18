@@ -11,11 +11,13 @@ final class SearchLoadingS extends SearchState {}
 
 final class SearchSuccessS extends SearchState {
   final List<Product> searchProducts;
+  final List<double> averageRatingList;
 
-  const SearchSuccessS({required this.searchProducts});
+  const SearchSuccessS(
+      {required this.searchProducts, required this.averageRatingList});
 
   @override
-  List<Object> get props => [searchProducts];
+  List<Object> get props => [searchProducts, averageRatingList];
 }
 
 final class SearchErrorS extends SearchState {

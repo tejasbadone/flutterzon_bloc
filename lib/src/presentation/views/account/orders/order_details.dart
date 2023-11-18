@@ -18,10 +18,6 @@ class OrderDetailsScreen extends StatelessWidget {
   final Order order;
   const OrderDetailsScreen({super.key, required this.order});
 
-  // List<Product>? categoryProductList;
-
-  // List<double> orderedProductRatings = [];
-  // final HomeServices homeServices = HomeServices();
   @override
   Widget build(BuildContext context) {
     int currentStep = 0;

@@ -5,17 +5,28 @@ import 'package:flutter_amazon_clone_bloc/src/data/repositories/account_reposito
 import 'package:flutter_amazon_clone_bloc/src/data/repositories/auth_repository.dart';
 import 'package:flutter_amazon_clone_bloc/src/data/repositories/category_products_repository.dart';
 import 'package:flutter_amazon_clone_bloc/src/data/repositories/search_products_repository.dart';
-import 'package:flutter_amazon_clone_bloc/src/logic/blocs/account/fetch_orders_bloc/fetch_orders_bloc.dart';
+import 'package:flutter_amazon_clone_bloc/src/logic/blocs/account/fetch_orders/fethc_orders_cubit.dart';
+import 'package:flutter_amazon_clone_bloc/src/logic/blocs/account/keep_shopping_for/cubit/keep_shopping_for_cubit.dart';
+
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/account/product_rating/product_rating_bloc.dart';
+import 'package:flutter_amazon_clone_bloc/src/logic/blocs/account/wish_list/wish_list_cubit.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/auth_bloc/auth_bloc.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/bottom_bar/bottom_bar_bloc.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/category_products/fetch_category_products_bloc/fetch_category_products_bloc.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/home_blocs/carousel_bloc/carousel_image_bloc.dart';
+import 'package:flutter_amazon_clone_bloc/src/logic/blocs/product_details/user_rating/user_rating_cubit.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/search/bloc/search_bloc.dart';
+import 'package:flutter_amazon_clone_bloc/src/logic/blocs/user_cubit/user_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:path_provider/path_provider.dart';
 
-void main() async {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  HydratedBloc.storage = await HydratedStorage.build(
+      storageDirectory: await getApplicationDocumentsDirectory());
+
   await dotenv.load(fileName: "config.env");
   runApp(const MyApp());
 }
@@ -31,6 +42,9 @@ class MyApp extends StatelessWidget {
           create: (context) => AuthBloc(AuthRepository()),
         ),
         BlocProvider(
+          create: (context) => UserCubit(),
+        ),
+        BlocProvider(
           create: (context) => BottomBarBloc(),
         ),
         BlocProvider(
@@ -44,15 +58,23 @@ class MyApp extends StatelessWidget {
           create: (context) => SearchBloc(SearchProductsRepository()),
         ),
         BlocProvider(
-          create: (context) => FetchOrdersBloc(AccountRepository()),
+          create: (context) => FetchOrdersCubit(AccountRepository()),
         ),
         BlocProvider(
           create: (context) => ProductRatingBloc(AccountRepository()),
         ),
+        BlocProvider(
+          create: (context) => KeepShoppingForCubit(AccountRepository()),
+        ),
+        BlocProvider(
+          create: (context) => WishListCubit(AccountRepository()),
+        ),
+        BlocProvider(
+          create: (context) => UserRatingCubit(AccountRepository()),
+        ),
       ],
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,
-        title: 'Flutter Demo',
         theme: AppTheme.light,
         routerConfig: router,
       ),

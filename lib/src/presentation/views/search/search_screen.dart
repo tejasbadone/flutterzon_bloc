@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/search/bloc/search_bloc.dart';
+import 'package:flutter_amazon_clone_bloc/src/logic/blocs/user_cubit/user_cubit.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/widgets/common_widgets/custom_app_bar.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/widgets/common_widgets/single_listing_product.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/widgets/home/address_bar.dart';
@@ -31,7 +32,16 @@ class SearchScreen extends StatelessWidget {
           } else if (state is SearchSuccessS) {
             return Column(
               children: [
-                const AddressBar(),
+                BlocBuilder<UserCubit, UserState>(
+                  builder: (context, state) {
+                    if (state is UserSuccessS) {
+                      return state.user.address == ''
+                          ? const SizedBox()
+                          : const AddressBar();
+                    }
+                    return const SizedBox();
+                  },
+                ),
                 const SizedBox(
                   height: 10,
                 ),
@@ -40,6 +50,7 @@ class SearchScreen extends StatelessWidget {
                     itemCount: state.searchProducts.length,
                     itemBuilder: ((context, index) {
                       final product = state.searchProducts[index];
+                      final averageRating = state.averageRatingList[index];
 
                       return GestureDetector(
                         onTap: () {
@@ -50,6 +61,7 @@ class SearchScreen extends StatelessWidget {
                         },
                         child: SingleListingProduct(
                           product: product,
+                          averageRating: averageRating,
                           deliveryDate: getDeliveryDate(),
                         ),
                       );

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_amazon_clone_bloc/src/logic/blocs/account/fetch_orders_bloc/fetch_orders_bloc.dart';
+import 'package:flutter_amazon_clone_bloc/src/logic/blocs/account/fetch_orders/fethc_orders_cubit.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/widgets/account/orders/order_list_single.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/widgets/common_widgets/custom_app_bar.dart';
 import 'package:flutter_amazon_clone_bloc/src/utils/utils.dart';
@@ -17,20 +17,20 @@ class SearchOrderScreeen extends StatelessWidget {
         preferredSize: Size.fromHeight(60),
         child: CustomAppBar(),
       ),
-      body: BlocConsumer<FetchOrdersBloc, FetchOrdersState>(
+      body: BlocConsumer<FetchOrdersCubit, FetchOrdersState>(
         listener: (context, state) {
-          if (state is FetchOrdersErrorS) {
+          if (state is FetchSearchedOrdersErrorS) {
             return showSnackBar(context, state.errorString);
           }
         },
         builder: (context, state) {
-          if (state is FetchOrdersLoadingS) {
+          if (state is FetchSearchedOrdersLoadingS) {
             return const Center(
               child: CircularProgressIndicator(),
             );
           }
 
-          if (state is FetchOrdersSuccessS) {
+          if (state is FetchSearchedOrdersSuccessS) {
             return SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.all(12.0),
@@ -38,16 +38,17 @@ class SearchOrderScreeen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '${state.ordersList.length} order(s) matching "$orderQuery"',
+                      '${state.searchedOrdersList.length} order(s) matching "$orderQuery"',
                       style: const TextStyle(fontSize: 16),
                     ),
                     const SizedBox(height: 10),
                     ListView.builder(
-                      itemCount: state.ordersList.length,
+                      itemCount: state.searchedOrdersList.length,
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
                       itemBuilder: ((context, index) {
-                        return OrderListSingle(order: state.ordersList[index]);
+                        return OrderListSingle(
+                            order: state.searchedOrdersList[index]);
                       }),
                     ),
                   ],

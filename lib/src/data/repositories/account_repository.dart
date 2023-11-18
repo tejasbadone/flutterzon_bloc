@@ -86,11 +86,94 @@ class AccountRepository {
     }
   }
 
-  void keepShoppingFor({required Product product}) async {
+  Future<double> getAverageRating(String productId) async {
     try {
+      double averageRating = 0;
+
+      http.Response res = await accountApis.getAverageRating(productId);
+
+      if (res.statusCode == 200) {
+        averageRating = jsonDecode(res.body).toDouble();
+
+        return averageRating;
+      } else {
+        throw Exception(jsonDecode(res.body)['msg']);
+      }
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<List<Product>> keepShoppingFor({required Product product}) async {
+    try {
+      List<Product> keepShoppingFor = [];
+
       http.Response res = await accountApis.keepShoppingFor(product: product);
 
-      if (res.statusCode != 200) {
+      if (res.statusCode == 200) {
+        for (int i = 0; i < jsonDecode(res.body).length; i++) {
+          keepShoppingFor.add(
+            Product.fromJson(
+              jsonEncode(
+                jsonDecode(res.body)[i],
+              ),
+            ),
+          );
+        }
+
+        return keepShoppingFor;
+      } else {
+        throw Exception(jsonDecode(res.body)['msg']);
+      }
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<List<Product>> getKeepShoppingFor() async {
+    try {
+      List<Product> productList = [];
+
+      http.Response res = await accountApis.getKeepShoppingFor();
+
+      if (res.statusCode == 200) {
+        for (int i = 0; i < jsonDecode(res.body).length; i++) {
+          productList.add(
+            Product.fromJson(
+              jsonEncode(
+                jsonDecode(res.body)[i],
+              ),
+            ),
+          );
+        }
+        return productList;
+      } else {
+        throw Exception(jsonDecode(res.body)['msg']);
+      }
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<List<Product>> getWishList() async {
+    try {
+      List<Product> wishList = [];
+
+      http.Response res = await accountApis.getWishList();
+
+      if (res.statusCode == 200) {
+        for (int i = 0; i < jsonDecode(res.body).length; i++) {
+          wishList.add(
+            Product.fromJson(
+              jsonEncode(
+                jsonDecode(res.body)[i],
+              ),
+            ),
+          );
+        }
+
+        return wishList;
+      } else {
         throw Exception(jsonDecode(res.body)['msg']);
       }
     } catch (e) {

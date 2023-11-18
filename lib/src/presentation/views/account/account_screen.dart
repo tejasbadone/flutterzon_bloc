@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_amazon_clone_bloc/src/config/router/app_route_constants.dart';
-import 'package:flutter_amazon_clone_bloc/src/data/models/order.dart';
-import 'package:flutter_amazon_clone_bloc/src/data/repositories/account_repository.dart';
-import 'package:flutter_amazon_clone_bloc/src/logic/blocs/account/fetch_orders_bloc/fetch_orders_bloc.dart';
+import 'package:flutter_amazon_clone_bloc/src/logic/blocs/account/fetch_orders/fethc_orders_cubit.dart';
+import 'package:flutter_amazon_clone_bloc/src/logic/blocs/auth_bloc/auth_bloc.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/widgets/account/account_screen_app_bar.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/widgets/account/keep_shopping_for.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/widgets/account/name_bar.dart';
@@ -99,18 +98,21 @@ class _AccountScreenState extends State<AccountScreen> {
                           ))
                     ],
                   ),
-                  BlocConsumer<FetchOrdersBloc, FetchOrdersState>(
+                  BlocConsumer<FetchOrdersCubit, FetchOrdersState>(
                     listener: ((context, state) {
-                      if (state is FetchOrdersErrorS) {
+                      if (state is FetchOrdersErrorAS) {
                         showSnackBar(context, state.errorString);
                       }
                     }),
                     builder: (context, state) {
-                      if (state is FetchOrdersLoadingS) {
+                      if (state is FetchOrdersLoadingAS) {
+                        return const OrdersLoadingWidget();
+                      }
+                      if (state is AuthLoadingState) {
                         return const OrdersLoadingWidget();
                       }
 
-                      if (state is FetchOrdersSuccessS) {
+                      if (state is FetchOrdersSuccessAS) {
                         return SizedBox(
                           height: 170,
                           child: ListView.builder(
@@ -157,7 +159,7 @@ class _AccountScreenState extends State<AccountScreen> {
                               }),
                         );
                       }
-                      return const SizedBox();
+                      return const Text('null');
                     },
                   ),
                 ],
@@ -179,7 +181,7 @@ class _AccountScreenState extends State<AccountScreen> {
                 ),
               ],
             ),
-            // const WishList(),
+            const WishListWidget(),
 
             const SizedBox(height: 20),
           ],

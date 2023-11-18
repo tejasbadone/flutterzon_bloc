@@ -50,10 +50,12 @@ class CategoryProductsScreen extends StatelessWidget {
                       scrollDirection: Axis.vertical,
                       itemBuilder: (context, index) {
                         final product = state.productList[index];
+                        final averageRating = state.averageRatingList[index];
                         final deliveryDate = getDeliveryDate();
 
                         return SingleListingProduct(
                           product: product,
+                          averageRating: averageRating,
                           deliveryDate: deliveryDate,
                         );
                       }),

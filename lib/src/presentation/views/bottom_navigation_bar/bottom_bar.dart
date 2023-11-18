@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_amazon_clone_bloc/src/config/router/router.dart';
 import 'package:flutter_amazon_clone_bloc/src/data/repositories/account_repository.dart';
-import 'package:flutter_amazon_clone_bloc/src/logic/blocs/account/fetch_orders_bloc/fetch_orders_bloc.dart';
+import 'package:flutter_amazon_clone_bloc/src/logic/blocs/account/fetch_orders/fethc_orders_cubit.dart';
+import 'package:flutter_amazon_clone_bloc/src/logic/blocs/account/keep_shopping_for/cubit/keep_shopping_for_cubit.dart';
+import 'package:flutter_amazon_clone_bloc/src/logic/blocs/account/wish_list/wish_list_cubit.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/bottom_bar/bottom_bar_bloc.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/views/account/account_screen.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/views/another_screen.dart';
@@ -27,11 +28,26 @@ class BottomBar extends StatelessWidget {
 
   List<Widget> pages = [
     const HomeScreen(),
-    BlocProvider.value(
-      value: FetchOrdersBloc(AccountRepository())
-        ..add(const FetchAccountOrdersEvent()),
+    // BlocProvider.value(
+    //   value: FetchOrdersBloc(AccountRepository())
+    //     ..add(const FetchAccountOrdersEvent()),
+    //   child:
+    MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) =>
+              FetchOrdersCubit(AccountRepository())..fetchOrders(),
+        ),
+        BlocProvider(
+            create: (context) =>
+                KeepShoppingForCubit(AccountRepository())..keepShoppingFor()),
+        BlocProvider(
+            create: (context) =>
+                WishListCubit(AccountRepository())..getWishList()),
+      ],
       child: const AccountScreen(),
     ),
+    // ),
     const AnotherScreen(appBarTitle: 'More Screen'),
     const AnotherScreen(appBarTitle: 'Cart Screen'),
     const MenuScreen(),

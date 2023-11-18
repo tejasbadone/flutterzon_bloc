@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_amazon_clone_bloc/src/data/models/product.dart';
+import 'package:flutter_amazon_clone_bloc/src/logic/blocs/account/keep_shopping_for/cubit/keep_shopping_for_cubit.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/widgets/common_widgets/custom_app_bar.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/widgets/common_widgets/single_listing_product.dart';
 import 'package:flutter_amazon_clone_bloc/src/utils/utils.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class BrowsingHistory extends StatelessWidget {
-  static const String routeName = '/browsing-history';
-
   const BrowsingHistory({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // final userProvider = Provider.of<UserProvider>(context, listen: false);
-
     return Scaffold(
       appBar: const PreferredSize(
         preferredSize: Size.fromHeight(60),
@@ -49,18 +46,37 @@ class BrowsingHistory extends StatelessWidget {
                         color: Colors.black87),
                   ),
                   const SizedBox(height: 10),
-                  ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: 3,
-                      itemBuilder: ((context, index) {
-                        // Product product = Product.fromMap(userProvider
-                        //     .user.keepShoppingFor[index]['product']);
+                  BlocConsumer<KeepShoppingForCubit, KeepShoppingForState>(
+                    listener: (context, state) {
+                      if (state is KeepShoppingForErrorS) {
+                        showSnackBar(context, state.errorString);
+                      }
+                    },
+                    builder: (context, state) {
+                      if (state is KeepShoppingForLoadingS) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                      if (state is KeepShoppingForSuccessS) {
+                        return ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: state.productList.length,
+                          itemBuilder: ((context, index) {
+                            return SingleListingProduct(
+                                product: state.productList[index],
+                                averageRating: state.averageRatingList[index],
+                                deliveryDate: getDeliveryDate());
+                          }),
+                        );
+                      }
 
-                        //   return SingleListingProduct(
-                        //       product: product,
-                        //       deliveryDate: getDeliveryDate());
-                      }))
+                      return const Center(
+                        child: Text('No products in browsing history'),
+                      );
+                    },
+                  )
                 ],
               ),
             ],

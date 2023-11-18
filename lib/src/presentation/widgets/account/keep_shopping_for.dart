@@ -1,7 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_amazon_clone_bloc/src/config/router/app_route_constants.dart';
+import 'package:flutter_amazon_clone_bloc/src/logic/blocs/account/keep_shopping_for/cubit/keep_shopping_for_cubit.dart';
 import 'package:flutter_amazon_clone_bloc/src/utils/constants/constants.dart';
 import 'package:flutter_amazon_clone_bloc/src/utils/utils.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class KeepShoppingFor extends StatelessWidget {
   const KeepShoppingFor({
@@ -23,7 +27,8 @@ class KeepShoppingFor extends StatelessWidget {
               ),
               TextButton(
                   onPressed: () {
-                    // Navigator.pushNamed(context, BrowsingHistory.routeName);
+                    context.pushNamed(
+                        AppRouteConstants.browsingHistoryScreenRoute.name);
                   },
                   child: Text(
                     'Browsing history',
@@ -37,74 +42,83 @@ class KeepShoppingFor extends StatelessWidget {
           // user.keepShoppingFor.isEmpty
           // ? const SizedBox()
           // :
-          GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            scrollDirection: Axis.vertical,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                mainAxisSpacing: 8,
-                crossAxisSpacing: 15,
-                childAspectRatio:
-                    //  user.keepShoppingFor.length == 1
-                    //     ? 2.0
-                    //     : user.keepShoppingFor.length == 3
-                    //         ? 0.7
-                    //         :
-                    1.15,
-                crossAxisCount:
-                    //  user.keepShoppingFor.length >= 4
-                    // ?
-                    2
-                // : user.keepShoppingFor.length,
-                ),
-            itemCount:
-                //  user.keepShoppingFor.length >= 4
-                // ?
-                4,
-            // : user.keepShoppingFor.length,
-            itemBuilder: (context, index) {
-              // if (user.wishList.length >= 4) {
-              //   index =
-              //       getUniqueRandomInt(max: user.keepShoppingFor.length);
-              // }
+          BlocConsumer<KeepShoppingForCubit, KeepShoppingForState>(
+            listener: (context, state) {
+              if (state is KeepShoppingForErrorS) {
+                showSnackBar(context, state.errorString);
+              }
+            },
+            builder: (context, state) {
+              if (state is KeepShoppingForLoadingS) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
 
-              return InkWell(
-                onTap: () {
-                  // Navigator.pushNamed(
-                  //     context, CategoryDealsScreen.routeName,
-                  //     arguments: user.keepShoppingFor[index]['product']
-                  //         ['category'],
-                  // );
-                },
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 7, horizontal: 6),
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.black12, width: 1.5),
-                        borderRadius: BorderRadius.circular(5),
-                      ),
-                      child: CachedNetworkImage(
-                        imageUrl:
-                            'https://res.cloudinary.com/dthljz11q/image/upload/v1698516160/OnePlus%2011R%205G%20%28Galactic%20Silver%2C%208GB%20RAM%2C%20128GB%20Storage%29/rllsp9kvyuzvomw8ylgl.jpg'
+              if (state is KeepShoppingForSuccessS) {
+                return GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  scrollDirection: Axis.vertical,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    mainAxisSpacing: 8,
+                    crossAxisSpacing: 15,
+                    childAspectRatio: state.productList.length == 1
+                        ? 2.0
+                        : state.productList.length == 3
+                            ? 0.7
+                            : 1.15,
+                    crossAxisCount: state.productList.length >= 4
+                        ? 2
+                        : state.productList.length,
+                  ),
+                  itemCount: state.productList.length >= 4
+                      ? 4
+                      : state.productList.length,
+                  itemBuilder: (context, index) {
+                    if (state.productList.length >= 4) {
+                      index = getUniqueRandomInt(max: state.productList.length);
+                    }
 
-                        // user.keepShoppingFor[index]['product']
-                        //     ['images'][0]
-                        ,
-                        height: 90,
+                    return InkWell(
+                      onTap: () {
+                        // Navigator.pushNamed(
+                        //     context, CategoryDealsScreen.routeName,
+                        //     arguments: user.keepShoppingFor[index]['product']
+                        //         ['category'],
+                        // );
+                      },
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 7, horizontal: 6),
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              border:
+                                  Border.all(color: Colors.black12, width: 1.5),
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            child: CachedNetworkImage(
+                              imageUrl: state.productList[index].images[0],
+                              height: 90,
+                            ),
+                          ),
+                          const SizedBox(height: 5),
+                          Text(
+                            state.productList[index].category,
+                            style: const TextStyle(
+                                fontSize: 14, color: Colors.black87),
+                          )
+                        ],
                       ),
-                    ),
-                    const SizedBox(height: 5),
-                    const Text(
-                      '  user.keepShoppingFor[index]',
-                      style: TextStyle(fontSize: 14, color: Colors.black87),
-                    )
-                  ],
-                ),
-              );
+                    );
+                  },
+                );
+              }
+
+              return const Text('return null');
             },
           ),
         ],

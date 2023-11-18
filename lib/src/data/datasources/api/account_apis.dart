@@ -7,17 +7,9 @@ import 'package:http/http.dart' as http;
 
 class AccountApis {
   final client = http.Client();
-  late final String token;
-
-  AccountApis() {
-    getTokenforMethod();
-  }
-
-  getTokenforMethod() async {
-    token = await getToken();
-  }
 
   Future<http.Response> fetchMyOrders() async {
+    final String token = await getToken();
     try {
       http.Response res =
           await client.get(Uri.parse(fetchMyOrdersUri), headers: {
@@ -32,6 +24,7 @@ class AccountApis {
   }
 
   Future<http.Response> searchOrders(String orderQuery) async {
+    final String token = await getToken();
     try {
       http.Response res =
           await client.get(Uri.parse('$searchOrdersUri/$orderQuery'), headers: {
@@ -45,6 +38,7 @@ class AccountApis {
   }
 
   Future<http.Response> getProductRating(Product product) async {
+    final String token = await getToken();
     try {
       http.Response res = await client
           .get(Uri.parse('$getProductRatingUri/${product.id}'), headers: {
@@ -59,6 +53,7 @@ class AccountApis {
 
   Future<http.Response> rateProduct(
       {required Product product, required double rating}) async {
+    final String token = await getToken();
     try {
       http.Response res = await client.post(
         Uri.parse(rateProductUri),
@@ -80,7 +75,25 @@ class AccountApis {
     }
   }
 
+  Future<http.Response> getAverageRating(String productId) async {
+    final String token = await getToken();
+    try {
+      http.Response res = await client.get(
+        Uri.parse('$getAverageRatingUri/$productId'),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': token,
+        },
+      );
+
+      return res;
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
   Future<http.Response> keepShoppingFor({required Product product}) async {
+    final String token = await getToken();
     try {
       http.Response res = await client.post(
         Uri.parse(keepShoppingForUri),
@@ -93,6 +106,40 @@ class AccountApis {
             'id': product.id,
           },
         ),
+      );
+
+      return res;
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<http.Response> getKeepShoppingFor() async {
+    final String token = await getToken();
+    try {
+      http.Response res = await http.get(
+        Uri.parse(getKeepShoppingForUri),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': token,
+        },
+      );
+
+      return res;
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<http.Response> getWishList() async {
+    final String token = await getToken();
+    try {
+      http.Response res = await client.get(
+        Uri.parse(getWishListUri),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': token,
+        },
       );
 
       return res;

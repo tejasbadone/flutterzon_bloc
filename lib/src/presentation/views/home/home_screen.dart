@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_amazon_clone_bloc/src/logic/blocs/user_cubit/user_cubit.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/widgets/common_widgets/custom_app_bar.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/widgets/home/address_bar.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/widgets/home/carousel_image.dart';
@@ -7,10 +8,9 @@ import 'package:flutter_amazon_clone_bloc/src/presentation/widgets/home/multi_im
 import 'package:flutter_amazon_clone_bloc/src/presentation/widgets/home/single_image_offer.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/widgets/home/top_categories.dart';
 import 'package:flutter_amazon_clone_bloc/src/utils/constants/constants.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomeScreen extends StatefulWidget {
-  static const String routeName = '/home-screen';
-
   const HomeScreen({super.key});
 
   @override
@@ -28,7 +28,16 @@ class _HomeScreenState extends State<HomeScreen> {
         body: SingleChildScrollView(
           child: Column(
             children: [
-              const AddressBar(),
+              BlocBuilder<UserCubit, UserState>(
+                builder: (context, state) {
+                  if (state is UserSuccessS) {
+                    return state.user.address == ''
+                        ? const SizedBox()
+                        : const AddressBar();
+                  }
+                  return const SizedBox();
+                },
+              ),
               const TopCategories(),
               CarouselImage(),
               Container(

@@ -5,46 +5,22 @@ import 'package:flutter_amazon_clone_bloc/src/presentation/widgets/common_widget
 import 'package:flutter_amazon_clone_bloc/src/utils/constants/constants.dart';
 import 'package:flutter_amazon_clone_bloc/src/utils/utils.dart';
 
-class SingleWishListProduct extends StatefulWidget {
+class SingleWishListProduct extends StatelessWidget {
   const SingleWishListProduct({
     super.key,
     required this.product,
     required this.deliveryDate,
+    required this.averageRating,
   });
 
   final Product? product;
   final String? deliveryDate;
-
-  @override
-  State<SingleWishListProduct> createState() => _SingleWishListProductState();
-}
-
-class _SingleWishListProductState extends State<SingleWishListProduct> {
-  // final AccountServices accountServices = AccountServices();
-  // final ProductDetailsServices productDetailsServices =
-  //     ProductDetailsServices();
-  String? price;
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   price = formatPrice(widget.product!.price);
-  // }
+  final double averageRating;
 
   @override
   Widget build(BuildContext context) {
     const productTextStyle = TextStyle(
         fontSize: 12, color: Colors.black54, fontWeight: FontWeight.normal);
-
-    double totalRating = 0;
-    for (int i = 0; i < widget.product!.rating!.length; i++) {
-      totalRating += widget.product!.rating![i].rating;
-    }
-
-    double averageRating = 0;
-    if (totalRating != 0) {
-      averageRating = totalRating / widget.product!.rating!.length;
-    }
 
     return GestureDetector(
       onTap: () {
@@ -70,7 +46,7 @@ class _SingleWishListProductState extends State<SingleWishListProduct> {
               child: Padding(
                 padding: const EdgeInsets.all(15),
                 child: CachedNetworkImage(
-                  imageUrl: widget.product!.images[0],
+                  imageUrl: product!.images[0],
                   fit: BoxFit.contain,
                 ),
               ),
@@ -85,7 +61,7 @@ class _SingleWishListProductState extends State<SingleWishListProduct> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     Text(
-                      widget.product!.name,
+                      product!.name,
                       maxLines: 2,
                       style: const TextStyle(
                           fontSize: 16, overflow: TextOverflow.ellipsis),
@@ -104,7 +80,7 @@ class _SingleWishListProductState extends State<SingleWishListProduct> {
                           rating: averageRating,
                           size: 20,
                         ),
-                        Text('(${widget.product!.rating!.length})',
+                        Text('(${product!.rating!.length})',
                             style: productTextStyle.copyWith(fontSize: 14)),
                       ],
                     ),
@@ -119,20 +95,20 @@ class _SingleWishListProductState extends State<SingleWishListProduct> {
                               fontWeight: FontWeight.w400),
                         ),
                         Text(
-                          price!,
+                          formatPrice(product!.price),
                           style: const TextStyle(
                               fontSize: 24, fontWeight: FontWeight.w400),
                         ),
                       ],
                     ),
-                    // const SizedBox(height: 4),
+
                     RichText(
                       text: TextSpan(
                           text: 'Get it by ',
                           style: productTextStyle,
                           children: [
                             TextSpan(
-                              text: widget.deliveryDate,
+                              text: deliveryDate,
                               style: const TextStyle(
                                   fontSize: 12,
                                   fontWeight: FontWeight.bold,

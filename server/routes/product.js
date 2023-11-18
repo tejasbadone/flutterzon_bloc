@@ -8,6 +8,8 @@ productRouter.get('/api/products', auth ,async (req, res)=>{
     try {
 
         const products = await Product.find({category : req.query.category});
+
+
         res.json(products);
     } catch (error) {
         res.status(500).json({error : e.message});
@@ -93,6 +95,11 @@ productRouter.get("/api/get-ratings-average/:id", auth, async (req, res)=>{
         }
 
         averageRating = ratingSum / product.ratings.length;
+
+        if(isNaN(averageRating)){
+            averageRating = 0;
+        }
+     
 
         res.json(averageRating)
 

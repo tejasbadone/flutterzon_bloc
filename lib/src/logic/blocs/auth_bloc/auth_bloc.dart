@@ -1,6 +1,7 @@
 // ignore_for_file: depend_on_referenced_packages
 
 import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter_amazon_clone_bloc/src/data/models/user.dart';
 import 'package:flutter_amazon_clone_bloc/src/data/repositories/auth_repository.dart';
 import 'package:meta/meta.dart';
@@ -45,10 +46,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       address: '',
       type: '',
       token: '',
-      cart: [],
-      saveForLater: [],
-      keepShoppingFor: [],
-      wishList: [],
+      cart: const [],
+      saveForLater: const [],
+      keepShoppingFor: const [],
+      wishList: const [],
     );
 
     try {
@@ -71,6 +72,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setString('x-auth-token', user.token);
+
+      emit(UpdateUserData(user: user));
+
       emit(SignInSuccessState(user: user));
     } catch (e) {
       emit(AuthErrorState(errorString: e.toString()));
