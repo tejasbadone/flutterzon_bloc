@@ -9,11 +9,12 @@ part 'fetch_category_products_state.dart';
 
 class FetchCategoryProductsBloc
     extends Bloc<FetchCategoryProductsEvent, FetchCategoryProductsState> {
-  final CategoryProductsRepository homeRepository;
+  final CategoryProductsRepository categoryProductRepository;
   final AccountRepository accountRepository = AccountRepository();
-  FetchCategoryProductsBloc(this.homeRepository)
+  FetchCategoryProductsBloc(this.categoryProductRepository)
       : super(FetchCategoryProductsLoadingS()) {
     on<FetchCategoryProductsEvent>(_onFetchCategoryProductsHandler);
+    on<CategoryPressedEvent>(_onFetchCategoryProductsHandler);
   }
 
   void _onFetchCategoryProductsHandler(event, emit) async {
@@ -21,10 +22,11 @@ class FetchCategoryProductsBloc
       List<Product> productList;
       List<double> averageRatingList = [];
       double rating;
-
       emit(FetchCategoryProductsLoadingS());
 
-      productList = await homeRepository.fetchCategoryProducts(event.category);
+      productList =
+          await categoryProductRepository.fetchCategoryProducts(event.category);
+      productList.shuffle();
 
       for (int i = 0; i < productList.length; i++) {
         rating = await accountRepository.getAverageRating(productList[i].id!);

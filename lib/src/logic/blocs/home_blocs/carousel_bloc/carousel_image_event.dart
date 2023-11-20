@@ -5,9 +5,3 @@ class CarouselImageEvent {
 
   CarouselImageEvent({required this.index});
 }
-
-// class CarouselImageChangedEvent extends CarouselImageEvent {
-//   final int index;
-
-//   CarouselImageChangedEvent({required this.index});
-// }

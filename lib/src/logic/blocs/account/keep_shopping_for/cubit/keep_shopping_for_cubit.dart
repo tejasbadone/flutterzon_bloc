@@ -16,8 +16,6 @@ class KeepShoppingForCubit extends Cubit<KeepShoppingForState> {
       List<double> averageRatingList = [];
       double rating;
 
-      emit(KeepShoppingForLoadingS());
-
       keepShoppingForList = await accountRepository.getKeepShoppingFor();
 
       for (int i = 0; i < keepShoppingForList.length; i++) {

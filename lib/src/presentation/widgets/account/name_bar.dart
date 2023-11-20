@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_amazon_clone_bloc/src/logic/blocs/user_cubit/user_cubit.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class NameBar extends StatelessWidget {
   const NameBar({super.key});
@@ -18,16 +20,25 @@ class NameBar extends StatelessWidget {
                 Color(0xffA6E6CE),
               ]),
         ),
-        child: const Row(
+        child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
+            const Text(
               'Hello, ',
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.w400),
             ),
-            Text(
-              'User Name here',
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+            BlocBuilder<UserCubit, UserState>(
+              builder: (context, state) {
+                if (state is UserSuccessS) {
+                  return Text(
+                    state.user.name,
+                    style: const TextStyle(
+                        fontSize: 22, fontWeight: FontWeight.bold),
+                  );
+                }
+
+                return const SizedBox();
+              },
             ),
           ],
         ));

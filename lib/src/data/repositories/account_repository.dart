@@ -104,11 +104,12 @@ class AccountRepository {
     }
   }
 
-  Future<List<Product>> keepShoppingFor({required Product product}) async {
+  Future<List<Product>> addKeepShoppingFor({required Product product}) async {
     try {
       List<Product> keepShoppingFor = [];
 
-      http.Response res = await accountApis.keepShoppingFor(product: product);
+      http.Response res =
+          await accountApis.addKeepShoppingFor(product: product);
 
       if (res.statusCode == 200) {
         for (int i = 0; i < jsonDecode(res.body).length; i++) {

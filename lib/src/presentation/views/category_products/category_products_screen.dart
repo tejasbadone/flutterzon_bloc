@@ -51,12 +51,11 @@ class CategoryProductsScreen extends StatelessWidget {
                       itemBuilder: (context, index) {
                         final product = state.productList[index];
                         final averageRating = state.averageRatingList[index];
-                        final deliveryDate = getDeliveryDate();
 
                         return SingleListingProduct(
                           product: product,
                           averageRating: averageRating,
-                          deliveryDate: deliveryDate,
+                          deliveryDate: getDeliveryDate(),
                         );
                       }),
                 ),

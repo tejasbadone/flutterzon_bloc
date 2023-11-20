@@ -8,9 +8,11 @@ class YouMightAlsoLikeSingle extends StatefulWidget {
   const YouMightAlsoLikeSingle({
     super.key,
     required this.product,
+    required this.averageRating,
   });
 
   final Product product;
+  final double averageRating;
 
   @override
   State<YouMightAlsoLikeSingle> createState() => _YouMightAlsoLikeSingleState();
@@ -27,16 +29,6 @@ class _YouMightAlsoLikeSingleState extends State<YouMightAlsoLikeSingle> {
 
   @override
   Widget build(BuildContext context) {
-    double totalRating = 0;
-    for (int i = 0; i < widget.product.rating!.length; i++) {
-      totalRating += widget.product.rating![i].rating;
-    }
-
-    double averageRating = 0;
-    if (totalRating != 0) {
-      averageRating = totalRating / widget.product.rating!.length;
-    }
-
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 6),
       padding: const EdgeInsets.symmetric(horizontal: 4),
@@ -59,7 +51,7 @@ class _YouMightAlsoLikeSingleState extends State<YouMightAlsoLikeSingle> {
                 overflow: TextOverflow.ellipsis),
           ),
           Stars(
-            rating: averageRating,
+            rating: widget.averageRating,
             size: 18,
           ),
           Text(

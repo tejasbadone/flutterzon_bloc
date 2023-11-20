@@ -80,8 +80,18 @@ final router = GoRouter(initialLocation: '/', routes: [
       final averageRating = extraData["averageRating"] as double;
 
       return MaterialPage(
-          child: BlocProvider.value(
-        value: UserRatingCubit(AccountRepository())..userRating(product),
+          child: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) =>
+                UserRatingCubit(AccountRepository())..userRating(product),
+          ),
+          BlocProvider(
+            create: (context) =>
+                FetchCategoryProductsBloc(CategoryProductsRepository())
+                  ..add(CategoryPressedEvent(category: product.category)),
+          ),
+        ],
         child: ProductDetailsScreen(
           product: product,
           deliveryDate: deliveryDate,

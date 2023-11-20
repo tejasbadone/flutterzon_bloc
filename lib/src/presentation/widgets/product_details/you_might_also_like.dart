@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_amazon_clone_bloc/src/data/models/product.dart';
+import 'package:flutter_amazon_clone_bloc/src/logic/blocs/category_products/fetch_category_products_bloc/fetch_category_products_bloc.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/widgets/common_widgets/you_might_also_like_single.dart';
+import 'package:flutter_amazon_clone_bloc/src/utils/utils.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../../config/router/app_route_constants.dart';
 
 class YouMightAlsoLike extends StatelessWidget {
   const YouMightAlsoLike({
     super.key,
-    required this.categoryProductList,
-    required this.deliveryDate,
   });
-
-  final List<Product>? categoryProductList;
-  final String deliveryDate;
 
   @override
   Widget build(BuildContext context) {
@@ -23,30 +24,51 @@ class YouMightAlsoLike extends StatelessWidget {
               fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black87),
         ),
         const SizedBox(height: 8),
-        categoryProductList == null
-            ? const Center(
-                child: CircularProgressIndicator(),
-              )
-            : SizedBox(
-                height: 250,
-                child: ListView.builder(
+        SizedBox(
+          height: 250,
+          child: BlocConsumer<FetchCategoryProductsBloc,
+              FetchCategoryProductsState>(
+            listener: (context, state) {
+              if (state is FetchCategoryProductsErrorS) {
+                showSnackBar(context, state.errorString);
+              }
+            },
+            builder: (context, state) {
+              if (state is FetchCategoryProductsLoadingS) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              if (state is FetchCategoryProductsSuccessS) {
+                return ListView.builder(
                     scrollDirection: Axis.horizontal,
-                    itemCount: categoryProductList!.length,
+                    itemCount: state.productList.length,
                     itemBuilder: ((context, index) {
-                      Product productData = categoryProductList![index];
+                      Product product = state.productList[index];
+                      double averageRating = state.averageRatingList[index];
 
                       return GestureDetector(
                           onTap: () {
-                            // Navigator.pushNamed(
-                            //     context, ProductDetailsScreen.routeName,
-                            //     arguments: {
-                            //       'product': productData,
-                            //       'deliveryDate': deliveryDate,
-                            //     });
+                            context.pushNamed(
+                                AppRouteConstants
+                                    .productDetailsScreenRoute.name,
+                                extra: {
+                                  "product": product,
+                                  "deliveryDate": getDeliveryDate(),
+                                  "averageRating": averageRating
+                                });
                           },
-                          child: YouMightAlsoLikeSingle(product: productData));
-                    })),
-              ),
+                          child: YouMightAlsoLikeSingle(
+                              averageRating: averageRating, product: product));
+                    }));
+              } else {
+                return const Center(
+                  child: Text('null'),
+                );
+              }
+            },
+          ),
+        ),
       ],
     );
   }

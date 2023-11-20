@@ -6,6 +6,7 @@ import 'package:flutter_amazon_clone_bloc/src/logic/blocs/account/wish_list/wish
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/bottom_bar/bottom_bar_bloc.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/views/account/account_screen.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/views/another_screen.dart';
+import 'package:flutter_amazon_clone_bloc/src/presentation/views/cart/cart_screen.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/views/home/home_screen.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/views/menu/menu_screen.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/widgets/bottom_bar/custom_bottom_sheet.dart';
@@ -28,10 +29,7 @@ class BottomBar extends StatelessWidget {
 
   List<Widget> pages = [
     const HomeScreen(),
-    // BlocProvider.value(
-    //   value: FetchOrdersBloc(AccountRepository())
-    //     ..add(const FetchAccountOrdersEvent()),
-    //   child:
+
     MultiBlocProvider(
       providers: [
         BlocProvider(
@@ -49,7 +47,7 @@ class BottomBar extends StatelessWidget {
     ),
     // ),
     const AnotherScreen(appBarTitle: 'More Screen'),
-    const AnotherScreen(appBarTitle: 'Cart Screen'),
+    const CartScreen(),
     const MenuScreen(),
   ];
 

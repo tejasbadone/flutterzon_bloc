@@ -1,9 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_amazon_clone_bloc/src/config/router/app_route_constants.dart';
 import 'package:flutter_amazon_clone_bloc/src/data/models/product.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/widgets/common_widgets/stars.dart';
 import 'package:flutter_amazon_clone_bloc/src/utils/constants/constants.dart';
 import 'package:flutter_amazon_clone_bloc/src/utils/utils.dart';
+import 'package:go_router/go_router.dart';
 
 class SingleWishListProduct extends StatelessWidget {
   const SingleWishListProduct({
@@ -24,11 +26,12 @@ class SingleWishListProduct extends StatelessWidget {
 
     return GestureDetector(
       onTap: () {
-        // Navigator.pushNamed(context, ProductDetailsScreen.routeName,
-        //     arguments: {
-        //       'product': widget.product,
-        //       'deliveryDate': widget.deliveryDate,
-        //     });
+        context.pushNamed(AppRouteConstants.productDetailsScreenRoute.name,
+            extra: {
+              "product": product,
+              "deliveryDate": deliveryDate,
+              "averageRating": averageRating
+            });
       },
       child: Container(
         height: 230,

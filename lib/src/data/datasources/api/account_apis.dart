@@ -92,7 +92,7 @@ class AccountApis {
     }
   }
 
-  Future<http.Response> keepShoppingFor({required Product product}) async {
+  Future<http.Response> addKeepShoppingFor({required Product product}) async {
     final String token = await getToken();
     try {
       http.Response res = await client.post(

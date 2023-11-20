@@ -5,9 +5,3 @@ class CarouselImageState {
 
   CarouselImageState({required this.index});
 }
-
-// final class CarouselImageChangeState extends CarouselImageState {
-//   final int index;
-
-//   CarouselImageChangeState({required this.index});
-// }

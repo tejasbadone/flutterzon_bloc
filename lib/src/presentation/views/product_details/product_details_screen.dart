@@ -2,8 +2,9 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_amazon_clone_bloc/src/data/models/product.dart';
 import 'package:flutter_amazon_clone_bloc/src/data/repositories/account_repository.dart';
-import 'package:flutter_amazon_clone_bloc/src/logic/blocs/account/product_rating/product_rating_bloc.dart';
+import 'package:flutter_amazon_clone_bloc/src/logic/blocs/home_blocs/carousel_bloc/carousel_image_bloc.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/product_details/user_rating/user_rating_cubit.dart';
+import 'package:flutter_amazon_clone_bloc/src/logic/blocs/user_cubit/user_cubit.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/widgets/common_widgets/custom_app_bar.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/widgets/common_widgets/custom_elevated_button.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/widgets/common_widgets/divider_with_sizedbox.dart';
@@ -19,7 +20,7 @@ import 'package:flutter_amazon_clone_bloc/src/utils/utils.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
-class ProductDetailsScreen extends StatefulWidget {
+class ProductDetailsScreen extends StatelessWidget {
   final Product product;
   final String deliveryDate;
   final double averageRating;
@@ -32,83 +33,10 @@ class ProductDetailsScreen extends StatefulWidget {
   });
 
   @override
-  State<ProductDetailsScreen> createState() => _ProductDetailsScreenState();
-}
-
-class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
-  // final ProductDetailsServices productDetailsServices =
-  //     ProductDetailsServices();
-
-  // final AccountServices accountServices = AccountServices();
-
-  final CarouselController controller = CarouselController();
-  // final HomeServices homeServices = HomeServices();
-  // List<Product>? categoryProductList;
-  int currentIndex = 0;
-  // bool isOrdered = false;
-
-  // double averageRating = 0;
-  // double userRating = -1;
-
-  // String? price;
-  // String? emi;
-  // bool isFilled = false;
-
-  // getCategoryProducts() async {
-  //   categoryProductList = await homeServices.fetchCategoryProducts(
-  //       context: context, category: widget.arguments['product'].category);
-  //   categoryProductList!.shuffle();
-  //   setState(() {});
-  // }
-
-  // addKeepShoppingForProduct() {
-  //   accountServices.keepShoppingFor(
-  //       context: context, product: widget.arguments['product']);
-  //   setState(() {});
-  // }
-
-  // getProductRating() async {
-  //   userRating = await productDetailsServices.getRating(
-  //       context: context, product: widget.arguments['product']);
-  //   if (context.mounted) {
-  //     averageRating = await productDetailsServices.getAverageRating(
-  //         context: context, product: widget.arguments['product']);
-  //   }
-  //   setState(() {});
-  // }
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   getProductRating();
-  //   addKeepShoppingForProduct();
-  //   getCategoryProducts();
-  //   price = formatPrice(widget.arguments['product'].price);
-  //   emi = getEmi(widget.arguments['product']);
-  // }
-
-  @override
   Widget build(BuildContext context) {
-    // final user = Provider.of<UserProvider>(context, listen: false).user;
-
-    // Product product = widget.arguments['product'];
-    // String deliveryDate = widget.arguments['deliveryDate'];
-
-    // final cartCategoryOffer =
-    //     Provider.of<CartOfferProvider>(context, listen: false);
+    final CarouselController controller = CarouselController();
 
     bool isFavourite = false;
-
-    // final userProvider = Provider.of<UserProvider>(context, listen: false);
-
-    // String productId = widget.arguments['product'].id;
-
-    // for (int i = 0; i < userProvider.user.wishList.length; i++) {
-    //   if (productId == userProvider.user.wishList[i]['product']['_id']) {
-    //     isFavourite = true;
-    //     break;
-    //   }
-    // }
 
     return Scaffold(
       appBar: const PreferredSize(
@@ -125,15 +53,26 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 Stack(
                   children: [
                     const SizedBox(height: 10),
-                    CustomCarouselSliderList(
-                        onPageChanged: (index, reason) {
-                          setState(() {
-                            currentIndex = index;
-                          });
-                        },
-                        sliderImages: widget.product.images),
+                    BlocBuilder<CarouselImageBloc, CarouselImageState>(
+                      builder: (context, state) {
+                        return Column(
+                          children: [
+                            CustomCarouselSliderList(
+                                onPageChanged: (index, reason) {
+                                  BlocProvider.of<CarouselImageBloc>(context)
+                                      .add(CarouselImageEvent(index: index));
+                                },
+                                sliderImages: product.images),
+                            DotsIndicatorList(
+                                controller: controller,
+                                current: state.index,
+                                sliderImages: product.images),
+                          ],
+                        );
+                      },
+                    ),
                     Positioned(
-                        bottom: 10,
+                        bottom: 30,
                         child: Container(
                             height: 40,
                             width: 40,
@@ -178,10 +117,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   ],
                 ),
                 const SizedBox(height: 10),
-                DotsIndicatorList(
-                    controller: controller,
-                    current: currentIndex,
-                    sliderImages: widget.product.images),
                 const SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -192,16 +127,16 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     ),
                     Row(
                       children: [
-                        Text(widget.averageRating.toStringAsFixed(1),
+                        Text(averageRating.toStringAsFixed(1),
                             style: const TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.w400,
                                 color: Colors.black87)),
                         const SizedBox(width: 4),
-                        Stars(rating: widget.averageRating),
+                        Stars(rating: averageRating),
                         const SizedBox(width: 6),
                         Text(
-                          widget.product.rating!.length.toString(),
+                          product.rating!.length.toString(),
                           style: TextStyle(
                             color: Constants.selectedNavBarColor,
                             fontSize: 12,
@@ -214,7 +149,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 ),
                 const SizedBox(height: 10),
                 Text(
-                  widget.product.name,
+                  product.name,
                   style: const TextStyle(fontSize: 14, color: Colors.black54),
                 ),
               ],
@@ -237,7 +172,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       ),
                       children: [
                         TextSpan(
-                          text: '₹${formatPrice(widget.product.price)}',
+                          text: '₹${formatPrice(product.price)}',
                           style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
@@ -259,7 +194,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       ),
                       children: [
                         TextSpan(
-                          text: widget.deliveryDate,
+                          text: deliveryDate,
                           style: const TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.bold,
@@ -283,14 +218,33 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     // user.address == ''
                     //     ? const SizedBox()
                     //     :
-                    Expanded(
-                      child: Text(
-                        'Deliver to {} - {}',
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                            fontWeight: FontWeight.normal,
-                            color: Constants.selectedNavBarColor),
-                      ),
+                    BlocBuilder<UserCubit, UserState>(
+                      builder: (context, state) {
+                        if (state is UserSuccessS) {
+                          if (state.user.address != '') {
+                            return Expanded(
+                              child: Text(
+                                'Deliver to ${state.user.name} - ${state.user.address}',
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                    fontWeight: FontWeight.normal,
+                                    color: Constants.selectedNavBarColor),
+                              ),
+                            );
+                          } else {
+                            return Expanded(
+                              child: Text(
+                                'Deliver to ${state.user.name} ',
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                    fontWeight: FontWeight.normal,
+                                    color: Constants.selectedNavBarColor),
+                              ),
+                            );
+                          }
+                        }
+                        return const SizedBox();
+                      },
                     ),
                   ],
                 ),
@@ -381,10 +335,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               sB1Height: 4,
               sB2Height: 6,
             ),
-            ProductFeatures(product: widget.product),
+            ProductFeatures(product: product),
             const DividerWithSizedBox(),
-            CustomerReviews(
-                averageRating: widget.averageRating, product: widget.product),
+            CustomerReviews(averageRating: averageRating, product: product),
             const DividerWithSizedBox(),
 
             // userRating == -1
@@ -404,25 +357,19 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 
               if (state is UserRatingSuccessS) {
                 if (state.userRating == -1) {
-                  print(state.userRating);
                   return const SizedBox();
                 } else {
-                  print(state.userRating);
-                  return ratingFromUser(
-                      context, state.userRating, widget.product);
+                  return ratingFromUser(context, state.userRating, product);
                 }
               } else {
                 if (state is UpdateUserRatingSuccessS) {
-                  return ratingFromUser(
-                      context, state.userRating, widget.product);
+                  return ratingFromUser(context, state.userRating, product);
                 }
               }
               return const SizedBox();
-            })
+            }),
 
-            // YouMightAlsoLike(
-            //     categoryProductList: categoryProductList,
-            //     deliveryDate: 'deliveryDate'),
+            const YouMightAlsoLike(),
           ]),
         ),
       ),
@@ -453,7 +400,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   color: Constants.secondaryColor,
                 ),
             onRatingUpdate: (rating) {
-              print('pressed!');
               BlocProvider.value(
                   value: UserRatingCubit(AccountRepository())
                     ..updateUserRating(userRating: rating, product: product));
@@ -481,7 +427,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               width: 4,
             ),
             Text(
-              formatPrice(widget.product.price),
+              formatPrice(product.price),
               style: const TextStyle(fontSize: 32, fontWeight: FontWeight.w400),
             ),
           ],
@@ -496,7 +442,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 fontSize: 15, fontWeight: FontWeight.bold, color: Colors.black),
             children: [
               TextSpan(
-                text: 'from ₹${getEmi(widget.product)}. No Cost EMI available.',
+                text: 'from ₹${getEmi(product)}. No Cost EMI available.',
                 style: const TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.normal,
