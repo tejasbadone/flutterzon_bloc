@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_amazon_clone_bloc/src/data/models/product.dart';
 import 'package:flutter_amazon_clone_bloc/src/data/repositories/account_repository.dart';
+import 'package:flutter_amazon_clone_bloc/src/logic/blocs/account/wish_list/wish_list_cubit.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/home_blocs/carousel_bloc/carousel_image_bloc.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/product_details/user_rating/user_rating_cubit.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/user_cubit/user_cubit.dart';
@@ -72,48 +73,51 @@ class ProductDetailsScreen extends StatelessWidget {
                       },
                     ),
                     Positioned(
-                        bottom: 30,
-                        child: Container(
-                            height: 40,
-                            width: 40,
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(30)),
-                            child: Center(
-                              child: isFavourite == true
-                                  ? InkWell(
-                                      onTap: () {
-                                        // accountServices.deleteFromWishList(
-                                        //     context: context,
-                                        //     product:
-                                        //         widget.arguments['product']);
-                                        // setState(() {
-                                        //   isFavourite = false;
-                                        // });
-                                      },
-                                      child: const Icon(
-                                        Icons.favorite,
-                                        color: Colors.red,
-                                        size: 30,
-                                      ),
-                                    )
-                                  : InkWell(
-                                      onTap: () {
-                                        // accountServices.addToWishList(
-                                        //     context: context,
-                                        //     product:
-                                        //         widget.arguments['product']);
-                                        // setState(() {
-                                        //   isFavourite = true;
-                                        // });
-                                      },
-                                      child: const Icon(
-                                        Icons.favorite_border,
-                                        color: Colors.grey,
-                                        size: 30,
-                                      ),
-                                    ),
-                            )))
+                      bottom: 30,
+                      child: Container(
+                        height: 40,
+                        width: 40,
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(30)),
+                        child: BlocBuilder<WishListCubit, WishListState>(
+                          builder: (context, state) {
+                            if (state is AddToWishListSuccessS) {
+                              return WishListIcon(
+                                iconColor: Colors.red,
+                                product: product,
+                                onPressed: () {
+                                  context
+                                      .read<WishListCubit>()
+                                      .addToWishList(product: product);
+                                },
+                              );
+                            }
+                            if (state is DeleteFromWishListS) {
+                              return WishListIcon(
+                                iconColor: Colors.grey,
+                                product: product,
+                                onPressed: () {
+                                  context
+                                      .read<WishListCubit>()
+                                      .addToWishList(product: product);
+                                },
+                              );
+                            } else {
+                              return WishListIcon(
+                                iconColor: Colors.grey,
+                                product: product,
+                                onPressed: () {
+                                  context
+                                      .read<WishListCubit>()
+                                      .addToWishList(product: product);
+                                },
+                              );
+                            }
+                          },
+                        ),
+                      ),
+                    ),
                   ],
                 ),
                 const SizedBox(height: 10),
@@ -470,5 +474,44 @@ class ProductDetailsScreen extends StatelessWidget {
         ),
       ],
     );
+  }
+}
+
+class WishListIcon extends StatelessWidget {
+  const WishListIcon({
+    super.key,
+    required this.product,
+    required this.onPressed,
+    required this.iconColor,
+  });
+
+  final Product product;
+  final VoidCallback onPressed;
+  final Color iconColor;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+        child: InkWell(
+      onTap: onPressed,
+      child: Icon(
+        Icons.favorite,
+        color: iconColor,
+        size: 30,
+      ),
+    )
+        // : InkWell(
+        //     onTap: () {
+        //       context
+        //           .read<WishListCubit>()
+        //           .addToWishList(product: product);
+        //     },
+        //     child: const Icon(
+        //       Icons.favorite_border,
+        //       color: Colors.grey,
+        //       size: 30,
+        //     ),
+        //   ),
+        );
   }
 }

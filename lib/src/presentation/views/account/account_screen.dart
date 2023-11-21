@@ -159,7 +159,9 @@ class _AccountScreenState extends State<AccountScreen> {
                               }),
                         );
                       }
-                      return const Text('null');
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
                     },
                   ),
                 ],

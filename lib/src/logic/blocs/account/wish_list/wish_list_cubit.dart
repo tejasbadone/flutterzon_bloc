@@ -30,4 +30,41 @@ class WishListCubit extends Cubit<WishListState> {
       emit(GetWishListErrorS(errorString: e.toString()));
     }
   }
+
+  void isWishListed({required Product product}) async {
+    try {
+      bool isWishListed =
+          await accountRepository.isWishListed(product: product);
+
+      print(isWishListed);
+
+      if (isWishListed) {
+        emit(AddToWishListSuccessS());
+      }
+    } catch (e) {
+      emit(GetWishListErrorS(errorString: e.toString()));
+    }
+  }
+
+  void addToWishList({required Product product}) async {
+    try {
+      emit(AddToWishListPressedS(product: product));
+
+      accountRepository.addToWishList(product: product);
+
+      emit(AddToWishListPressedS(product: product));
+    } catch (e) {
+      emit(AddToWishListErrorS(errorString: e.toString()));
+    }
+  }
+
+  void deleteFromWishList({required Product product}) async {
+    try {
+      accountRepository.deleteFromWishList(product: product);
+
+      emit(DeleteFromWishListS());
+    } catch (e) {
+      emit(AddToWishListErrorS(errorString: e.toString()));
+    }
+  }
 }

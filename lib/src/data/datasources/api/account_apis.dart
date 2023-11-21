@@ -95,17 +95,12 @@ class AccountApis {
   Future<http.Response> addKeepShoppingFor({required Product product}) async {
     final String token = await getToken();
     try {
-      http.Response res = await client.post(
-        Uri.parse(keepShoppingForUri),
+      http.Response res = await client.get(
+        Uri.parse('$addKeepShoppingForUri/${product.id}'),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
           'x-auth-token': token,
         },
-        body: jsonEncode(
-          {
-            'id': product.id,
-          },
-        ),
       );
 
       return res;
@@ -136,6 +131,58 @@ class AccountApis {
     try {
       http.Response res = await client.get(
         Uri.parse(getWishListUri),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': token,
+        },
+      );
+
+      return res;
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<http.Response> addToWishList({required Product product}) async {
+    final String token = await getToken();
+    try {
+      http.Response res = await client.post(Uri.parse(addToWishListUri),
+          headers: {
+            'Content-Type': 'application/json; charset=UTF-8',
+            'x-auth-token': token,
+          },
+          body: jsonEncode({
+            "id": product.id,
+          }));
+
+      return res;
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<http.Response> deletFromWishList({required Product product}) async {
+    final String token = await getToken();
+    try {
+      http.Response res = await client.delete(
+        Uri.parse('$removeFromWishListUri/${product.id}'),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': token,
+        },
+      );
+
+      return res;
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<http.Response> isWishListed({required Product product}) async {
+    final String token = await getToken();
+    try {
+      http.Response res = await client.get(
+        Uri.parse('$isWishListedUri/${product.id}'),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
           'x-auth-token': token,

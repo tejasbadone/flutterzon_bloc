@@ -12,11 +12,14 @@ class KeepShoppingForCubit extends Cubit<KeepShoppingForState> {
 
   void keepShoppingFor() async {
     try {
+      List<Product> tempKeepShoppingForList;
       List<Product> keepShoppingForList;
       List<double> averageRatingList = [];
       double rating;
 
-      keepShoppingForList = await accountRepository.getKeepShoppingFor();
+      tempKeepShoppingForList = await accountRepository.getKeepShoppingFor();
+
+      keepShoppingForList = tempKeepShoppingForList.reversed.toList();
 
       for (int i = 0; i < keepShoppingForList.length; i++) {
         rating = await accountRepository
@@ -30,6 +33,17 @@ class KeepShoppingForCubit extends Cubit<KeepShoppingForState> {
           averageRatingList: averageRatingList));
     } catch (e) {
       emit(KeepShoppingForErrorS(errorString: e.toString()));
+    }
+  }
+
+  void addToKeepShoppingFor({required Product product}) async {
+    try {
+      print('inside cubit');
+      accountRepository.addKeepShoppingFor(product: product);
+
+      emit(AddKeepShoppingForSuccessS(product: product));
+    } catch (e) {
+      emit(AddKeepShoppingForErrorS(errorString: e.toString()));
     }
   }
 }

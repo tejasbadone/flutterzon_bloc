@@ -29,3 +29,23 @@ final class KeepShoppingForErrorS extends KeepShoppingForState {
   @override
   List<Object> get props => [errorString];
 }
+
+// Add keep shopping for
+class AddKeepShoppingForLoadingS extends KeepShoppingForState {}
+
+class AddKeepShoppingForSuccessS extends KeepShoppingForState {
+  final Product product;
+
+  const AddKeepShoppingForSuccessS({required this.product});
+  @override
+  List<Object> get props => [product];
+}
+
+class AddKeepShoppingForErrorS extends KeepShoppingForState {
+  final String errorString;
+
+  const AddKeepShoppingForErrorS({required this.errorString});
+
+  @override
+  List<Object> get props => [errorString];
+}

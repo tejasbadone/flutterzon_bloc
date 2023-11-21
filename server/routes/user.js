@@ -305,10 +305,10 @@ userRouter.post("/api/move-to-cart", auth , async (req, res) => {
 });
 
 
-userRouter.post("/api/keep-shopping-for", auth , async (req, res) => {
+userRouter.get("/api/add-keep-shopping-for/:id", auth , async (req, res) => {
 
     try {
-        const {id} = req.body;
+        const {id} = req.params;
         const product = await Product.findById(id);
         let user = await User.findById(req.user);
 
@@ -420,6 +420,7 @@ userRouter.delete("/api/delete-from-wish-list/:id", auth, async (req, res) => {
     try {
         
         const {id} = req.params;
+        console.log(req.user);
         const product = await  Product.findById(id);
         let user = await User.findById(req.user);
 
@@ -437,6 +438,30 @@ userRouter.delete("/api/delete-from-wish-list/:id", auth, async (req, res) => {
         res.status(500).json({error : e.message});
     }
 });
+
+
+
+userRouter.get("/api/is-wishlisted/:id", auth, async (req, res) => {
+
+try {
+    
+    const {id} = req.params;
+    
+    let user = await User.findById(req.user);
+    const product = await Product.findById(id);
+    let isFound = false;
+    for(let i=0; i<user.wishList.length ; i++){
+        if(user.wishList[i].product._id.equals(product._id)){
+            isFound =  true;
+        }
+    }
+
+    res.json(isFound);
+
+} catch (e) {
+    res.status(500).json({error : e.message});
+}});
+
 
 
 userRouter.post("/api/add-to-cart-from-wish-list", auth, async (req, res) => {

@@ -39,9 +39,6 @@ class KeepShoppingFor extends StatelessWidget {
                   ))
             ],
           ),
-          // user.keepShoppingFor.isEmpty
-          // ? const SizedBox()
-          // :
           BlocConsumer<KeepShoppingForCubit, KeepShoppingForState>(
             listener: (context, state) {
               if (state is KeepShoppingForErrorS) {
@@ -76,17 +73,13 @@ class KeepShoppingFor extends StatelessWidget {
                       ? 4
                       : state.productList.length,
                   itemBuilder: (context, index) {
-                    if (state.productList.length >= 4) {
-                      index = getUniqueRandomInt(max: state.productList.length);
-                    }
-
                     return InkWell(
                       onTap: () {
-                        // Navigator.pushNamed(
-                        //     context, CategoryDealsScreen.routeName,
-                        //     arguments: user.keepShoppingFor[index]['product']
-                        //         ['category'],
-                        // );
+                        context.pushNamed(
+                            AppRouteConstants.categoryproductsScreenRoute.name,
+                            pathParameters: {
+                              "category": state.productList[index].category
+                            });
                       },
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -118,7 +111,9 @@ class KeepShoppingFor extends StatelessWidget {
                 );
               }
 
-              return const Text('return null');
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
             },
           ),
         ],

@@ -104,28 +104,9 @@ class AccountRepository {
     }
   }
 
-  Future<List<Product>> addKeepShoppingFor({required Product product}) async {
+  void addKeepShoppingFor({required Product product}) async {
     try {
-      List<Product> keepShoppingFor = [];
-
-      http.Response res =
-          await accountApis.addKeepShoppingFor(product: product);
-
-      if (res.statusCode == 200) {
-        for (int i = 0; i < jsonDecode(res.body).length; i++) {
-          keepShoppingFor.add(
-            Product.fromJson(
-              jsonEncode(
-                jsonDecode(res.body)[i],
-              ),
-            ),
-          );
-        }
-
-        return keepShoppingFor;
-      } else {
-        throw Exception(jsonDecode(res.body)['msg']);
-      }
+      await accountApis.addKeepShoppingFor(product: product);
     } catch (e) {
       throw Exception(e.toString());
     }
@@ -174,6 +155,44 @@ class AccountRepository {
         }
 
         return wishList;
+      } else {
+        throw Exception(jsonDecode(res.body)['msg']);
+      }
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  void addToWishList({required Product product}) async {
+    try {
+      http.Response res = await accountApis.addToWishList(product: product);
+
+      if (res.statusCode != 200) {
+        throw Exception(jsonDecode(res.body)['msg']);
+      }
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  void deleteFromWishList({required Product product}) async {
+    try {
+      http.Response res = await accountApis.deletFromWishList(product: product);
+
+      if (res.statusCode != 200) {
+        throw Exception(jsonDecode(res.body)['msg']);
+      }
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<bool> isWishListed({required Product product}) async {
+    try {
+      http.Response res = await accountApis.isWishListed(product: product);
+
+      if (res.statusCode == 200) {
+        return jsonDecode(res.body);
       } else {
         throw Exception(jsonDecode(res.body)['msg']);
       }
