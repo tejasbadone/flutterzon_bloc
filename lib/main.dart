@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_amazon_clone_bloc/src/config/router/router.dart';
 import 'package:flutter_amazon_clone_bloc/src/config/themes/app_theme.dart';
+import 'package:flutter_amazon_clone_bloc/src/data/datasources/api/user_apis.dart';
 import 'package:flutter_amazon_clone_bloc/src/data/repositories/account_repository.dart';
 import 'package:flutter_amazon_clone_bloc/src/data/repositories/auth_repository.dart';
 import 'package:flutter_amazon_clone_bloc/src/data/repositories/category_products_repository.dart';
 import 'package:flutter_amazon_clone_bloc/src/data/repositories/search_products_repository.dart';
+import 'package:flutter_amazon_clone_bloc/src/data/repositories/user_repository.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/account/fetch_orders/fethc_orders_cubit.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/account/keep_shopping_for/cubit/keep_shopping_for_cubit.dart';
 
@@ -67,7 +69,9 @@ class MyApp extends StatelessWidget {
           create: (context) => KeepShoppingForCubit(AccountRepository()),
         ),
         BlocProvider(
-          create: (context) => WishListCubit(AccountRepository()),
+          create: (context) => WishListCubit(
+              accountRepository: AccountRepository(),
+              userRepository: UserRepository()),
         ),
         BlocProvider(
           create: (context) => UserRatingCubit(AccountRepository()),

@@ -1,7 +1,30 @@
+import 'dart:convert';
+
+import 'package:flutter_amazon_clone_bloc/src/data/models/product.dart';
+import 'package:flutter_amazon_clone_bloc/src/utils/constants/strings.dart';
+import 'package:flutter_amazon_clone_bloc/src/utils/utils.dart';
 import 'package:http/http.dart' as http;
 
-class ProductApi {
-// Future<http.Response> addToWishList() async {
+class UserApi {
+  final client = http.Client();
 
-// }
+  Future<http.Response> addToCartFromWishList(
+      {required Product product}) async {
+    final token = await getToken();
+
+    try {
+      http.Response res = await client.post(Uri.parse(addToCartFromWishListUri),
+          headers: {
+            'Content-Type': 'application/json; charset=UTF-8',
+            'x-auth-token': token,
+          },
+          body: jsonEncode({
+            "id": product.id,
+          }));
+
+      return res;
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
 }

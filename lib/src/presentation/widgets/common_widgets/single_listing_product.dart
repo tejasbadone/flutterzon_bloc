@@ -40,7 +40,7 @@ class SingleListingProduct extends StatelessWidget {
 
         BlocProvider.of<KeepShoppingForCubit>(context)
             .addToKeepShoppingFor(product: product!);
-        BlocProvider.of<WishListCubit>(context).isWishListed(product: product!);
+        BlocProvider.of<WishListCubit>(context).wishList(product: product!);
       },
       child: Container(
         height: 180,

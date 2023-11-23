@@ -37,8 +37,6 @@ class ProductDetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final CarouselController controller = CarouselController();
 
-    bool isFavourite = false;
-
     return Scaffold(
       appBar: const PreferredSize(
           preferredSize: Size.fromHeight(60), child: CustomAppBar()),
@@ -82,9 +80,9 @@ class ProductDetailsScreen extends StatelessWidget {
                             borderRadius: BorderRadius.circular(30)),
                         child: BlocBuilder<WishListCubit, WishListState>(
                           builder: (context, state) {
-                            if (state is AddToWishListSuccessS) {
+                            if (state is NotAddedToWishListS) {
                               return WishListIcon(
-                                iconColor: Colors.red,
+                                iconColor: Colors.grey,
                                 product: product,
                                 onPressed: () {
                                   context
@@ -93,7 +91,18 @@ class ProductDetailsScreen extends StatelessWidget {
                                 },
                               );
                             }
-                            if (state is DeleteFromWishListS) {
+                            if (state is AddedToWishListS) {
+                              return WishListIcon(
+                                iconColor: Colors.red,
+                                product: product,
+                                onPressed: () {
+                                  context
+                                      .read<WishListCubit>()
+                                      .deleteFromWishList(product: product);
+                                },
+                              );
+                            }
+                            if (state is DeletedFromWishListS) {
                               return WishListIcon(
                                 iconColor: Colors.grey,
                                 product: product,
@@ -219,9 +228,6 @@ class ProductDetailsScreen extends StatelessWidget {
                     const SizedBox(
                       width: 10,
                     ),
-                    // user.address == ''
-                    //     ? const SizedBox()
-                    //     :
                     BlocBuilder<UserCubit, UserState>(
                       builder: (context, state) {
                         if (state is UserSuccessS) {
@@ -310,26 +316,26 @@ class ProductDetailsScreen extends StatelessWidget {
                       fontWeight: FontWeight.w400),
                 ),
                 const SizedBox(height: 14),
-                InkWell(
-                  onTap: () {
-                    // if (isFavourite == true) {
-                    //   showSnackBar(
-                    //       context, 'This product is already in your wish list');
-                    // } else {
-                    //   accountServices.addToWishList(
-                    //       context: context,
-                    //       product: widget.arguments['product']);
-                    //   setState(() {
-                    //     isFavourite = true;
-                    //   });
-                    //   showSnackBar(context, 'Added to wish list!');
-                    // }
+                BlocBuilder<WishListCubit, WishListState>(
+                  builder: (context, state) {
+                    return InkWell(
+                      onTap: () {
+                        if (state is AddedToWishListS) {
+                          return showSnackBar(context,
+                              'This product is already in your wish list');
+                        } else {
+                          context
+                              .read<WishListCubit>()
+                              .addToWishList(product: product);
+                        }
+                      },
+                      child: Text(
+                        'Add to Wish List',
+                        style: TextStyle(
+                            color: Constants.selectedNavBarColor, fontSize: 15),
+                      ),
+                    );
                   },
-                  child: Text(
-                    'Add to Wish List',
-                    style: TextStyle(
-                        color: Constants.selectedNavBarColor, fontSize: 15),
-                  ),
                 ),
               ],
             ),

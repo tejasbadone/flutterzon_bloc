@@ -30,28 +30,50 @@ final class GetWishListErrorS extends WishListState {
   List<Object> get props => [errorString];
 }
 
-// add to wish list
+// product details screen - wishlist
 
-class AddToWishListPressedS extends WishListState {
+class NotAddedToWishListS extends WishListState {
   final Product product;
 
-  const AddToWishListPressedS({required this.product});
+  const NotAddedToWishListS({required this.product});
 
   @override
   List<Object> get props => [product];
 }
 
-class AddToWishListSuccessS extends WishListState {}
+class AddedToWishListS extends WishListState {
+  final Product product;
 
-class AddToWishListErrorS extends WishListState {
+  const AddedToWishListS({required this.product});
+
+  @override
+  List<Object> get props => [product];
+}
+
+class DeletedFromWishListS extends WishListState {
+  final Product product;
+
+  const DeletedFromWishListS({required this.product});
+
+  @override
+  List<Object> get props => [product];
+}
+
+// class AddToWishListSuccessS extends WishListState {}
+
+class WishListErrorS extends WishListState {
   final String errorString;
 
-  const AddToWishListErrorS({required this.errorString});
+  const WishListErrorS({required this.errorString});
 
   @override
   List<Object> get props => [errorString];
 }
 
-// delete from wish list
+// wish list screen
 
-class DeleteFromWishListS extends WishListState {}
+final class LoadingWishListScreenS extends WishListState {}
+
+final class AddedToCartWishListScreenS extends WishListState {}
+
+final class RemovedFromWishListScreenS extends WishListState {}

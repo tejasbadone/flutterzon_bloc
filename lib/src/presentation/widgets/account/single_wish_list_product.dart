@@ -2,9 +2,12 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_amazon_clone_bloc/src/config/router/app_route_constants.dart';
 import 'package:flutter_amazon_clone_bloc/src/data/models/product.dart';
+import 'package:flutter_amazon_clone_bloc/src/logic/blocs/account/keep_shopping_for/cubit/keep_shopping_for_cubit.dart';
+import 'package:flutter_amazon_clone_bloc/src/logic/blocs/account/wish_list/wish_list_cubit.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/widgets/common_widgets/stars.dart';
 import 'package:flutter_amazon_clone_bloc/src/utils/constants/constants.dart';
 import 'package:flutter_amazon_clone_bloc/src/utils/utils.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 class SingleWishListProduct extends StatelessWidget {
@@ -32,6 +35,10 @@ class SingleWishListProduct extends StatelessWidget {
               "deliveryDate": deliveryDate,
               "averageRating": averageRating
             });
+
+        BlocProvider.of<KeepShoppingForCubit>(context)
+            .addToKeepShoppingFor(product: product!);
+        BlocProvider.of<WishListCubit>(context).wishList(product: product!);
       },
       child: Container(
         height: 230,
@@ -140,6 +147,8 @@ class SingleWishListProduct extends StatelessWidget {
                                 //       context: context,
                                 //       product: widget.product!);
                                 // });
+                                BlocProvider.of<WishListCubit>(context)
+                                    .addToCartFromWishList(product: product!);
                               },
                               style: const ButtonStyle(
                                   backgroundColor: MaterialStatePropertyAll(
@@ -153,10 +162,8 @@ class SingleWishListProduct extends StatelessWidget {
                         ),
                         IconButton(
                           onPressed: () {
-                            // setState(() {
-                            //   accountServices.deleteFromWishList(
-                            //       context: context, product: widget.product!);
-                            // });
+                            BlocProvider.of<WishListCubit>(context)
+                                .removedFromWishListScreen(product: product!);
                           },
                           icon: const Icon(Icons.delete_outline),
                         )

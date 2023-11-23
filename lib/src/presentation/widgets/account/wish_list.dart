@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_amazon_clone_bloc/src/config/router/app_route_constants.dart';
+
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/account/wish_list/wish_list_cubit.dart';
 import 'package:flutter_amazon_clone_bloc/src/utils/constants/constants.dart';
 import 'package:flutter_amazon_clone_bloc/src/utils/utils.dart';
@@ -76,15 +77,13 @@ class WishListWidget extends StatelessWidget {
                     }
                     return InkWell(
                       onTap: () {
-                        // Map<String, dynamic> arguments = {
-                        //   'product':
-                        //       Product.fromMap(user.wishList[index]['product']),
-                        //   'deliveryDate': getDeliveryDate(),
-                        // };
-
-                        // Navigator.pushNamed(
-                        //     context, ProductDetailsScreen.routeName,
-                        //     arguments: arguments);
+                        context.pushNamed(
+                            AppRouteConstants.productDetailsScreenRoute.name,
+                            extra: {
+                              "product": state.wishList[index],
+                              "deliveryDate": getDeliveryDate(),
+                              "averageRating": state.averageRatingList[index]
+                            });
                       },
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,

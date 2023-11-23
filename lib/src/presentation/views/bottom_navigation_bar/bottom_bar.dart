@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_amazon_clone_bloc/src/data/repositories/account_repository.dart';
+import 'package:flutter_amazon_clone_bloc/src/data/repositories/user_repository.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/account/fetch_orders/fethc_orders_cubit.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/account/keep_shopping_for/cubit/keep_shopping_for_cubit.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/account/wish_list/wish_list_cubit.dart';
@@ -40,8 +41,10 @@ class BottomBar extends StatelessWidget {
             create: (context) =>
                 KeepShoppingForCubit(AccountRepository())..keepShoppingFor()),
         BlocProvider(
-            create: (context) =>
-                WishListCubit(AccountRepository())..getWishList()),
+            create: (context) => WishListCubit(
+                accountRepository: AccountRepository(),
+                userRepository: UserRepository())
+              ..getWishList()),
       ],
       child: const AccountScreen(),
     ),

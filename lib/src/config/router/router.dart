@@ -5,6 +5,7 @@ import 'package:flutter_amazon_clone_bloc/src/data/models/product.dart';
 import 'package:flutter_amazon_clone_bloc/src/data/repositories/account_repository.dart';
 import 'package:flutter_amazon_clone_bloc/src/data/repositories/category_products_repository.dart';
 import 'package:flutter_amazon_clone_bloc/src/data/repositories/search_products_repository.dart';
+import 'package:flutter_amazon_clone_bloc/src/data/repositories/user_repository.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/account/fetch_orders/fethc_orders_cubit.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/account/keep_shopping_for/cubit/keep_shopping_for_cubit.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/account/product_rating/product_rating_bloc.dart';
@@ -128,7 +129,10 @@ final router = GoRouter(initialLocation: '/', routes: [
       pageBuilder: (context, state) {
         return MaterialPage(
           child: BlocProvider.value(
-            value: WishListCubit(AccountRepository())..getWishList(),
+            value: WishListCubit(
+                accountRepository: AccountRepository(),
+                userRepository: UserRepository())
+              ..getWishList(),
             child: const WishListScreen(),
           ),
         );

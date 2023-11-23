@@ -175,13 +175,18 @@ class AccountRepository {
     }
   }
 
-  void deleteFromWishList({required Product product}) async {
+  Future<bool> deleteFromWishList({required Product product}) async {
     try {
+      bool isDeleted = false;
+
       http.Response res = await accountApis.deletFromWishList(product: product);
 
-      if (res.statusCode != 200) {
+      if (res.statusCode == 200) {
+        isDeleted = true;
+      } else {
         throw Exception(jsonDecode(res.body)['msg']);
       }
+      return isDeleted;
     } catch (e) {
       throw Exception(e.toString());
     }

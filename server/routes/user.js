@@ -420,7 +420,6 @@ userRouter.delete("/api/delete-from-wish-list/:id", auth, async (req, res) => {
     try {
         
         const {id} = req.params;
-        console.log(req.user);
         const product = await  Product.findById(id);
         let user = await User.findById(req.user);
 
@@ -471,6 +470,7 @@ userRouter.post("/api/add-to-cart-from-wish-list", auth, async (req, res) => {
         const {id} = req.body;
         const product = await Product.findById(id);
         let user = await User.findById(req.user);
+        let wishList = [];
 
 
         for(let i = 0; i<user.wishList.length; i++){
@@ -499,7 +499,14 @@ userRouter.post("/api/add-to-cart-from-wish-list", auth, async (req, res) => {
 
 
         user = await user.save();
-        res.json(user);
+
+        for(let i=0; i<user.wishList.length; i++){
+            wishList.push(user.wishList[i]['product']);
+        }
+
+
+
+        res.json(wishList);
 
     } catch (e) {
         res.status(500).json({error : e.message});
