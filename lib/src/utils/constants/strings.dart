@@ -20,3 +20,10 @@ String removeFromWishListUri = '$uri/api/delete-from-wish-list';
 String isWishListedUri = '$uri/api/is-wishlisted';
 
 String addToCartFromWishListUri = '$uri/api/add-to-cart-from-wish-list';
+
+String getCartUri = '$uri/api/get-cart';
+String addToCartUri = '$uri/api/add-to-cart';
+String removeFromCartUri = '$uri/api/remove-from-cart';
+String deleteFromCartUri = '$uri/api/delete-from-cart';
+
+String saveForLaterUri = '$uri/api/save-for-later';

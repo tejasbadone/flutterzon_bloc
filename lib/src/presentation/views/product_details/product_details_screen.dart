@@ -80,6 +80,10 @@ class ProductDetailsScreen extends StatelessWidget {
                             borderRadius: BorderRadius.circular(30)),
                         child: BlocBuilder<WishListCubit, WishListState>(
                           builder: (context, state) {
+                            if (state is GetWishListLoadingS) {
+                              return const SizedBox();
+                            }
+
                             if (state is NotAddedToWishListS) {
                               return WishListIcon(
                                 iconColor: Colors.grey,
@@ -113,15 +117,7 @@ class ProductDetailsScreen extends StatelessWidget {
                                 },
                               );
                             } else {
-                              return WishListIcon(
-                                iconColor: Colors.grey,
-                                product: product,
-                                onPressed: () {
-                                  context
-                                      .read<WishListCubit>()
-                                      .addToWishList(product: product);
-                                },
-                              );
+                              return const SizedBox();
                             }
                           },
                         ),

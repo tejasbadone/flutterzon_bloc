@@ -6,6 +6,24 @@ const User = require("../model/user");
 const Order = require("../model/order");
 
 
+
+
+userRouter.get("/api/get-cart" , auth , async (req, res) => {
+
+    try {
+        
+        let user = await User.findById(req.user);
+
+        res.json(user.cart);
+    } catch (e) {
+        res.status(500).json({error : e.message});
+    }
+
+
+});
+
+
+
 userRouter.post("/api/add-to-cart", auth , async (req, res) => {
 try {
     
@@ -31,7 +49,7 @@ try {
         }
     }
     user = await user.save();
-    res.json(user);
+    res.json(user.cart);
 
 } catch (e) {
     res.status(500).json({error : e.message});
@@ -57,7 +75,7 @@ userRouter.delete("/api/remove-from-cart/:id", auth , async (req, res)=> {
         }
 
         user = await user.save();
-        res.json(user);
+        res.json(user.cart);
 
     } catch (e) {
         res.status(500).json({error : e.message});
@@ -80,7 +98,7 @@ userRouter.delete("/api/delete-from-cart/:id", auth, async (req, res)=>{
         }
 
         user = await user.save();
-        res.json(user);
+        res.json(user.cart);
 
 
     } catch (e) {
@@ -227,7 +245,7 @@ userRouter.post("/api/save-for-later", auth , async(req, res) => {
 
         user = await user.save();
 
-        res.json(user);
+        res.json(user.saveForLater);
 
 
     }catch(e){

@@ -36,6 +36,8 @@ class WishListCubit extends Cubit<WishListState> {
 
   void wishList({required Product product}) async {
     try {
+      emit(GetWishListLoadingS());
+
       bool isWishListed =
           await accountRepository.isWishListed(product: product);
 

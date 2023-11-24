@@ -142,11 +142,6 @@ class SingleWishListProduct extends StatelessWidget {
                         Expanded(
                           child: TextButton(
                               onPressed: () {
-                                // setState(() {
-                                //   accountServices.addToCartFromWishList(
-                                //       context: context,
-                                //       product: widget.product!);
-                                // });
                                 BlocProvider.of<WishListCubit>(context)
                                     .addToCartFromWishList(product: product!);
                               },

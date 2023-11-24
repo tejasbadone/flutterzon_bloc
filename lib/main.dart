@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_amazon_clone_bloc/src/config/router/router.dart';
 import 'package:flutter_amazon_clone_bloc/src/config/themes/app_theme.dart';
-import 'package:flutter_amazon_clone_bloc/src/data/datasources/api/user_apis.dart';
 import 'package:flutter_amazon_clone_bloc/src/data/repositories/account_repository.dart';
 import 'package:flutter_amazon_clone_bloc/src/data/repositories/auth_repository.dart';
 import 'package:flutter_amazon_clone_bloc/src/data/repositories/category_products_repository.dart';
@@ -9,11 +8,12 @@ import 'package:flutter_amazon_clone_bloc/src/data/repositories/search_products_
 import 'package:flutter_amazon_clone_bloc/src/data/repositories/user_repository.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/account/fetch_orders/fethc_orders_cubit.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/account/keep_shopping_for/cubit/keep_shopping_for_cubit.dart';
-
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/account/product_rating/product_rating_bloc.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/account/wish_list/wish_list_cubit.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/auth_bloc/auth_bloc.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/bottom_bar/bottom_bar_bloc.dart';
+import 'package:flutter_amazon_clone_bloc/src/logic/blocs/cart/cart_bloc.dart';
+import 'package:flutter_amazon_clone_bloc/src/logic/blocs/cart/save_for_later/save_for_later_bloc.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/category_products/fetch_category_products_bloc/fetch_category_products_bloc.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/home_blocs/carousel_bloc/carousel_image_bloc.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/product_details/user_rating/user_rating_cubit.dart';
@@ -47,6 +47,9 @@ class MyApp extends StatelessWidget {
           create: (context) => UserCubit(),
         ),
         BlocProvider(
+          create: (context) => CartBloc(UserRepository()),
+        ),
+        BlocProvider(
           create: (context) => BottomBarBloc(),
         ),
         BlocProvider(
@@ -67,6 +70,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => KeepShoppingForCubit(AccountRepository()),
+        ),
+        BlocProvider(
+          create: (context) => SaveForLaterBloc(UserRepository()),
         ),
         BlocProvider(
           create: (context) => WishListCubit(

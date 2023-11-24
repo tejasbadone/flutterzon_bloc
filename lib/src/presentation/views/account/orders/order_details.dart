@@ -21,8 +21,6 @@ class OrderDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     int currentStep = 0;
-    double userRating = -1;
-
     int totalQuantity = 0;
     final BoxDecoration containerDecoration = BoxDecoration(
         border: Border.all(color: Colors.black12),
@@ -374,7 +372,7 @@ class OrderDetailsScreen extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Order Summary', style: headingTextSyle),
+                const Text('Order Summary', style: headingTextSyle),
                 const SizedBox(height: 6),
                 Container(
                   padding: const EdgeInsets.all(12),
@@ -388,7 +386,7 @@ class OrderDetailsScreen extends StatelessWidget {
                           secondText: totalQuantity.toString(),
                           textSyle: textSyle,
                         ),
-                        OrderSummaryRow(
+                        const OrderSummaryRow(
                           firstText: 'Postage & Packing:',
                           secondText: '₹0',
                           textSyle: textSyle,
@@ -402,7 +400,7 @@ class OrderDetailsScreen extends StatelessWidget {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
+                            const Text(
                               'Order Total:',
                               style: headingTextSyle,
                             ),

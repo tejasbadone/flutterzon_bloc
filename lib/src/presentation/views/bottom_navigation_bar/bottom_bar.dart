@@ -5,6 +5,7 @@ import 'package:flutter_amazon_clone_bloc/src/logic/blocs/account/fetch_orders/f
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/account/keep_shopping_for/cubit/keep_shopping_for_cubit.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/account/wish_list/wish_list_cubit.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/bottom_bar/bottom_bar_bloc.dart';
+import 'package:flutter_amazon_clone_bloc/src/logic/blocs/cart/cart_bloc.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/views/account/account_screen.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/views/another_screen.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/views/cart/cart_screen.dart';
@@ -50,7 +51,15 @@ class BottomBar extends StatelessWidget {
     ),
     // ),
     const AnotherScreen(appBarTitle: 'More Screen'),
-    const CartScreen(),
+    MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) {
+          final cartBloc = CartBloc(UserRepository());
+          return cartBloc..add(GetCartPressed());
+        }),
+      ],
+      child: const CartScreen(),
+    ),
     const MenuScreen(),
   ];
 

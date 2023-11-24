@@ -27,4 +27,92 @@ class UserApi {
       throw Exception(e.toString());
     }
   }
+
+  Future<http.Response> getCart() async {
+    final token = await getToken();
+
+    try {
+      http.Response res = await client.get(
+        Uri.parse(getCartUri),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': token,
+        },
+      );
+      return res;
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<http.Response> addToCart({required Product product}) async {
+    final token = await getToken();
+
+    try {
+      http.Response res = await client.post(Uri.parse(addToCartUri),
+          headers: {
+            'Content-Type': 'application/json; charset=UTF-8',
+            'x-auth-token': token,
+          },
+          body: jsonEncode({
+            "id": product.id,
+          }));
+      return res;
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<http.Response> removeFromCart({required Product product}) async {
+    final token = await getToken();
+    try {
+      http.Response res = await client.delete(
+        Uri.parse('$removeFromCartUri/${product.id}'),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': token,
+        },
+      );
+      return res;
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<http.Response> deleteFromCart({required Product product}) async {
+    final token = await getToken();
+    try {
+      http.Response res = await client.delete(
+        Uri.parse('$deleteFromCartUri/${product.id}'),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': token,
+        },
+      );
+
+      return res;
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<http.Response> saveForLater({required Product product}) async {
+    final token = await getToken();
+    try {
+      http.Response res = await client.post(
+        Uri.parse(saveForLaterUri),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': token,
+        },
+        body: jsonEncode({
+          "id": product.id,
+        }),
+      );
+
+      return res;
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
 }
