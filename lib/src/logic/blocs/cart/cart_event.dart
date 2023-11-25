@@ -18,6 +18,15 @@ class AddToCart extends CartEvent {
   List<Object> get props => [product];
 }
 
+class AddToCartFromBottomSheet extends CartEvent {
+  final Product product;
+
+  const AddToCartFromBottomSheet({required this.product});
+
+  @override
+  List<Object> get props => [product];
+}
+
 class RemoveFromCart extends CartEvent {
   final Product product;
 
@@ -31,6 +40,33 @@ class DeleteFromCart extends CartEvent {
   final Product product;
 
   const DeleteFromCart({required this.product});
+
+  @override
+  List<Object> get props => [product];
+}
+
+class SaveForLaterE extends CartEvent {
+  final Product product;
+
+  const SaveForLaterE({required this.product});
+
+  @override
+  List<Object> get props => [product];
+}
+
+class DeleteFromLaterE extends CartEvent {
+  final Product product;
+
+  const DeleteFromLaterE({required this.product});
+
+  @override
+  List<Object> get props => [product];
+}
+
+class MoveToCartE extends CartEvent {
+  final Product product;
+
+  const MoveToCartE({required this.product});
 
   @override
   List<Object> get props => [product];

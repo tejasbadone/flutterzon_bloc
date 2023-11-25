@@ -115,4 +115,61 @@ class UserApi {
       throw Exception(e.toString());
     }
   }
+
+  Future<http.Response> getSaveForLater() async {
+    final token = await getToken();
+    try {
+      http.Response res = await client.get(
+        Uri.parse(getSaveForLaterUri),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': token,
+        },
+      );
+
+      return res;
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<http.Response> deleteFromLater({required Product product}) async {
+    final token = await getToken();
+    try {
+      http.Response res = await client.delete(
+        Uri.parse('$deleteFromLaterUri/${product.id}'),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': token,
+        },
+      );
+
+      return res;
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<http.Response> moveToCart({required Product product}) async {
+    final token = await getToken();
+
+    try {
+      http.Response res = await client.post(
+        Uri.parse(moveToCartUri),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': token,
+        },
+        body: jsonEncode(
+          {
+            "id": product.id,
+          },
+        ),
+      );
+
+      return res;
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
 }

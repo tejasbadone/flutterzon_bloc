@@ -27,3 +27,6 @@ String removeFromCartUri = '$uri/api/remove-from-cart';
 String deleteFromCartUri = '$uri/api/delete-from-cart';
 
 String saveForLaterUri = '$uri/api/save-for-later';
+String getSaveForLaterUri = '$uri/api/get-save-for-later';
+String deleteFromLaterUri = '$uri/api/delete-from-later';
+String moveToCartUri = '$uri/api/move-to-cart';

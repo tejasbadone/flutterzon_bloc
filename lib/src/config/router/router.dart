@@ -21,9 +21,11 @@ import 'package:flutter_amazon_clone_bloc/src/presentation/views/account/wish_li
 import 'package:flutter_amazon_clone_bloc/src/presentation/views/another_screen.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/views/auth/auth_screen.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/views/bottom_navigation_bar/bottom_bar.dart';
+import 'package:flutter_amazon_clone_bloc/src/presentation/views/cart/cart_screen.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/views/category_products/category_products_screen.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/views/home/home_screen.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/views/menu/menu_screen.dart';
+import 'package:flutter_amazon_clone_bloc/src/presentation/views/payment/payment_screen.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/views/product_details/product_details_screen.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/views/search/search_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -192,5 +194,19 @@ final router = GoRouter(initialLocation: '/', routes: [
       path: AppRouteConstants.menuScreenRoute.path,
       pageBuilder: (context, state) {
         return const MaterialPage(child: MenuScreen());
-      })
+      }),
+  GoRoute(
+      name: AppRouteConstants.cartScreenScreenRoute.name,
+      path: AppRouteConstants.cartScreenScreenRoute.path,
+      pageBuilder: (context, state) {
+        return const MaterialPage(child: CartScreen());
+      }),
+  GoRoute(
+      name: AppRouteConstants.paymentScreenRoute.name,
+      path: AppRouteConstants.paymentScreenRoute.path,
+      pageBuilder: (context, state) {
+        double totalAmount = state.extra as double;
+        return MaterialPage(
+            child: PaymentScreen(totalAmount: totalAmount.toString()));
+      }),
 ]);

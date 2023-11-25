@@ -2,7 +2,9 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_amazon_clone_bloc/src/data/models/product.dart';
 import 'package:flutter_amazon_clone_bloc/src/data/repositories/account_repository.dart';
+import 'package:flutter_amazon_clone_bloc/src/logic/blocs/account/keep_shopping_for/cubit/keep_shopping_for_cubit.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/account/wish_list/wish_list_cubit.dart';
+import 'package:flutter_amazon_clone_bloc/src/logic/blocs/cart/cart_bloc.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/home_blocs/carousel_bloc/carousel_image_bloc.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/product_details/user_rating/user_rating_cubit.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/user_cubit/user_cubit.dart';
@@ -35,6 +37,9 @@ class ProductDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    BlocProvider.of<WishListCubit>(context).wishList(product: product);
+    BlocProvider.of<KeepShoppingForCubit>(context)
+        .addToKeepShoppingFor(product: product);
     final CarouselController controller = CarouselController();
 
     return Scaffold(
@@ -265,13 +270,8 @@ class ProductDetailsScreen extends StatelessWidget {
                 CustomElevatedButton(
                     buttonText: 'Add to Cart',
                     onPressed: () {
-                      // productDetailsServices.addToCart(
-                      //     context: context,
-                      //     product: widget.arguments['product']);
-                      // showSnackBar(context, 'Added to cart!');
-                      // setState(() {});
-                      // cartCategoryOffer.setCategory1(
-                      //     widget.arguments['product'].category.toString());
+                      context.read<CartBloc>().add(AddToCart(product: product));
+                      showSnackBar(context, 'Added to cart!');
                     }),
                 const SizedBox(
                   height: 10,

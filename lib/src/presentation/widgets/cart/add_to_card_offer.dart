@@ -1,42 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_amazon_clone_bloc/src/config/router/app_route_constants.dart';
 import 'package:flutter_amazon_clone_bloc/src/data/models/product.dart';
+import 'package:flutter_amazon_clone_bloc/src/logic/blocs/account/keep_shopping_for/cubit/keep_shopping_for_cubit.dart';
+import 'package:flutter_amazon_clone_bloc/src/logic/blocs/account/wish_list/wish_list_cubit.dart';
+import 'package:flutter_amazon_clone_bloc/src/logic/blocs/cart/cart_bloc.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/widgets/common_widgets/stars.dart';
 import 'package:flutter_amazon_clone_bloc/src/utils/constants/constants.dart';
 import 'package:flutter_amazon_clone_bloc/src/utils/utils.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
-class AddToCartOffer extends StatefulWidget {
+class AddToCartOffer extends StatelessWidget {
   const AddToCartOffer({
     super.key,
     required this.product,
+    required this.averageRating,
   });
 
   final Product product;
-
-  @override
-  State<AddToCartOffer> createState() => _AddToCartOfferState();
-}
-
-// String? price;
-
-class _AddToCartOfferState extends State<AddToCartOffer> {
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   price =
-  // }
+  final double averageRating;
 
   @override
   Widget build(BuildContext context) {
-    //   double totalRating = 0;
-    //   for (int i = 0; i < widget.product.rating!.length; i++) {
-    //     totalRating += widget.product.rating![i].rating;
-    //   }
-
-    //   double averageRating = 0;
-    //   if (totalRating != 0) {
-    //     averageRating = totalRating / widget.product.rating!.length;
-    //   }
-
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: SizedBox(
@@ -46,23 +31,31 @@ class _AddToCartOfferState extends State<AddToCartOffer> {
           children: [
             InkWell(
               onTap: () {
-                // navigateToProductDetails(
-                //     context: context,
-                //     product: widget.product,
-                //     deliveryDate: getDeliveryDate());
+                context.pushNamed(
+                    AppRouteConstants.productDetailsScreenRoute.name,
+                    extra: {
+                      "product": product,
+                      "deliveryDate": getDeliveryDate(),
+                      "averageRating": averageRating
+                    });
+
+                BlocProvider.of<KeepShoppingForCubit>(context)
+                    .addToKeepShoppingFor(product: product);
+                BlocProvider.of<WishListCubit>(context)
+                    .wishList(product: product);
               },
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Center(
                     child: Image.network(
-                      widget.product.images[0],
+                      product.images[0],
                       height: 130,
                       width: 130,
                     ),
                   ),
                   Text(
-                    widget.product.name,
+                    product.name,
                     maxLines: 2,
                     style: TextStyle(
                         fontSize: 16,
@@ -73,14 +66,14 @@ class _AddToCartOfferState extends State<AddToCartOffer> {
                   Row(
                     children: [
                       Stars(
-                        rating: 4,
+                        rating: averageRating,
                         size: 20,
                       ),
                       const SizedBox(
                         width: 4,
                       ),
                       Text(
-                        widget.product.rating!.length.toString(),
+                        product.rating!.length.toString(),
                         style: TextStyle(
                           color: Constants.selectedNavBarColor,
                           fontSize: 14,
@@ -90,7 +83,7 @@ class _AddToCartOfferState extends State<AddToCartOffer> {
                     ],
                   ),
                   Text(
-                    '₹price.00',
+                    '₹ ${formatPriceWithDecimal(product.price)}',
                     maxLines: 2,
                     style: const TextStyle(
                         fontSize: 16,
@@ -103,9 +96,10 @@ class _AddToCartOfferState extends State<AddToCartOffer> {
             ),
             ElevatedButton(
               onPressed: () {
-                // setState(() {
-                //   addToCart(context, widget.product);
-                // });
+                showSnackBar(context, 'Added to Cart!');
+                context
+                    .read<CartBloc>()
+                    .add(AddToCartFromBottomSheet(product: product));
               },
               style: const ButtonStyle(
                   padding: MaterialStatePropertyAll(EdgeInsets.zero),

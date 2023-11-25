@@ -11,17 +11,27 @@ final class CartLoadingS extends CartState {}
 
 final class CartProductSuccessS extends CartState {
   final List<Product> cartProducts;
+  final List<Product> saveForLaterProducts;
+  final List<double> averageRatingList;
   final List<int> productsQuantity;
   final double total;
 
-  const CartProductSuccessS(
-    this.total,
-    this.cartProducts,
-    this.productsQuantity,
-  );
+  const CartProductSuccessS({
+    required this.total,
+    required this.cartProducts,
+    required this.productsQuantity,
+    required this.averageRatingList,
+    required this.saveForLaterProducts,
+  });
 
   @override
-  List<Object> get props => [cartProducts, productsQuantity, total];
+  List<Object> get props => [
+        cartProducts,
+        productsQuantity,
+        total,
+        saveForLaterProducts,
+        averageRatingList
+      ];
 }
 
 final class CartProductErrorS extends CartState {
@@ -40,4 +50,13 @@ final class CartProductSubtotalS extends CartState {
 
   @override
   List<Object> get props => [total];
+}
+
+final class SaveForLaterSuccessS extends CartState {
+  final List<Product> saveForLaterProducts;
+
+  const SaveForLaterSuccessS({required this.saveForLaterProducts});
+
+  @override
+  List<Object> get props => [saveForLaterProducts];
 }

@@ -217,7 +217,19 @@ userRouter.get("/api/orders/search/:name", auth, async (req, res) => {
     }
 })
 
+userRouter.get("/api/get-save-for-later", auth, async (req, res) => {
 
+    try {
+        const user = await User.findById(req.user);
+        const saveForLaterList = await user.saveForLater;
+        res.json(saveForLaterList);
+    } catch (e) {
+        res.status(500).json({error: e.message});
+    }
+
+
+
+});
 
 
 
@@ -245,7 +257,7 @@ userRouter.post("/api/save-for-later", auth , async(req, res) => {
 
         user = await user.save();
 
-        res.json(user.saveForLater);
+        res.json(user);
 
 
     }catch(e){

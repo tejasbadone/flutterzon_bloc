@@ -1,60 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_amazon_clone_bloc/src/data/models/product.dart';
+import 'package:flutter_amazon_clone_bloc/src/logic/blocs/cart/cart_bloc.dart';
+import 'package:flutter_amazon_clone_bloc/src/logic/blocs/category_products/fetch_category_products_bloc/fetch_category_products_bloc.dart';
+import 'package:flutter_amazon_clone_bloc/src/presentation/widgets/cart/add_to_card_offer.dart';
 import 'package:flutter_amazon_clone_bloc/src/utils/constants/constants.dart';
 import 'package:flutter_amazon_clone_bloc/src/utils/utils.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'custom_text_button.dart';
 
-class SaveForLaterSingle extends StatefulWidget {
+class SaveForLaterSingle extends StatelessWidget {
   const SaveForLaterSingle({super.key, required this.product});
 
   final Product product;
 
   @override
-  State<SaveForLaterSingle> createState() => _SaveForLaterSingleState();
-}
-
-class _SaveForLaterSingleState extends State<SaveForLaterSingle> {
-  // final ProductDetailsServices productDetailsServices =
-  //     ProductDetailsServices();
-  // final HomeServices homeServices = HomeServices();
-
-  List<Product>? modalSheetProductList;
-
-  // fetchCategoryProducts({required String category}) async {
-  //   modalSheetProductList = await homeServices.fetchCategoryProducts(
-  //       context: context, category: category);
-  //   modalSheetProductList!.shuffle();
-  //   if (context.mounted) {
-  //     setState(() {});
-  //   }
-  // }
-
-  // final CartServices cartServices = CartServices();
-
-  // void increaseQuantity(Product product) {
-  //   productDetailsServices.addToCart(context: context, product: product);
-  // }
-
-  // void decreaseQuantity(Product product) {
-  //   cartServices.removeFromCart(context: context, product: product);
-  // }
-
-  // void deleteProduct(Product product) {
-  //   cartServices.deleteFromCart(context: context, product: product);
-  // }
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   fetchCategoryProducts(category: widget.product.category);
-  // }
-
-  @override
   Widget build(BuildContext context) {
-    Product product = widget.product;
-
-    String price = formatPriceWithDecimal(widget.product.price);
+    String price = formatPriceWithDecimal(product.price);
 
     return Container(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
@@ -143,81 +105,103 @@ class _SaveForLaterSingleState extends State<SaveForLaterSingle> {
                   child: CustomTextButton(
                       buttonText: 'Delete',
                       onPressed: () {
-                        // cartServices.deleteFromLater(
-                        //     context: context, product: product);
+                        context
+                            .read<CartBloc>()
+                            .add(DeleteFromLaterE(product: product));
                       }),
                 ),
                 Expanded(
                   child: CustomTextButton(
                       buttonText: 'Compare',
                       onPressed: () {
+                        context.read<FetchCategoryProductsBloc>().add(
+                            CategoryPressedEvent(category: product.category));
+
                         showModalBottomSheet(
-                            constraints: const BoxConstraints(
-                                minHeight: 350, maxHeight: 350),
-                            shape: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(0)),
-                            context: context,
-                            builder: (context) {
-                              return modalSheetProductList == null
-                                  ? const Center(
-                                      child: CircularProgressIndicator(),
-                                    )
-                                  : MoreLikeThisBottomSheet(
-                                      modalSheetProductList:
-                                          modalSheetProductList);
-                            });
+                                constraints: const BoxConstraints(
+                                    minHeight: 350, maxHeight: 350),
+                                shape: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(0)),
+                                context: context,
+                                builder: (context) {
+                                  return Scaffold(
+                                    body: Container(
+                                      margin: const EdgeInsets.symmetric(
+                                          horizontal: 10, vertical: 16),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          const Text(
+                                            'More items like this',
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          const SizedBox(height: 10),
+                                          BlocBuilder<FetchCategoryProductsBloc,
+                                              FetchCategoryProductsState>(
+                                            builder: (context, state) {
+                                              if (state
+                                                  is FetchCategoryProductsSuccessS) {
+                                                return Expanded(
+                                                  child: ListView.builder(
+                                                      scrollDirection:
+                                                          Axis.horizontal,
+                                                      itemCount: state
+                                                                  .productList
+                                                                  .length >
+                                                              20
+                                                          ? 20
+                                                          : state.productList
+                                                              .length,
+                                                      itemBuilder:
+                                                          (context, index) {
+                                                        final product = state
+                                                            .productList[index];
+
+                                                        final averageRating =
+                                                            state.averageRatingList[
+                                                                index];
+                                                        return AddToCartOffer(
+                                                          product: product,
+                                                          averageRating:
+                                                              averageRating,
+                                                        );
+                                                      }),
+                                                );
+                                              }
+
+                                              return const SizedBox(
+                                                height: 250,
+                                                child: Center(
+                                                  child:
+                                                      CircularProgressIndicator(),
+                                                ),
+                                              );
+                                            },
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                })
+                            .whenComplete(() =>
+                                context.read<CartBloc>().add(GetCartPressed()));
                       }),
                 ),
                 Expanded(
                   child: CustomTextButton(
                       buttonText: 'Move to cart',
                       onPressed: () {
-                        // cartServices.moveToCart(
-                        //     context: context, product: product);
+                        context
+                            .read<CartBloc>()
+                            .add(MoveToCartE(product: product));
                       }),
                 ),
               ],
             ),
           ],
         ));
-  }
-}
-
-class MoreLikeThisBottomSheet extends StatelessWidget {
-  const MoreLikeThisBottomSheet({
-    super.key,
-    required this.modalSheetProductList,
-  });
-
-  final List<Product>? modalSheetProductList;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'More items like this',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 10),
-            // Expanded(
-            //   child: ListView.builder(
-            //       scrollDirection: Axis.horizontal,
-            //       itemCount: modalSheetProductList!.length > 20
-            //           ? 20
-            //           : modalSheetProductList!.length,
-            //       itemBuilder: (context, index) {
-            //         final product = modalSheetProductList![index];
-            //         return AddToCartOffer(product: product);
-            //       }),
-            // )
-          ],
-        ),
-      ),
-    );
   }
 }

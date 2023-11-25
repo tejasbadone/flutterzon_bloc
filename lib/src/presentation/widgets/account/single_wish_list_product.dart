@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_amazon_clone_bloc/src/config/router/app_route_constants.dart';
 import 'package:flutter_amazon_clone_bloc/src/data/models/product.dart';
-import 'package:flutter_amazon_clone_bloc/src/logic/blocs/account/keep_shopping_for/cubit/keep_shopping_for_cubit.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/account/wish_list/wish_list_cubit.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/widgets/common_widgets/stars.dart';
 import 'package:flutter_amazon_clone_bloc/src/utils/constants/constants.dart';
@@ -35,10 +34,6 @@ class SingleWishListProduct extends StatelessWidget {
               "deliveryDate": deliveryDate,
               "averageRating": averageRating
             });
-
-        BlocProvider.of<KeepShoppingForCubit>(context)
-            .addToKeepShoppingFor(product: product!);
-        BlocProvider.of<WishListCubit>(context).wishList(product: product!);
       },
       child: Container(
         height: 230,
