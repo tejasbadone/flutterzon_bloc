@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_amazon_clone_bloc/src/config/router/app_route_constants.dart';
 import 'package:flutter_amazon_clone_bloc/src/data/models/order.dart';
 import 'package:flutter_amazon_clone_bloc/src/data/models/product.dart';
+import 'package:flutter_amazon_clone_bloc/src/data/models/user.dart';
 import 'package:flutter_amazon_clone_bloc/src/data/repositories/account_repository.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/account/product_rating/product_rating_bloc.dart';
+import 'package:flutter_amazon_clone_bloc/src/logic/blocs/category_products/fetch_category_products_bloc/fetch_category_products_bloc.dart';
+import 'package:flutter_amazon_clone_bloc/src/logic/blocs/product_details/averageRating/average_rating_cubit.dart';
+import 'package:flutter_amazon_clone_bloc/src/logic/blocs/user_cubit/user_cubit.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/widgets/account/orders/widgets/shipment_details.dart';
-import 'package:flutter_amazon_clone_bloc/src/presentation/widgets/account/orders/widgets/shipping_address_block.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/widgets/account/orders/widgets/standard_delivery_container.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/widgets/account/orders/widgets/you_might_also_like_block.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/widgets/common_widgets/custom_app_bar.dart';
@@ -13,6 +17,7 @@ import 'package:flutter_amazon_clone_bloc/src/utils/constants/constants.dart';
 import 'package:flutter_amazon_clone_bloc/src/utils/utils.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:go_router/go_router.dart';
 
 class OrderDetailsScreen extends StatelessWidget {
   final Order order;
@@ -20,8 +25,14 @@ class OrderDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context
+        .read<FetchCategoryProductsBloc>()
+        .add(CategoryPressedEvent(category: order.products[0].category));
+
+    User user = context.read<UserCubit>().currentUser!;
+
     int currentStep = 0;
-    int totalQuantity = 0;
+    int totalQuantity = order.products.length;
     final BoxDecoration containerDecoration = BoxDecoration(
         border: Border.all(color: Colors.black12),
         borderRadius: BorderRadius.circular(8));
@@ -49,7 +60,7 @@ class OrderDetailsScreen extends StatelessWidget {
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(
-                  height: 5,
+                  height: 7,
                 ),
                 Container(
                   height: 90,
@@ -100,153 +111,153 @@ class OrderDetailsScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // widget.user.type == 'user'
-                      // ?
                       ShipmentStatus(
                           currentStep: currentStep, textSyle: textSyle),
-                      // :
-                      const SizedBox(),
                       const SizedBox(height: 10),
                       ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: order.products.length,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemBuilder: ((context, index) {
-                            return Column(
-                              children: [
-                                Column(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: GestureDetector(
-                                        onTap: () {
-                                          // navigateToProductDetails(
-                                          //     context: context,
-                                          //     product:
-                                          //         widget.widget.order.products[i],
-                                          //     deliveryDate: getDeliveryDate());
-                                        },
-                                        child: Row(
-                                          children: [
-                                            Image.network(
-                                              order.products[index].images[0],
-                                              height: 110,
-                                              width: 100,
-                                              fit: BoxFit.contain,
-                                              // width: 120,
+                        shrinkWrap: true,
+                        itemCount: order.products.length,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemBuilder: ((context, index) {
+                          return Column(
+                            children: [
+                              Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: GestureDetector(
+                                      onTap: () async {
+                                        context.pushNamed(
+                                            AppRouteConstants
+                                                .productDetailsScreenRoute.name,
+                                            extra: {
+                                              'product': order.products[index],
+                                              'deliveryDate': getDeliveryDate(),
+                                              'averageRating': await context
+                                                  .read<AverageRatingCubit>()
+                                                  .getProductAverageRating(
+                                                      productId: order
+                                                          .products[index].id!)
+                                            });
+                                      },
+                                      child: Row(
+                                        children: [
+                                          Image.network(
+                                            order.products[index].images[0],
+                                            height: 110,
+                                            width: 100,
+                                            fit: BoxFit.contain,
+                                            // width: 120,
+                                          ),
+                                          const SizedBox(width: 20),
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  order.products[index].name,
+                                                  maxLines: 3,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: const TextStyle(
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                                const SizedBox(
+                                                  height: 8,
+                                                ),
+                                                Text(
+                                                    'Qty. ${order.quantity[index]}'),
+                                              ],
                                             ),
-                                            const SizedBox(width: 20),
-                                            Expanded(
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    order.products[index].name,
-                                                    maxLines: 2,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    style: const TextStyle(
-                                                        fontSize: 16,
-                                                        fontWeight:
-                                                            FontWeight.bold),
-                                                  ),
-                                                  const SizedBox(
-                                                    height: 8,
-                                                  ),
-                                                  Text(
-                                                      'Qty. ${order.quantity[index]}'),
-                                                ],
-                                              ),
-                                            ),
-                                            const SizedBox(width: 20),
-                                            Text(
-                                              '₹${formatPrice(order.products[index].price)}',
-                                              style: textSyle.copyWith(
-                                                  fontSize: 16),
-                                            ),
-                                          ],
-                                        ),
+                                          ),
+                                          const SizedBox(width: 20),
+                                          Text(
+                                            '₹${formatPrice(order.products[index].price)}',
+                                            style:
+                                                textSyle.copyWith(fontSize: 16),
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceAround,
-                                      children: [
-                                        const Text(
-                                          'Your rating',
-                                          style: TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.black87),
-                                        ),
-                                        BlocConsumer<ProductRatingBloc,
-                                            ProductRatingState>(
-                                          listener: (context, state) {
-                                            if (state
-                                                is GetProductRatingErrorS) {
-                                              showSnackBar(
-                                                  context, state.errorString);
-                                            }
-                                            if (state is RateProductErrorS) {
-                                              showSnackBar(
-                                                  context, state.errorString);
-                                            }
-                                          },
-                                          builder: (context, state) {
-                                            if (state
-                                                is GetProductRatingInitialS) {
-                                              return RatingBarWidget(
-                                                rating: state.initialRating,
-                                                product: order.products[index],
-                                                order: order,
-                                              );
-                                            }
-
-                                            if (state
-                                                is GetProductRatingSuccessS) {
-                                              return RatingBarWidget(
-                                                rating:
-                                                    state.ratingsList[index],
-                                                product: order.products[index],
-                                                order: order,
-                                              );
-                                            }
-
-                                            if (state is RateProductInitialS) {
-                                              return RatingBarWidget(
-                                                rating:
-                                                    state.ratingsList[index],
-                                                product: order.products[index],
-                                                order: order,
-                                              );
-                                            }
-
-                                            if (state is RateProductSuccessS) {
-                                              return RatingBarWidget(
-                                                rating: state
-                                                    .updatedRatingsList[index],
-                                                product: order.products[index],
-                                                order: order,
-                                              );
-                                            }
-
-                                            return const SizedBox(
-                                              child: Center(
-                                                child:
-                                                    LinearProgressIndicator(),
-                                              ),
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: [
+                                      const Text(
+                                        'Your rating',
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black87),
+                                      ),
+                                      BlocConsumer<ProductRatingBloc,
+                                          ProductRatingState>(
+                                        listener: (context, state) {
+                                          if (state is GetProductRatingErrorS) {
+                                            showSnackBar(
+                                                context, state.errorString);
+                                          }
+                                          if (state is RateProductErrorS) {
+                                            showSnackBar(
+                                                context, state.errorString);
+                                          }
+                                        },
+                                        builder: (context, state) {
+                                          if (state
+                                              is GetProductRatingInitialS) {
+                                            return RatingBarWidget(
+                                              rating: state.initialRating,
+                                              product: order.products[index],
+                                              order: order,
                                             );
-                                          },
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(height: 10)
-                                  ],
-                                ),
-                              ],
-                            );
-                          })),
+                                          }
+
+                                          if (state
+                                              is GetProductRatingSuccessS) {
+                                            return RatingBarWidget(
+                                              rating: state.ratingsList[index],
+                                              product: order.products[index],
+                                              order: order,
+                                            );
+                                          }
+
+                                          if (state is RateProductInitialS) {
+                                            return RatingBarWidget(
+                                              rating: state.ratingsList[index],
+                                              product: order.products[index],
+                                              order: order,
+                                            );
+                                          }
+
+                                          if (state is RateProductSuccessS) {
+                                            return RatingBarWidget(
+                                              rating: state
+                                                  .updatedRatingsList[index],
+                                              product: order.products[index],
+                                              order: order,
+                                            );
+                                          }
+
+                                          return const SizedBox(
+                                            child: Center(
+                                              child: LinearProgressIndicator(),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 10)
+                                ],
+                              ),
+                            ],
+                          );
+                        }),
+                      ),
                     ],
                   ),
                 ),
@@ -258,30 +269,35 @@ class OrderDetailsScreen extends StatelessWidget {
               children: [
                 ListTile(
                   onTap: () {
-                    // Navigator.pushNamed(context, TrackingDetailsScreen.routeName,
-                    //     arguments: widget.order);
+                    context.pushNamed(
+                        AppRouteConstants.trackingDetailsScreenRoute.name,
+                        extra: {
+                          "order": order,
+                          "user": user,
+                        });
                   },
-                  // title: Text(
-                  //   // user.type == 'user' ? 'Track shipment' : 'Update shipment (admin)',
-                  //   style: user.type == 'user'
-                  //       ? textSyle
-                  //       : textSyle.copyWith(color: Constants.greenColor),
-                  // ),
+                  title: Text(
+                    user.type == 'user'
+                        ? 'Track shipment'
+                        : 'Update shipment (admin)',
+                    style: user.type == 'user'
+                        ? textSyle
+                        : textSyle.copyWith(color: Constants.greenColor),
+                  ),
                   style: ListTileStyle.list,
-                  trailing: const Icon(Icons.chevron_right_rounded,
-                      color:
-                          // user.type == 'user'
-                          // ?
-                          Colors.black87
-                      // : Constants.greenColor,
-                      ),
+                  trailing: Icon(
+                    Icons.chevron_right_rounded,
+                    color: user.type == 'user'
+                        ? Colors.black87
+                        : Constants.greenColor,
+                  ),
                 ),
               ],
             ),
             const DividerWithSizedBox(
               thickness: 1,
               sB1Height: 0,
-              sB2Height: 0,
+              sB2Height: 5,
             ),
 
             // Payment Infomrmation block
@@ -346,7 +362,7 @@ class OrderDetailsScreen extends StatelessWidget {
                             color: Colors.black87, fontWeight: FontWeight.w600),
                       ),
                       Text(
-                        'user.address',
+                        order.address,
                         style: textSyle.copyWith(
                           color: Colors.black87,
                           fontWeight: FontWeight.normal,
@@ -360,11 +376,36 @@ class OrderDetailsScreen extends StatelessWidget {
             const SizedBox(
               height: 8,
             ),
-            ShippingAddressBlock(
-                headingTextSyle: headingTextSyle,
-                containerDecoration: containerDecoration,
-                // user: user,
-                textSyle: textSyle),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text('Shipping Address', style: headingTextSyle),
+                const SizedBox(height: 6),
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  width: double.infinity,
+                  decoration: containerDecoration,
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          capitalizeFirstLetter(string: user.name),
+                          style: textSyle.copyWith(
+                            color: Colors.black87,
+                            fontWeight: FontWeight.normal,
+                          ),
+                        ),
+                        Text(
+                          order.address,
+                          style: textSyle.copyWith(
+                            color: Colors.black87,
+                            fontWeight: FontWeight.normal,
+                          ),
+                        )
+                      ]),
+                ),
+              ],
+            ),
             const SizedBox(
               height: 8,
             ),
@@ -412,13 +453,6 @@ class OrderDetailsScreen extends StatelessWidget {
                             )
                           ],
                         )
-
-                        // OrderSummaryTotal(
-                        //     firstText: 'Order Total:',
-                        //     secondText:
-                        //         '₹${formatPriceWithDecimal(widget.order.totalPrice)}',
-                        //     headingTextSyle: headingTextSyle,
-                        //     widget: widget),
                       ]),
                 ),
               ],
@@ -426,12 +460,13 @@ class OrderDetailsScreen extends StatelessWidget {
             const SizedBox(
               height: 20,
             ),
-            // user.type == 'admin'
-            //     ? const SizedBox()
-            // :
-            const YouMightAlsoLikeBlock(
-              headingTextSyle: headingTextSyle,
-            )
+            user.type == 'admin'
+                ? const SizedBox()
+                : YouMightAlsoLikeBlock(
+                    productName: order.products[0].name.length >= 30
+                        ? order.products[0].name.substring(0, 30)
+                        : order.products[0].name
+                            .substring(0, order.products[0].name.length))
           ],
         ),
       )),

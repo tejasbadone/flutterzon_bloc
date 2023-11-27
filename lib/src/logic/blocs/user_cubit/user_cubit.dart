@@ -1,11 +1,13 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_amazon_clone_bloc/src/data/models/user.dart';
+import 'package:flutter_amazon_clone_bloc/src/data/repositories/user_repository.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
 part 'user_state.dart';
 
 class UserCubit extends Cubit<UserState> with HydratedMixin {
-  UserCubit() : super(UserInitialS());
+  final UserRepository userRepository;
+  UserCubit(this.userRepository) : super(UserInitialS());
 
   void setUser(User user) {
     emit(UserLoadingS());
@@ -17,8 +19,14 @@ class UserCubit extends Cubit<UserState> with HydratedMixin {
       emit(UserErrorS(errorString: e.toString()));
     }
   }
-  // }
-// { String? id, String? name, String? email, String? password, String? address, String? type, String? token, List<dynamic>? cart, List<dynamic>?  saveForLater, List<dynamic>? keepShoppingFor,List<dynamic>? wishList }
+
+  User? get currentUser {
+    if (state is UserSuccessS) {
+      return (state as UserSuccessS).user;
+    } else {
+      return null;
+    }
+  }
 
   void updateUser(User updatedUser) {
     emit(UserLoadingS());
@@ -31,45 +39,15 @@ class UserCubit extends Cubit<UserState> with HydratedMixin {
     }
   }
 
-  // void updateUser(
-  //     {String? id,
-  //     String? name,
-  //     String? email,
-  //     String? password,
-  //     String? address,
-  //     String? type,
-  //     String? token,
-  //     List<dynamic>? cart,
-  //     List<dynamic>? saveForLater,
-  //     List<dynamic>? keepShoppingFor,
-  //     List<dynamic>? wishList}) {
-  //   emit(UserLoadingS());
-  //   try {
-  //     // if (state is UserSuccessS) {
-  //     User updatedUser = (state as UserSuccessS).user.copyWith(
-  //           id: id,
-  //           name: name,
-  //           email: email,
-  //           password: password,
-  //           address: address,
-  //           type: type,
-  //           token: token,
-  //           cart: cart,
-  //           saveForLater: saveForLater,
-  //           keepShoppingFor: keepShoppingFor,
-  //           wishList: wishList,
-  //         );
-  //     saveToStorage(updatedUser);
+  void saveUserAddress({required String address}) async {
+    try {
+      User user = await userRepository.saveUserAddress(address: address);
 
-  //     emit(UserSuccessS(user: updatedUser.copyWith()));
-  //     // } else {
-  //     // }
-  //   } catch (e) {
-  //     print(
-  //         'error in updateUser copywith method, instead of one one property, pass the whole usermodel like before');
-  //     emit(UserErrorS(errorString: e.toString()));
-  //   }
-  // }
+      updateUser(user);
+    } catch (e) {
+      emit(UserErrorS(errorString: e.toString()));
+    }
+  }
 
   @override
   UserState? fromJson(Map<String, dynamic> json) {
@@ -80,13 +58,6 @@ class UserCubit extends Cubit<UserState> with HydratedMixin {
       throw Exception(e.toString());
     }
   }
-
-  //   if (json['user'] != null) {
-  //     return UserSuccessS(user: User.fromJson(json['user']));
-  //   } else {
-  //     return UserInitialS();
-  //   }
-  // }
 
   @override
   Map<String, dynamic>? toJson(UserState state) {

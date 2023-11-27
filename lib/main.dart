@@ -6,6 +6,7 @@ import 'package:flutter_amazon_clone_bloc/src/data/repositories/auth_repository.
 import 'package:flutter_amazon_clone_bloc/src/data/repositories/category_products_repository.dart';
 import 'package:flutter_amazon_clone_bloc/src/data/repositories/search_products_repository.dart';
 import 'package:flutter_amazon_clone_bloc/src/data/repositories/user_repository.dart';
+import 'package:flutter_amazon_clone_bloc/src/logic/blocs/account/fetch_account_screen_data/fetch_account_screen_data_cubit.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/account/fetch_orders/fethc_orders_cubit.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/account/keep_shopping_for/cubit/keep_shopping_for_cubit.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/account/product_rating/product_rating_bloc.dart';
@@ -18,6 +19,9 @@ import 'package:flutter_amazon_clone_bloc/src/logic/blocs/cart/cart_offers_cubit
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/cart/cart_offers_cubit3/cart_offers_cubit.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/category_products/fetch_category_products_bloc/fetch_category_products_bloc.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/home_blocs/carousel_bloc/carousel_image_bloc.dart';
+import 'package:flutter_amazon_clone_bloc/src/logic/blocs/order/order_cubit/order_cubit.dart';
+import 'package:flutter_amazon_clone_bloc/src/logic/blocs/page_redirection_cubit/page_redirection_cubit.dart';
+import 'package:flutter_amazon_clone_bloc/src/logic/blocs/product_details/averageRating/average_rating_cubit.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/product_details/user_rating/user_rating_cubit.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/search/bloc/search_bloc.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/user_cubit/user_cubit.dart';
@@ -30,7 +34,6 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   HydratedBloc.storage = await HydratedStorage.build(
       storageDirectory: await getApplicationDocumentsDirectory());
-
   await dotenv.load(fileName: "config.env");
   runApp(const MyApp());
 }
@@ -46,7 +49,10 @@ class MyApp extends StatelessWidget {
           create: (context) => AuthBloc(AuthRepository()),
         ),
         BlocProvider(
-          create: (context) => UserCubit(),
+          create: (context) => PageRedirectionCubit(AuthRepository()),
+        ),
+        BlocProvider(
+          create: (context) => UserCubit(UserRepository()),
         ),
         BlocProvider(
           create: (context) => CartBloc(UserRepository()),
@@ -63,6 +69,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => SearchBloc(SearchProductsRepository()),
+        ),
+        BlocProvider(
+          create: (context) => FetchAccountScreenDataCubit(UserRepository()),
         ),
         BlocProvider(
           create: (context) => FetchOrdersCubit(AccountRepository()),
@@ -89,6 +98,12 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => CartOffersCubit3(AccountRepository()),
+        ),
+        BlocProvider(
+          create: (context) => OrderCubit(UserRepository()),
+        ),
+        BlocProvider(
+          create: (context) => AverageRatingCubit(AccountRepository()),
         ),
       ],
       child: MaterialApp.router(

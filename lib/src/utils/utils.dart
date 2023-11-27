@@ -2,9 +2,7 @@ import 'dart:io';
 import 'dart:math';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_amazon_clone_bloc/src/config/router/app_route_constants.dart';
 import 'package:flutter_amazon_clone_bloc/src/data/models/product.dart';
-import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -126,25 +124,12 @@ String getSubStatus(int status) {
   return '';
 }
 
-// void navigateToProductDetails(
-//     {required BuildContext context,
-//     required Product product,
-//     required String deliveryDate}) {
-//   Map<String, dynamic> arguments = {
-//     'product': product,
-//     'deliveryDate': deliveryDate,
-//   };
-//   Navigator.pushNamed(context, ProductDetailsScreen.routeName,
-//       arguments: arguments);
-// }
+String capitalizeFirstLetter({required String string}) {
+  String firstLetter = string[0].toUpperCase();
+  String remainingString = string.substring(1, string.length);
 
-// final ProductDetailsServices productDetailsServices = ProductDetailsServices();
-
-// void addToCart(BuildContext context, Product product) {
-//   productDetailsServices.addToCart(context: context, product: product);
-//   showSnackBar(context, 'Added to cart!');
-//   debugPrint('addToCart pressed!');
-// }
+  return firstLetter + remainingString;
+}
 
 Random random = Random();
 
@@ -171,13 +156,6 @@ int getUniqueRandomInt({required max}) {
   }
 
   return randomInt;
-}
-
-void navigateToCategoryPage(BuildContext context, String category) {
-  context.pushNamed(AppRouteConstants.categoryproductsScreenRoute.name,
-      pathParameters: {
-        'category': category,
-      });
 }
 
 Future<String> getToken() async {

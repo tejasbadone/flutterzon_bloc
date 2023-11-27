@@ -6,7 +6,8 @@ class AppRoute {
 }
 
 class AppRouteConstants {
-  static const authRoute = AppRoute(name: 'auth-screen', path: '/');
+  static const splashScreen = AppRoute(name: 'splash-screen', path: '/');
+  static const authRoute = AppRoute(name: 'auth-screen', path: '/auth-screen');
 
   static const bottomBarRoute = AppRoute(name: 'bottomBar', path: '/bottomBar');
 
@@ -48,4 +49,7 @@ class AppRouteConstants {
 
   static const paymentScreenRoute =
       AppRoute(name: 'payment-screen', path: '/payment-screen');
+
+  static const trackingDetailsScreenRoute = AppRoute(
+      name: 'tracking-details-screen', path: '/tracking-details-screen');
 }

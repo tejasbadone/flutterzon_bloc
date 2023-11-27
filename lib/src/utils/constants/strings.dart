@@ -5,6 +5,8 @@ String uri = secureUri!;
 
 String signUpUrl = '$uri/api/signup';
 String signInUrl = '$uri/api/signin';
+String isTokenValidUri = '$uri/IsTokenValid';
+
 String fetchCategoryProductsUri = '$uri/api/products?category=';
 String searchProductsUri = '$uri/api/products/search';
 String fetchMyOrdersUri = '$uri/api/orders/me';
@@ -30,3 +32,8 @@ String saveForLaterUri = '$uri/api/save-for-later';
 String getSaveForLaterUri = '$uri/api/get-save-for-later';
 String deleteFromLaterUri = '$uri/api/delete-from-later';
 String moveToCartUri = '$uri/api/move-to-cart';
+
+String saveUserAddressUri = '$uri/api/save-user-address';
+String getUserDataUri = '$uri/';
+
+String orderUri = '$uri/api/order';

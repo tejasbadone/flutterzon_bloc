@@ -33,25 +33,7 @@ class BottomBar extends StatelessWidget {
 
   List<Widget> pages = [
     const HomeScreen(),
-
-    MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (context) =>
-              FetchOrdersCubit(AccountRepository())..fetchOrders(),
-        ),
-        BlocProvider(
-            create: (context) =>
-                KeepShoppingForCubit(AccountRepository())..keepShoppingFor()),
-        BlocProvider(
-            create: (context) => WishListCubit(
-                accountRepository: AccountRepository(),
-                userRepository: UserRepository())
-              ..getWishList()),
-      ],
-      child: const AccountScreen(),
-    ),
-    // ),
+    const AccountScreen(),
     const AnotherScreen(appBarTitle: 'More Screen'),
     MultiBlocProvider(
       providers: [

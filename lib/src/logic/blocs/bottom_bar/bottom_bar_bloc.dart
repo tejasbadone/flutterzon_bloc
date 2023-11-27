@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 // ignore: depend_on_referenced_packages
 import 'package:meta/meta.dart';
@@ -8,14 +9,14 @@ part 'bottom_bar_state.dart';
 
 class BottomBarBloc extends Bloc<BottomBarEvent, BottomBarState> {
   BottomBarBloc() : super(BottomBarPageState(index: 0)) {
-    on<BottomBarClickedEvent>(_bottomBarClickedHandler);
-    on<BottomBarMoreClickedEvent>(_bottomBarClickedHandler);
+    on<BottomBarClickedEvent>(_onbottomBarClickedHandler);
+    on<BottomBarMoreClickedEvent>(_onttomBarMoreClickedEvent);
   }
-  void _bottomBarClickedHandler(event, emit) {
-    if (event.index == 2) {
-      emit(BottomBarMoreClickedState(index: event.index));
-    } else {
-      emit(BottomBarPageState(index: event.index));
-    }
+  void _onbottomBarClickedHandler(event, emit) {
+    emit(BottomBarPageState(index: event.index));
+  }
+
+  void _onttomBarMoreClickedEvent(event, emit) {
+    emit(BottomBarMoreClickedState(index: event.index));
   }
 }

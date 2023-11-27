@@ -191,4 +191,15 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       emit(CartProductErrorS(errorString: e.toString()));
     }
   }
+
+  int get cartItemsLength {
+    if (state is CartProductSuccessS) {
+      print('inside');
+      print((state as CartProductSuccessS).cartProducts.length);
+
+      return (state as CartProductSuccessS).cartProducts.length;
+    } else {
+      return -1;
+    }
+  }
 }

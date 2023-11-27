@@ -32,4 +32,18 @@ class AuthAPI {
       ),
     );
   }
+
+  Future<http.Response> isTokenValid({required var token}) async {
+    try {
+      http.Response res =
+          await http.post(Uri.parse(isTokenValidUri), headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'x-auth-token': token,
+      });
+
+      return res;
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_amazon_clone_bloc/src/config/router/app_route_constants.dart';
 import 'package:flutter_amazon_clone_bloc/src/data/models/order.dart';
 import 'package:flutter_amazon_clone_bloc/src/data/models/product.dart';
+import 'package:flutter_amazon_clone_bloc/src/data/models/user.dart';
 import 'package:flutter_amazon_clone_bloc/src/data/repositories/account_repository.dart';
 import 'package:flutter_amazon_clone_bloc/src/data/repositories/category_products_repository.dart';
 import 'package:flutter_amazon_clone_bloc/src/data/repositories/search_products_repository.dart';
@@ -11,11 +12,11 @@ import 'package:flutter_amazon_clone_bloc/src/logic/blocs/account/keep_shopping_
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/account/product_rating/product_rating_bloc.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/account/wish_list/wish_list_cubit.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/category_products/fetch_category_products_bloc/fetch_category_products_bloc.dart';
-import 'package:flutter_amazon_clone_bloc/src/logic/blocs/product_details/user_rating/user_rating_cubit.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/search/bloc/search_bloc.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/views/account/browsing_history.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/views/account/orders/order_details.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/views/account/orders/search_orders_screen.dart';
+import 'package:flutter_amazon_clone_bloc/src/presentation/views/account/orders/tracking_details_sceen.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/views/account/orders/your_orders.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/views/account/wish_list_screen.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/views/another_screen.dart';
@@ -28,6 +29,7 @@ import 'package:flutter_amazon_clone_bloc/src/presentation/views/menu/menu_scree
 import 'package:flutter_amazon_clone_bloc/src/presentation/views/payment/payment_screen.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/views/product_details/product_details_screen.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/views/search/search_screen.dart';
+import 'package:flutter_amazon_clone_bloc/src/presentation/views/splash_screen/splash_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
@@ -37,6 +39,13 @@ final _fetchCategoryProductsBloc =
 final _searchProductBloc = SearchBloc(SearchProductsRepository());
 
 final router = GoRouter(initialLocation: '/', routes: [
+  GoRoute(
+    name: AppRouteConstants.splashScreen.name,
+    path: AppRouteConstants.splashScreen.path,
+    pageBuilder: (context, state) {
+      return const MaterialPage(child: SplashScreen());
+    },
+  ),
   GoRoute(
     name: AppRouteConstants.authRoute.name,
     path: AppRouteConstants.authRoute.path,
@@ -85,10 +94,6 @@ final router = GoRouter(initialLocation: '/', routes: [
       return MaterialPage(
           child: MultiBlocProvider(
         providers: [
-          BlocProvider(
-            create: (context) =>
-                UserRatingCubit(AccountRepository())..userRating(product),
-          ),
           BlocProvider(
             create: (context) =>
                 FetchCategoryProductsBloc(CategoryProductsRepository())
@@ -208,5 +213,19 @@ final router = GoRouter(initialLocation: '/', routes: [
         double totalAmount = state.extra as double;
         return MaterialPage(
             child: PaymentScreen(totalAmount: totalAmount.toString()));
+      }),
+  GoRoute(
+      name: AppRouteConstants.trackingDetailsScreenRoute.name,
+      path: AppRouteConstants.trackingDetailsScreenRoute.path,
+      pageBuilder: (context, state) {
+        Map<String, dynamic> extraData = state.extra as Map<String, dynamic>;
+
+        Order order = extraData['order'] as Order;
+        User user = extraData['user'] as User;
+        return MaterialPage(
+            child: TrackingDetailsScreen(
+          order: order,
+          user: user,
+        ));
       }),
 ]);

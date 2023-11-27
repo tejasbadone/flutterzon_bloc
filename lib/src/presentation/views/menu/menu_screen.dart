@@ -1,9 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_amazon_clone_bloc/src/config/router/app_route_constants.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/widgets/common_widgets/custom_app_bar.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/widgets/common_widgets/custom_text_button.dart';
 import 'package:flutter_amazon_clone_bloc/src/utils/constants/constants.dart';
-import 'package:flutter_amazon_clone_bloc/src/utils/utils.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../widgets/menu/container_clipper.dart';
 
@@ -26,15 +27,13 @@ class MenuScreen extends StatelessWidget {
               children: [
                 CustomTextButton(
                     buttonText: 'Orders',
-                    onPressed: () {
-                      // Navigator.pushNamed(context, YourOrders.routeName);
-                    },
+                    onPressed: () => context.pushNamed(
+                        AppRouteConstants.yourOrdersScreenRoute.name),
                     isMenuScreenButton: true),
                 CustomTextButton(
                     buttonText: 'History',
-                    onPressed: () {
-                      // Navigator.pushNamed(context, BrowsingHistory.routeName);
-                    },
+                    onPressed: () => context.pushNamed(
+                        AppRouteConstants.browsingHistoryScreenRoute.name),
                     isMenuScreenButton: true),
                 CustomTextButton(
                     buttonText: 'Account',
@@ -42,9 +41,8 @@ class MenuScreen extends StatelessWidget {
                     isMenuScreenButton: true),
                 CustomTextButton(
                     buttonText: 'Wish List',
-                    onPressed: () {
-                      // Navigator.pushNamed(context, WishListScreen.routeName);
-                    },
+                    onPressed: () => context.pushNamed(
+                        AppRouteConstants.yourWishListScreenRoute.name),
                     isMenuScreenButton: true),
               ],
             );
@@ -99,7 +97,9 @@ class MenuCategoryContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => navigateToCategoryPage(context, category),
+      onTap: () => context.pushNamed(
+          AppRouteConstants.categoryproductsScreenRoute.name,
+          pathParameters: {'category': category}),
       child: Container(
         height: 170,
         width: 125,

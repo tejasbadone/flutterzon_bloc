@@ -12,11 +12,13 @@ class FetchOrdersCubit extends Cubit<FetchOrdersState> {
 
   void fetchOrders() async {
     try {
+      List<Order> tempOrdersList;
       List<Order> ordersList;
 
       emit(FetchOrdersLoadingAS());
 
-      ordersList = await accountRepository.fetchMyOrders();
+      tempOrdersList = await accountRepository.fetchMyOrders();
+      ordersList = tempOrdersList.reversed.toList();
 
       emit(FetchOrdersSuccessAS(ordersList: ordersList));
     } catch (e) {

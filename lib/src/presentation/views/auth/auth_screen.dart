@@ -297,7 +297,6 @@ class _AuthScreenState extends State<AuthScreen> {
                                         AppRouteConstants.bottomBarRoute.name);
                                   }
                                   if (state is UpdateUserData) {
-                                    debugPrint('ran through update user');
                                     BlocProvider.of<UserCubit>(context)
                                         .setUser(state.user);
                                   }

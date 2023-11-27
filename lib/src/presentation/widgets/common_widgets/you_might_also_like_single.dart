@@ -4,7 +4,7 @@ import 'package:flutter_amazon_clone_bloc/src/presentation/widgets/common_widget
 import 'package:flutter_amazon_clone_bloc/src/utils/constants/constants.dart';
 import 'package:flutter_amazon_clone_bloc/src/utils/utils.dart';
 
-class YouMightAlsoLikeSingle extends StatefulWidget {
+class YouMightAlsoLikeSingle extends StatelessWidget {
   const YouMightAlsoLikeSingle({
     super.key,
     required this.product,
@@ -15,20 +15,8 @@ class YouMightAlsoLikeSingle extends StatefulWidget {
   final double averageRating;
 
   @override
-  State<YouMightAlsoLikeSingle> createState() => _YouMightAlsoLikeSingleState();
-}
-
-String? price;
-
-class _YouMightAlsoLikeSingleState extends State<YouMightAlsoLikeSingle> {
-  @override
-  void initState() {
-    super.initState();
-    price = formatPrice(widget.product.price);
-  }
-
-  @override
   Widget build(BuildContext context) {
+    price = formatPrice(product.price);
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 6),
       padding: const EdgeInsets.symmetric(horizontal: 4),
@@ -38,12 +26,12 @@ class _YouMightAlsoLikeSingleState extends State<YouMightAlsoLikeSingle> {
         children: [
           Center(
             child: Image.network(
-              widget.product.images[0],
+              product.images[0],
               height: 130,
             ),
           ),
           Text(
-            widget.product.name,
+            product.name,
             maxLines: 2,
             style: TextStyle(
                 fontSize: 16,
@@ -51,11 +39,11 @@ class _YouMightAlsoLikeSingleState extends State<YouMightAlsoLikeSingle> {
                 overflow: TextOverflow.ellipsis),
           ),
           Stars(
-            rating: widget.averageRating,
+            rating: averageRating,
             size: 18,
           ),
           Text(
-            '${widget.product.rating!.length.toString()} reviews',
+            '${product.rating!.length.toString()} reviews',
             style: const TextStyle(
               color: Colors.black54,
               fontSize: 14,
@@ -76,3 +64,5 @@ class _YouMightAlsoLikeSingleState extends State<YouMightAlsoLikeSingle> {
     );
   }
 }
+
+String? price;

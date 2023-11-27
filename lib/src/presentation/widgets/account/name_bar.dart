@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/user_cubit/user_cubit.dart';
+import 'package:flutter_amazon_clone_bloc/src/utils/utils.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class NameBar extends StatelessWidget {
@@ -30,8 +31,9 @@ class NameBar extends StatelessWidget {
             BlocBuilder<UserCubit, UserState>(
               builder: (context, state) {
                 if (state is UserSuccessS) {
+                  String name = capitalizeFirstLetter(string: state.user.name);
                   return Text(
-                    state.user.name,
+                    name,
                     style: const TextStyle(
                         fontSize: 22, fontWeight: FontWeight.bold),
                   );

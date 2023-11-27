@@ -35,4 +35,20 @@ class AuthRepository {
       throw e.toString();
     }
   }
+
+  Future<bool> isTokenValid({required var token}) async {
+    try {
+      http.Response res = await AuthAPI().isTokenValid(token: token);
+
+      if (res.statusCode == 200) {
+        bool isTokenValid = jsonDecode(res.body);
+
+        return isTokenValid;
+      } else {
+        throw Exception(jsonDecode(res.body)['msg']);
+      }
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
 }

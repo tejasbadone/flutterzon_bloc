@@ -37,6 +37,7 @@ class ProductDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    BlocProvider.of<UserRatingCubit>(context).userRating(product);
     BlocProvider.of<WishListCubit>(context).wishList(product: product);
     BlocProvider.of<KeepShoppingForCubit>(context)
         .addToKeepShoppingFor(product: product);
@@ -235,7 +236,7 @@ class ProductDetailsScreen extends StatelessWidget {
                           if (state.user.address != '') {
                             return Expanded(
                               child: Text(
-                                'Deliver to ${state.user.name} - ${state.user.address}',
+                                'Deliver to ${capitalizeFirstLetter(string: state.user.name)} - ${state.user.address}',
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                     fontWeight: FontWeight.normal,

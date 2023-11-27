@@ -1,44 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_amazon_clone_bloc/src/data/models/order.dart';
+import 'package:flutter_amazon_clone_bloc/src/data/models/user.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/widgets/common_widgets/custom_elevated_button.dart';
 
-class TrackingDetails extends StatefulWidget {
-  const TrackingDetails({
+class TrackingDetailsBottomSheet extends StatelessWidget {
+  const TrackingDetailsBottomSheet({
     super.key,
     required this.order,
+    required this.user,
   });
 
-  final Border order;
-
-  @override
-  State<TrackingDetails> createState() => _TrackingDetailsState();
-}
-
-class _TrackingDetailsState extends State<TrackingDetails> {
-  // final AdminServices adminServices = AdminServices();
-  int currentStep = 0;
-
-  // void changeOrderStatus(int status) {
-  //   adminServices.changeOrderStatus(
-  //       context: context,
-  //       order: widget.order,
-  //       status: status + 1,
-  //       onSuccess: () {
-  //         setState(() {
-  //           currentStep += 1;
-  //         });
-  //       });
-  //   debugPrint('onPressed clicked!');
-  // }
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   currentStep = widget.order.status;
-  // }
+  final Order order;
+  final User user;
 
   @override
   Widget build(BuildContext context) {
-    // final user = Provider.of<UserProvider>(context, listen: false).user;
+    // void changeOrderStatus(int status) {
+    //   adminServices.changeOrderStatus(
+    //       context: context,
+    //       order: widget.order,
+    //       status: status + 1,
+    //       onSuccess: () {
+    //         setState(() {
+    //           currentStep += 1;
+    //         });
+    //       });
+    //   debugPrint('onPressed clicked!');
+    // }
+
+    int currentStep = order.status;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
@@ -52,9 +42,9 @@ class _TrackingDetailsState extends State<TrackingDetails> {
                 fontWeight: FontWeight.bold,
                 color: Colors.black87),
           ),
-          const Text(
-            ' Order ID: {widget.order.id',
-            style: TextStyle(
+          Text(
+            ' Order ID: ${order.id}',
+            style: const TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
                 color: Colors.black87),
@@ -65,13 +55,13 @@ class _TrackingDetailsState extends State<TrackingDetails> {
                 physics: const NeverScrollableScrollPhysics(),
                 currentStep: currentStep,
                 controlsBuilder: ((context, details) {
-                  // if (user.type == 'admin') {
-                  return CustomElevatedButton(
-                      buttonText: 'Done', onPressed: () {}
-
-                      // changeOrderStatus(details.currentStep)
-                      );
-                  // }
+                  if (user.type == 'admin') {
+                    return CustomElevatedButton(
+                        buttonText: 'Done', onPressed: () {}
+                        // TODO
+                        // changeOrderStatus(details.currentStep)
+                        );
+                  }
                   return const SizedBox();
                 }),
                 steps: [
