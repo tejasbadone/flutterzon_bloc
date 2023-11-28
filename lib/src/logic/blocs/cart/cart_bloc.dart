@@ -60,6 +60,9 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       List<dynamic> items = await tryBlockCode(
           customUserRepository: await userRepository.getCart());
 
+      print('inside getCart');
+      print(items[1].length);
+
       emit(CartProductSuccessS(
           total: items[0],
           cartProducts: items[1],

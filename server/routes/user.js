@@ -136,7 +136,7 @@ userRouter.post("/api/order" , auth , async (req, res ) => {
             products.push({product, quantity : userCart[i].quantity});
             await product.save();
         } else {
-            return res.status(400).json({msg : `${product.name} is out of stock!`});
+            return res.status(400).json({error : `${product.name} is out of stock!`});
         }
     }
 

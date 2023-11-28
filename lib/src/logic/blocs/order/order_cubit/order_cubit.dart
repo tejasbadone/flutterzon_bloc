@@ -58,7 +58,7 @@ class OrderCubit extends Cubit<OrderState> {
     return user;
   }
 
-  void placeOrder(
+  Future<void> placeOrder(
       {required String address, required double totalAmount}) async {
     try {
       await userRepository.placeOrder(

@@ -193,21 +193,24 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                 paymentItems: state.paymentItems,
                                 type: GooglePayButtonType.order,
                                 margin: const EdgeInsets.only(top: 15.0),
-                                onPaymentResult: (res) {
-                                  showSnackBar(context, 'Order placed!');
+                                onPaymentResult: (res) async {
+                                  showSnackBar(context,
+                                      'Order placed successfully! redirecting...');
                                   if (state.user.address == '') {
                                     context.read<UserCubit>().saveUserAddress(
                                         address: addressToBeUsed);
                                   }
-
-                                  context.read<OrderCubit>().placeOrder(
+                                  await context.read<OrderCubit>().placeOrder(
                                       address: addressToBeUsed,
                                       totalAmount:
                                           double.parse(widget.totalAmount));
-                                  Navigator.pop(context);
-                                  context
-                                      .read<CartBloc>()
-                                      .add(GetCartPressed());
+
+                                  if (context.mounted) {
+                                    context
+                                        .read<CartBloc>()
+                                        .add(GetCartPressed());
+                                    Navigator.pop(context);
+                                  }
                                 },
                                 loadingIndicator: const Center(
                                   child: CircularProgressIndicator(),
