@@ -223,12 +223,9 @@ class UserApi {
   }
 
   Future<http.Response> placeOrder(
-      {required List<Product> cartProducts,
-      required double totalPrice,
-      required String address}) async {
+      {required double totalPrice, required String address}) async {
     final token = await getToken();
     try {
-      print(totalPrice.toString());
       http.Response res = await client.post(
         Uri.parse(orderUri),
         headers: {
@@ -237,9 +234,33 @@ class UserApi {
         },
         body: jsonEncode(
           {
-            "cart": cartProducts,
             "totalPrice": totalPrice,
             "address": address,
+          },
+        ),
+      );
+
+      return res;
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<http.Response> placeOrderBuyNow(
+      {required Product product, required String address}) async {
+    final token = await getToken();
+    try {
+      http.Response res = await client.post(
+        Uri.parse(placeOrderBuyNowUri),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': token,
+        },
+        body: jsonEncode(
+          {
+            'id': product.id,
+            'totalPrice': product.price,
+            'address': address,
           },
         ),
       );

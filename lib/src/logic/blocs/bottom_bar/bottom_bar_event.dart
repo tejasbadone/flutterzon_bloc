@@ -14,9 +14,10 @@ class BottomBarClickedEvent extends BottomBarEvent {
 
 class BottomBarMoreClickedEvent extends BottomBarEvent {
   final int index;
+  final bool isOpen;
 
-  BottomBarMoreClickedEvent({required this.index});
+  BottomBarMoreClickedEvent(this.index, this.isOpen);
 
   @override
-  List<Object?> get props => [index];
+  List<Object?> get props => [index, isOpen];
 }

@@ -31,7 +31,6 @@ class SingleListingProduct extends StatelessWidget {
             extra: {
               "product": product,
               "deliveryDate": deliveryDate,
-              "averageRating": averageRating
             });
       },
       child: Container(

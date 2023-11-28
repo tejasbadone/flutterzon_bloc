@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_amazon_clone_bloc/src/logic/blocs/cart/cart_bloc.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/order/order_cubit/order_cubit.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/user_cubit/user_cubit.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/widgets/common_widgets/custom_textfield.dart';
@@ -24,8 +25,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
   String addressToBeUsed = '';
 
-  // List<PaymentItem> paymentItems = [];
-
   final Future<PaymentConfiguration> _googlePayConfigFuture =
       PaymentConfiguration.fromAsset('gpay.json');
 
@@ -38,53 +37,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
     cityController.dispose();
   }
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   paymentItems.add(PaymentItem(
-  //       amount: widget.totalAmount,
-  //       label: 'Total Amount',
-  //       status: PaymentItemStatus.final_price));
-  // }
-
-  // void onPaymentResult(res) {
-  //   if (addressToBeUsed.isEmpty) {
-
-  //     context.read<OrderCubit>().paymentResult(address: addressToBeUsed);
-
-  //     addressServices.saveUserAddress(
-  //         context: context, address: addressToBeUsed);
-  //   }
-  //   addressServices.placeOrder(
-  //       context: context,
-  //       address: addressToBeUsed,
-  //       totalSum: double.parse(widget.totalAmount));
-  // }
-
-  // void payPressed(String addressFromBloc) {
-  //   addressToBeUsed = '';
-  //   bool isFromForm = flatBuildingController.text.isNotEmpty ||
-  //       areaController.text.isNotEmpty ||
-  //       pincodeController.text.isNotEmpty ||
-  //       cityController.text.isNotEmpty;
-
-  //   if (isFromForm) {
-  //     if (_addressFormKey.currentState!.validate()) {
-  //       addressToBeUsed =
-  //           '${flatBuildingController.text}, ${areaController.text}, ${cityController.text}, ${pincodeController.text}';
-  //     } else {
-  //       throw Exception('Please enter all the values');
-  //     }
-  //   } else if (addressToBeUsed.isEmpty) {
-  //     addressToBeUsed = addressFromBloc;
-  //   } else {
-  //     showSnackBar(context, 'ERROR');
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
-    // context.read<OrderCubit>().addPaymentItem(totalAmount: widget.totalAmount);
     context.read<OrderCubit>().gPayButton(totalAmount: widget.totalAmount);
 
     return Scaffold(
@@ -250,8 +204,10 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                       address: addressToBeUsed,
                                       totalAmount:
                                           double.parse(widget.totalAmount));
-
                                   Navigator.pop(context);
+                                  context
+                                      .read<CartBloc>()
+                                      .add(GetCartPressed());
                                 },
                                 loadingIndicator: const Center(
                                   child: CircularProgressIndicator(),

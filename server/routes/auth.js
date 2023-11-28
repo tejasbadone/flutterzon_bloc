@@ -68,6 +68,7 @@ authRouter.post('/IsTokenValid', async (req, res) => {
     try {
         const token = req.header('x-auth-token');
 
+        if(token == '') return res.json(false);
         if(!token) return res.json(false);
         const isVerified = jwt.verify(token, 'passwordKey');
         if(!isVerified) return res.json(false);
@@ -78,6 +79,7 @@ authRouter.post('/IsTokenValid', async (req, res) => {
         res.json(true);
 
     } catch (e) {
+        console.log(e);
         res.status(500).json({error : e.message})    
     }
 })

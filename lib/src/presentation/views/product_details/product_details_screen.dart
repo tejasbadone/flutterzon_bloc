@@ -1,11 +1,13 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_amazon_clone_bloc/src/config/router/app_route_constants.dart';
 import 'package:flutter_amazon_clone_bloc/src/data/models/product.dart';
 import 'package:flutter_amazon_clone_bloc/src/data/repositories/account_repository.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/account/keep_shopping_for/cubit/keep_shopping_for_cubit.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/account/wish_list/wish_list_cubit.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/cart/cart_bloc.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/home_blocs/carousel_bloc/carousel_image_bloc.dart';
+import 'package:flutter_amazon_clone_bloc/src/logic/blocs/product_details/averageRating/average_rating_cubit.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/product_details/user_rating/user_rating_cubit.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/user_cubit/user_cubit.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/widgets/common_widgets/custom_app_bar.dart';
@@ -22,22 +24,23 @@ import 'package:flutter_amazon_clone_bloc/src/utils/constants/constants.dart';
 import 'package:flutter_amazon_clone_bloc/src/utils/utils.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:go_router/go_router.dart';
 
 class ProductDetailsScreen extends StatelessWidget {
   final Product product;
   final String deliveryDate;
-  final double averageRating;
 
   const ProductDetailsScreen({
     super.key,
     required this.product,
     required this.deliveryDate,
-    required this.averageRating,
   });
 
   @override
   Widget build(BuildContext context) {
     BlocProvider.of<UserRatingCubit>(context).userRating(product);
+    BlocProvider.of<AverageRatingCubit>(context)
+        .getProductAverageRating(productId: product.id!);
     BlocProvider.of<WishListCubit>(context).wishList(product: product);
     BlocProvider.of<KeepShoppingForCubit>(context)
         .addToKeepShoppingFor(product: product);
@@ -140,25 +143,35 @@ class ProductDetailsScreen extends StatelessWidget {
                       'Visit the Store',
                       style: TextStyle(color: Constants.selectedNavBarColor),
                     ),
-                    Row(
-                      children: [
-                        Text(averageRating.toStringAsFixed(1),
-                            style: const TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w400,
-                                color: Colors.black87)),
-                        const SizedBox(width: 4),
-                        Stars(rating: averageRating),
-                        const SizedBox(width: 6),
-                        Text(
-                          product.rating!.length.toString(),
-                          style: TextStyle(
-                            color: Constants.selectedNavBarColor,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      ],
+                    BlocBuilder<AverageRatingCubit, AverageRatingState>(
+                      builder: (context, state) {
+                        if (state is AverageRatingLoadingS) {
+                          return const SizedBox();
+                        }
+                        if (state is AverageRatingSuccessS) {
+                          return Row(
+                            children: [
+                              Text(state.averageRating.toStringAsFixed(1),
+                                  style: const TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w400,
+                                      color: Colors.black87)),
+                              const SizedBox(width: 4),
+                              Stars(rating: state.averageRating),
+                              const SizedBox(width: 6),
+                              Text(
+                                state.averageRatingLength.toString(),
+                                style: TextStyle(
+                                  color: Constants.selectedNavBarColor,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              )
+                            ],
+                          );
+                        }
+                        return const SizedBox();
+                      },
                     )
                   ],
                 ),
@@ -280,8 +293,11 @@ class ProductDetailsScreen extends StatelessWidget {
                 CustomElevatedButton(
                   buttonText: 'Buy Now',
                   onPressed: () {
-                    // Navigator.pushNamed(context, AddressScreenBuyNow.routeName,
-                    //     arguments: product);
+                    context.pushReplacementNamed(
+                        AppRouteConstants.buyNowPaymentScreenRoute.name,
+                        extra: {
+                          'product': product,
+                        });
                   },
                   color: Constants.secondaryColor,
                 ),
@@ -344,7 +360,18 @@ class ProductDetailsScreen extends StatelessWidget {
             ),
             ProductFeatures(product: product),
             const DividerWithSizedBox(),
-            CustomerReviews(averageRating: averageRating, product: product),
+            BlocBuilder<AverageRatingCubit, AverageRatingState>(
+              builder: (context, state) {
+                if (state is AverageRatingLoadingS) {
+                  return CustomerReviews(averageRating: 0, product: product);
+                }
+                if (state is AverageRatingSuccessS) {
+                  return CustomerReviews(
+                      averageRating: state.averageRating, product: product);
+                }
+                return CustomerReviews(averageRating: 0, product: product);
+              },
+            ),
             const DividerWithSizedBox(),
 
             // userRating == -1

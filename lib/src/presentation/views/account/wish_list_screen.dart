@@ -38,8 +38,11 @@ class WishListScreen extends StatelessWidget {
                 },
                 builder: (context, state) {
                   if (state is GetWishListLoadingS) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
+                    return SizedBox(
+                      height: MediaQuery.sizeOf(context).height / 1.4,
+                      child: const Center(
+                        child: CircularProgressIndicator(),
+                      ),
                     );
                   }
 

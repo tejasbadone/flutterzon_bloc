@@ -2,13 +2,13 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_amazon_clone_bloc/src/data/models/product.dart';
 import 'package:flutter_amazon_clone_bloc/src/data/repositories/account_repository.dart';
-import 'package:flutter_amazon_clone_bloc/src/data/repositories/search_products_repository.dart';
+import 'package:flutter_amazon_clone_bloc/src/data/repositories/products_repository.dart';
 
 part 'search_event.dart';
 part 'search_state.dart';
 
 class SearchBloc extends Bloc<SearchEvent, SearchState> {
-  final SearchProductsRepository searchProductsRepository;
+  final ProductsRepository searchProductsRepository;
   final AccountRepository accountRepository = AccountRepository();
 
   SearchBloc(this.searchProductsRepository) : super(SearchLoadingS()) {

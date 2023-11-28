@@ -10,9 +10,18 @@ sealed class PageRedirectionState extends Equatable {
 final class PageRedirectionInitial extends PageRedirectionState {}
 
 final class PageRedirectionSuccess extends PageRedirectionState {
-  final bool isLoggedIn;
+  final bool isValid;
+  final String userType;
 
-  const PageRedirectionSuccess({required this.isLoggedIn});
+  const PageRedirectionSuccess({required this.isValid, required this.userType});
   @override
-  List<Object> get props => [isLoggedIn];
+  List<Object> get props => [isValid, userType];
+}
+
+final class PageRedirectionInvalid extends PageRedirectionState {
+  final bool isValid;
+  final String userType;
+  const PageRedirectionInvalid({required this.isValid, required this.userType});
+  @override
+  List<Object> get props => [isValid, userType];
 }

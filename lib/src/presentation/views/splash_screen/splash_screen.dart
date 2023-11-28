@@ -11,31 +11,32 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.read<PageRedirectionCubit>().redirectUser();
     return Scaffold(
-        body: FutureBuilder(
-            future: context.read<PageRedirectionCubit>().redirectUser(),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                final isValid = snapshot.data![0] as bool;
-                final userType = snapshot.data![1] as String;
-
-                Future.delayed(Duration.zero, () {
-                  if (isValid) {
-                    if (userType == 'user') {
-                      context.goNamed(AppRouteConstants.bottomBarRoute.name);
-                    } else {
-                      context.goNamed(AppRouteConstants.menuScreenRoute.name);
-                    }
-                  } else {
-                    context.goNamed(AppRouteConstants.authRoute.name);
-                  }
-                });
-              }
-              return Center(
-                  child: Image.asset(
-                'assets/images/amazon_in_alt.png',
-                height: 52,
-              ));
-            }));
+      body: BlocConsumer<PageRedirectionCubit, PageRedirectionState>(
+          listener: (context, state) {
+        if (state is PageRedirectionSuccess) {
+          if (state.userType == 'admin') {
+            context.goNamed(AppRouteConstants.menuScreenRoute.name);
+          } else if (state.userType == '' || state.userType == 'invalid') {
+            context.goNamed(AppRouteConstants.authRoute.name);
+          } else {
+            context.goNamed(AppRouteConstants.bottomBarRoute.name);
+          }
+        }
+        if (state is PageRedirectionInvalid) {
+          context.goNamed(AppRouteConstants.authRoute.name);
+        }
+      }, builder: ((context, state) {
+        return Scaffold(
+          body: Center(
+            child: Image.asset(
+              'assets/images/amazon_in_alt.png',
+              height: 52,
+            ),
+          ),
+        );
+      })),
+    );
   }
 }

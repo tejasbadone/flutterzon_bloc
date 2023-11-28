@@ -340,14 +340,10 @@ class UserRepository {
   }
 
   Future<Order> placeOrder(
-      {required List<Product> cartProducts,
-      required double totalPrice,
-      required String address}) async {
+      {required double totalPrice, required String address}) async {
     try {
-      http.Response res = await userApi.placeOrder(
-          cartProducts: cartProducts, totalPrice: totalPrice, address: address);
-
-      print(res.statusCode);
+      http.Response res =
+          await userApi.placeOrder(totalPrice: totalPrice, address: address);
 
       if (res.statusCode == 200) {
         Order order = Order.fromJson(
@@ -356,6 +352,22 @@ class UserRepository {
           ),
         );
         return order;
+      } else {
+        throw Exception(jsonDecode(res.body)['msg']);
+      }
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<bool> placeOrderBuyNow(
+      {required Product product, required String address}) async {
+    try {
+      http.Response res =
+          await userApi.placeOrderBuyNow(product: product, address: address);
+
+      if (res.statusCode == 200) {
+        return true;
       } else {
         throw Exception(jsonDecode(res.body)['msg']);
       }

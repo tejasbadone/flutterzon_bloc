@@ -35,6 +35,7 @@ class CartScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.read<CartBloc>().add(GetCartPressed());
     getCartOffers(context);
     return Scaffold(
       appBar: const PreferredSize(
@@ -58,6 +59,7 @@ class CartScreen extends StatelessWidget {
                     ),
                   );
                 }
+
                 if (state is CartProductSuccessS) {
                   return Column(
                     children: [
@@ -246,8 +248,6 @@ class CartScreen extends StatelessWidget {
                                             extra: {
                                               "product": product,
                                               "deliveryDate": getDeliveryDate(),
-                                              "averageRating":
-                                                  state.averageRatingList[index]
                                             });
                                       },
                                       child: CartProduct(
@@ -342,8 +342,6 @@ class CartScreen extends StatelessWidget {
                                                   "product": product,
                                                   "deliveryDate":
                                                       getDeliveryDate(),
-                                                  "averageRating": state
-                                                      .averageRatingList[index]
                                                 });
                                           },
                                           child: SaveForLaterSingle(
@@ -395,7 +393,13 @@ class CartScreen extends StatelessWidget {
                   );
                 }
 
-                return const SizedBox();
+                return SizedBox(
+                  height: MediaQuery.sizeOf(context).height - 180,
+                  width: MediaQuery.sizeOf(context).width,
+                  child: const Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                );
               },
             ),
           ],

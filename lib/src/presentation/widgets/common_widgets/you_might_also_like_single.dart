@@ -16,6 +16,7 @@ class YouMightAlsoLikeSingle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String? price;
     price = formatPrice(product.price);
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 6),
@@ -64,5 +65,3 @@ class YouMightAlsoLikeSingle extends StatelessWidget {
     );
   }
 }
-
-String? price;

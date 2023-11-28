@@ -43,12 +43,20 @@ class FetchAccountScreenDataCubit extends Cubit<FetchAccountScreenDataState> {
         averageRatingList.add(averageRating);
       }
 
-      emit(FetchAccountScreenDataSuccessS(
-        ordersList: ordersList,
-        keepShoppingForList: keepShoppingForList,
-        wishListProducts: wishListProducts,
-        averageRatingList: averageRatingList,
-      ));
+      if (ordersList.isEmpty &&
+          keepShoppingForList.isEmpty &&
+          wishListProducts.isEmpty) {
+        emit(const FetchAccountScreenDataEmptyS(
+            emptyStringMessage:
+                'Your account is currently empty. Start adding items to your orders, wishlist, and history to see them here.'));
+      } else {
+        emit(FetchAccountScreenDataSuccessS(
+          ordersList: ordersList,
+          keepShoppingForList: keepShoppingForList,
+          wishListProducts: wishListProducts,
+          averageRatingList: averageRatingList,
+        ));
+      }
     } catch (e) {
       emit(FetchAccountScreenDataErrorS(errorString: e.toString()));
     }

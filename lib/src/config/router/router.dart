@@ -5,7 +5,7 @@ import 'package:flutter_amazon_clone_bloc/src/data/models/product.dart';
 import 'package:flutter_amazon_clone_bloc/src/data/models/user.dart';
 import 'package:flutter_amazon_clone_bloc/src/data/repositories/account_repository.dart';
 import 'package:flutter_amazon_clone_bloc/src/data/repositories/category_products_repository.dart';
-import 'package:flutter_amazon_clone_bloc/src/data/repositories/search_products_repository.dart';
+import 'package:flutter_amazon_clone_bloc/src/data/repositories/products_repository.dart';
 import 'package:flutter_amazon_clone_bloc/src/data/repositories/user_repository.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/account/fetch_orders/fethc_orders_cubit.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/account/keep_shopping_for/cubit/keep_shopping_for_cubit.dart';
@@ -27,6 +27,7 @@ import 'package:flutter_amazon_clone_bloc/src/presentation/views/category_produc
 import 'package:flutter_amazon_clone_bloc/src/presentation/views/home/home_screen.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/views/menu/menu_screen.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/views/payment/payment_screen.dart';
+import 'package:flutter_amazon_clone_bloc/src/presentation/views/payment/payment_screen_buy_now.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/views/product_details/product_details_screen.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/views/search/search_screen.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/views/splash_screen/splash_screen.dart';
@@ -36,7 +37,7 @@ import 'package:go_router/go_router.dart';
 final _fetchCategoryProductsBloc =
     FetchCategoryProductsBloc(CategoryProductsRepository());
 
-final _searchProductBloc = SearchBloc(SearchProductsRepository());
+final _searchProductBloc = SearchBloc(ProductsRepository());
 
 final router = GoRouter(initialLocation: '/', routes: [
   GoRoute(
@@ -89,8 +90,6 @@ final router = GoRouter(initialLocation: '/', routes: [
 
       final product = extraData["product"] as Product;
       final deliveryDate = extraData["deliveryDate"] as String;
-      final averageRating = extraData["averageRating"] as double;
-
       return MaterialPage(
           child: MultiBlocProvider(
         providers: [
@@ -103,7 +102,6 @@ final router = GoRouter(initialLocation: '/', routes: [
         child: ProductDetailsScreen(
           product: product,
           deliveryDate: deliveryDate,
-          averageRating: averageRating,
         ),
       ));
     },
@@ -213,6 +211,18 @@ final router = GoRouter(initialLocation: '/', routes: [
         double totalAmount = state.extra as double;
         return MaterialPage(
             child: PaymentScreen(totalAmount: totalAmount.toString()));
+      }),
+  GoRoute(
+      name: AppRouteConstants.buyNowPaymentScreenRoute.name,
+      path: AppRouteConstants.buyNowPaymentScreenRoute.path,
+      pageBuilder: (context, state) {
+        Map<String, dynamic> extraData = state.extra as Map<String, dynamic>;
+
+        Product product = extraData['product'] as Product;
+        return MaterialPage(
+            child: PaymentScreenBuyNow(
+          product: product,
+        ));
       }),
   GoRoute(
       name: AppRouteConstants.trackingDetailsScreenRoute.name,

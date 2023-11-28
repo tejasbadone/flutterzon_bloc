@@ -49,7 +49,6 @@ class YouMightAlsoLikeBlock extends StatelessWidget {
                                 extra: {
                                   "product": product,
                                   "deliveryDate": getDeliveryDate(),
-                                  "averageRating": averageRating
                                 });
                           },
                           child: YouMightAlsoLikeSingle(

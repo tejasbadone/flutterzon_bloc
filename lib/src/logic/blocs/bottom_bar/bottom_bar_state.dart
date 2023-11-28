@@ -3,7 +3,8 @@ part of 'bottom_bar_bloc.dart';
 @immutable
 sealed class BottomBarState extends Equatable {}
 
-final class BottomBarPageState extends BottomBarState {
+// ignore: must_be_immutable
+class BottomBarPageState extends BottomBarState {
   final int index;
 
   BottomBarPageState({required this.index});
@@ -14,9 +15,10 @@ final class BottomBarPageState extends BottomBarState {
 
 final class BottomBarMoreClickedState extends BottomBarState {
   final int index;
+  final bool isOpen;
 
-  BottomBarMoreClickedState({required this.index});
+  BottomBarMoreClickedState(this.index, this.isOpen);
 
   @override
-  List<Object?> get props => [index];
+  List<Object?> get props => [index, isOpen];
 }

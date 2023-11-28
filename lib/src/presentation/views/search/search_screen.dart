@@ -52,18 +52,10 @@ class SearchScreen extends StatelessWidget {
                       final product = state.searchProducts[index];
                       final averageRating = state.averageRatingList[index];
 
-                      return GestureDetector(
-                        onTap: () {
-                          //TODO products deatils screen
-                          // Navigator.pushNamed(
-                          //     context, ProductDetailsScreen.routeName,
-                          //     arguments: product);
-                        },
-                        child: SingleListingProduct(
-                          product: product,
-                          averageRating: averageRating,
-                          deliveryDate: getDeliveryDate(),
-                        ),
+                      return SingleListingProduct(
+                        product: product,
+                        averageRating: averageRating,
+                        deliveryDate: getDeliveryDate(),
                       );
                     }),
                   ),

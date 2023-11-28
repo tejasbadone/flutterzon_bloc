@@ -36,3 +36,12 @@ final class FetchAccountScreenDataErrorS extends FetchAccountScreenDataState {
   @override
   List<Object> get props => [errorString];
 }
+
+final class FetchAccountScreenDataEmptyS extends FetchAccountScreenDataState {
+  final String emptyStringMessage;
+
+  const FetchAccountScreenDataEmptyS({required this.emptyStringMessage});
+
+  @override
+  List<Object> get props => [emptyStringMessage];
+}

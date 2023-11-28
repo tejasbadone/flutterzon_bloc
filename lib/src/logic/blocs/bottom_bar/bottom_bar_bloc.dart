@@ -17,6 +17,6 @@ class BottomBarBloc extends Bloc<BottomBarEvent, BottomBarState> {
   }
 
   void _onttomBarMoreClickedEvent(event, emit) {
-    emit(BottomBarMoreClickedState(index: event.index));
+    emit(BottomBarMoreClickedState(event.index, event.isOpen));
   }
 }

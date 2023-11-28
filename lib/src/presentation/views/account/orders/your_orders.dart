@@ -104,8 +104,11 @@ class YourOrders extends StatelessWidget {
               },
               builder: (context, state) {
                 if (state is FetchOrdersLoadingAS) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
+                  return SizedBox(
+                    height: MediaQuery.sizeOf(context).height / 1.5,
+                    child: const Center(
+                      child: CircularProgressIndicator(),
+                    ),
                   );
                 }
 

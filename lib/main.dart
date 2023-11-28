@@ -4,7 +4,7 @@ import 'package:flutter_amazon_clone_bloc/src/config/themes/app_theme.dart';
 import 'package:flutter_amazon_clone_bloc/src/data/repositories/account_repository.dart';
 import 'package:flutter_amazon_clone_bloc/src/data/repositories/auth_repository.dart';
 import 'package:flutter_amazon_clone_bloc/src/data/repositories/category_products_repository.dart';
-import 'package:flutter_amazon_clone_bloc/src/data/repositories/search_products_repository.dart';
+import 'package:flutter_amazon_clone_bloc/src/data/repositories/products_repository.dart';
 import 'package:flutter_amazon_clone_bloc/src/data/repositories/user_repository.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/account/fetch_account_screen_data/fetch_account_screen_data_cubit.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/account/fetch_orders/fethc_orders_cubit.dart';
@@ -20,6 +20,7 @@ import 'package:flutter_amazon_clone_bloc/src/logic/blocs/cart/cart_offers_cubit
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/category_products/fetch_category_products_bloc/fetch_category_products_bloc.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/home_blocs/carousel_bloc/carousel_image_bloc.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/order/order_cubit/order_cubit.dart';
+import 'package:flutter_amazon_clone_bloc/src/logic/blocs/order/place_order_buy_now/place_order_buy_now_cubit.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/page_redirection_cubit/page_redirection_cubit.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/product_details/averageRating/average_rating_cubit.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/product_details/user_rating/user_rating_cubit.dart';
@@ -49,13 +50,13 @@ class MyApp extends StatelessWidget {
           create: (context) => AuthBloc(AuthRepository()),
         ),
         BlocProvider(
-          create: (context) => PageRedirectionCubit(AuthRepository()),
-        ),
-        BlocProvider(
           create: (context) => UserCubit(UserRepository()),
         ),
         BlocProvider(
           create: (context) => CartBloc(UserRepository()),
+        ),
+        BlocProvider(
+          create: (context) => PageRedirectionCubit(AuthRepository()),
         ),
         BlocProvider(
           create: (context) => BottomBarBloc(),
@@ -68,7 +69,7 @@ class MyApp extends StatelessWidget {
               FetchCategoryProductsBloc(CategoryProductsRepository()),
         ),
         BlocProvider(
-          create: (context) => SearchBloc(SearchProductsRepository()),
+          create: (context) => SearchBloc(ProductsRepository()),
         ),
         BlocProvider(
           create: (context) => FetchAccountScreenDataCubit(UserRepository()),
@@ -101,6 +102,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => OrderCubit(UserRepository()),
+        ),
+        BlocProvider(
+          create: (context) => PlaceOrderBuyNowCubit(UserRepository()),
         ),
         BlocProvider(
           create: (context) => AverageRatingCubit(AccountRepository()),

@@ -16,7 +16,10 @@ class SingleProduct extends StatelessWidget {
       ),
       child: Container(
           padding: const EdgeInsets.all(8),
-          child: CachedNetworkImage(imageUrl: image)),
+          child: CachedNetworkImage(
+            imageUrl: image,
+            width: 120,
+          )),
     );
   }
 }

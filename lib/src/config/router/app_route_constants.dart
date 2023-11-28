@@ -50,6 +50,9 @@ class AppRouteConstants {
   static const paymentScreenRoute =
       AppRoute(name: 'payment-screen', path: '/payment-screen');
 
+  static const buyNowPaymentScreenRoute =
+      AppRoute(name: 'buy-now-payment-screen', path: '/buy-now-payment-screen');
+
   static const trackingDetailsScreenRoute = AppRoute(
       name: 'tracking-details-screen', path: '/tracking-details-screen');
 }

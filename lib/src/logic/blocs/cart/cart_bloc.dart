@@ -38,7 +38,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     saveForLaterProducts = await userRepository.getSaveForLater();
 
     for (int i = 0; i < cartProducts.length; i++) {
-      sum += cartProducts[i].price;
+      sum += cartProducts[i].price * productsQuantity[i];
 
       rating = await accountRepository.getAverageRating(cartProducts[i].id!);
 
@@ -91,8 +91,6 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   void _onAddToCartFromBottomSheetHandler(event, emit) async {
     try {
       emit(CartLoadingS());
-
-      print('inside addtocart from sheet');
       List<dynamic> items = await tryBlockCode(
           customUserRepository:
               await userRepository.addToCart(product: event.product));
@@ -194,9 +192,6 @@ class CartBloc extends Bloc<CartEvent, CartState> {
 
   int get cartItemsLength {
     if (state is CartProductSuccessS) {
-      print('inside');
-      print((state as CartProductSuccessS).cartProducts.length);
-
       return (state as CartProductSuccessS).cartProducts.length;
     } else {
       return -1;

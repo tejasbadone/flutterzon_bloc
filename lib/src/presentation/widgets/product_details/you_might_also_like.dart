@@ -55,7 +55,6 @@ class YouMightAlsoLike extends StatelessWidget {
                                 extra: {
                                   "product": product,
                                   "deliveryDate": getDeliveryDate(),
-                                  "averageRating": averageRating
                                 });
                           },
                           child: YouMightAlsoLikeSingle(
@@ -63,7 +62,7 @@ class YouMightAlsoLike extends StatelessWidget {
                     }));
               } else {
                 return const Center(
-                  child: Text('null'),
+                  child: CircularProgressIndicator(),
                 );
               }
             },

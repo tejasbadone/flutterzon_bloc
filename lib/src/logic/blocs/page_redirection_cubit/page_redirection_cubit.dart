@@ -12,7 +12,7 @@ class PageRedirectionCubit extends Cubit<PageRedirectionState> {
   UserRepository userRepository = UserRepository();
   PageRedirectionCubit(this.authRepository) : super(PageRedirectionInitial());
 
-  Future<List<dynamic>> redirectUser() async {
+  void redirectUser() async {
     bool isValid;
     String userType;
     try {
@@ -22,16 +22,16 @@ class PageRedirectionCubit extends Cubit<PageRedirectionState> {
 
       if (token == null) {
         prefs.setString('x-auth-token', '');
+        token = '';
       }
-
       isValid = await authRepository.isTokenValid(token: token);
 
       if (isValid == true) {
         User user = await userRepository.getUserDataInitial(token);
         userType = user.type;
-        return [isValid, userType];
+        emit(PageRedirectionSuccess(isValid: isValid, userType: userType));
       } else {
-        return [isValid, ''];
+        emit(PageRedirectionInvalid(isValid: isValid, userType: 'invalid'));
       }
     } catch (e) {
       throw Exception(e.toString());

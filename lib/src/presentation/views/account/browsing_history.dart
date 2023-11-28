@@ -28,14 +28,6 @@ class BrowsingHistory extends StatelessWidget {
                     fontWeight: FontWeight.w500,
                     color: Colors.black87),
               ),
-              // userProvider.user.keepShoppingFor.isEmpty
-              //     ? const Center(
-              //         child: Text(
-              //           'Your browsing history is empty.',
-              //           style: TextStyle(fontSize: 14, color: Colors.black87),
-              //         ),
-              //       )
-              // :
               Column(
                 children: [
                   const Text(
@@ -54,8 +46,11 @@ class BrowsingHistory extends StatelessWidget {
                     },
                     builder: (context, state) {
                       if (state is KeepShoppingForLoadingS) {
-                        return const Center(
-                          child: CircularProgressIndicator(),
+                        return SizedBox(
+                          height: MediaQuery.sizeOf(context).height / 1.4,
+                          child: const Center(
+                            child: CircularProgressIndicator(),
+                          ),
                         );
                       }
                       if (state is KeepShoppingForSuccessS) {

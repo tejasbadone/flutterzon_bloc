@@ -6,7 +6,6 @@ import 'package:flutter_amazon_clone_bloc/src/data/models/user.dart';
 import 'package:flutter_amazon_clone_bloc/src/data/repositories/account_repository.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/account/product_rating/product_rating_bloc.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/category_products/fetch_category_products_bloc/fetch_category_products_bloc.dart';
-import 'package:flutter_amazon_clone_bloc/src/logic/blocs/product_details/averageRating/average_rating_cubit.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/user_cubit/user_cubit.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/widgets/account/orders/widgets/shipment_details.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/widgets/account/orders/widgets/standard_delivery_container.dart';
@@ -133,11 +132,6 @@ class OrderDetailsScreen extends StatelessWidget {
                                             extra: {
                                               'product': order.products[index],
                                               'deliveryDate': getDeliveryDate(),
-                                              'averageRating': await context
-                                                  .read<AverageRatingCubit>()
-                                                  .getProductAverageRating(
-                                                      productId: order
-                                                          .products[index].id!)
                                             });
                                       },
                                       child: Row(

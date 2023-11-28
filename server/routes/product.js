@@ -114,9 +114,21 @@ productRouter.get("/api/get-ratings-average/:id", auth, async (req, res)=>{
 });
 
 
+productRouter.get("/api/get-average-ratings-length/:id", auth, async (req, res) => {
 
+    try {
+    
+        const { id} = req.params;
+        const product = await Product.findById(id);
+        const averageRatingLength = product.ratings.length;
 
+        res.json(averageRatingLength);
 
+    } catch (e) {
+        res.status(500).json({error : e.message});
+    }
+
+});
 
 
 

@@ -293,6 +293,8 @@ class _AuthScreenState extends State<AuthScreen> {
                                     showSnackBar(context, state.errorString);
                                   }
                                   if (state is SignInSuccessState) {
+                                    BlocProvider.of<UserCubit>(context)
+                                        .getUserData();
                                     context.goNamed(
                                         AppRouteConstants.bottomBarRoute.name);
                                   }

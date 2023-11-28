@@ -38,7 +38,6 @@ class KeepShoppingForCubit extends Cubit<KeepShoppingForState> {
 
   void addToKeepShoppingFor({required Product product}) async {
     try {
-      print('inside cubit');
       accountRepository.addKeepShoppingFor(product: product);
 
       emit(AddKeepShoppingForSuccessS(product: product));

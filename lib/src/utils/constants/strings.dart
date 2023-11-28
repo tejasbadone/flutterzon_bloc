@@ -14,6 +14,8 @@ String searchOrdersUri = '$uri/api/orders/search';
 String getProductRatingUri = '$uri/api/get-product-rating';
 String getAverageRatingUri = '$uri/api/get-ratings-average';
 String rateProductUri = '$uri/api/rate-product';
+String getAverageRatingLengthUri = '$uri/api/get-average-ratings-length';
+
 String addKeepShoppingForUri = '$uri/api/add-keep-shopping-for';
 String getKeepShoppingForUri = '$uri/api/get-keep-shopping-for';
 String getWishListUri = '$uri/api/get-wish-list';
@@ -37,3 +39,4 @@ String saveUserAddressUri = '$uri/api/save-user-address';
 String getUserDataUri = '$uri/';
 
 String orderUri = '$uri/api/order';
+String placeOrderBuyNowUri = '$uri/api/place-order-buy-now';
