@@ -86,7 +86,7 @@ adminRouter.post("/admin/change-order-status", admin , async (req, res) => {
 
         order = await order.save();
 
-        res.json(order);
+        res.json(order.status);
 
     } catch (e) {
         res.status(500).json({error : e.message});
@@ -108,16 +108,17 @@ adminRouter.get("/admin/analytics", admin, async ( req, res) => {
         }
 
         // CATEGORY WISE ORDERS FETCHING
-        let mobileEarnings = await fetchCategoryWiseProduct('Mobiles');
-        let fashionEarnings = await fetchCategoryWiseProduct('Fashion');
-        let electronicsEarnings = await fetchCategoryWiseProduct('Electronics');
-        let homeEarnings = await fetchCategoryWiseProduct('Home');
-        let beautyEarnings = await fetchCategoryWiseProduct('Beauty');
-        let appliancesEarnings = await fetchCategoryWiseProduct('Appliances');
-        let groceryEarnings = await fetchCategoryWiseProduct('Grocery');
-        let booksEarnings = await fetchCategoryWiseProduct('Books');
-        let essentialsEarnings = await fetchCategoryWiseProduct('Essentials');
+        let mobileEarnings = await fetchCategoryWiseProductEarning('Mobiles');
+        let fashionEarnings = await fetchCategoryWiseProductEarning('Fashion');
+        let electronicsEarnings = await fetchCategoryWiseProductEarning('Electronics');
+        let homeEarnings = await fetchCategoryWiseProductEarning('Home');
+        let beautyEarnings = await fetchCategoryWiseProductEarning('Beauty');
+        let appliancesEarnings = await fetchCategoryWiseProductEarning('Appliances');
+        let groceryEarnings = await fetchCategoryWiseProductEarning('Grocery');
+        let booksEarnings = await fetchCategoryWiseProductEarning('Books');
+        let essentialsEarnings = await fetchCategoryWiseProductEarning('Essentials');
 
+        // Map<String, dynamic> ie map of category and its respective earning
         let earnings = {
             totalEarnings,
             mobileEarnings,
@@ -140,7 +141,7 @@ adminRouter.get("/admin/analytics", admin, async ( req, res) => {
 })
 
 
-async function fetchCategoryWiseProduct(category){
+async function fetchCategoryWiseProductEarning(category){
     let earnings = 0;
     let categoryOrders = await Order.find({
         'products.product.category' : category,

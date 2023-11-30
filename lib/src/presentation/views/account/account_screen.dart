@@ -308,7 +308,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                   ),
                                   const DividerWithSizedBox(
                                     thickness: 4,
-                                    sB1Height: 0,
+                                    sB1Height: 6,
                                     sB2Height: 4,
                                   ),
                                 ],

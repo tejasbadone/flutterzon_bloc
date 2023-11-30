@@ -35,7 +35,7 @@ class OrderListSingle extends StatelessWidget {
             CachedNetworkImage(
               imageUrl: order.products[0].images[0],
               height: 75,
-              // width: 90,
+              width: 80,
               fit: BoxFit.contain,
             ),
             SizedBox(

@@ -92,12 +92,15 @@ class SaveForLaterSingle extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(
-                          height: 4,
+                          height: 6,
                         ),
                       ],
                     ),
                   ),
                 ]),
+            const SizedBox(
+              height: 4,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [

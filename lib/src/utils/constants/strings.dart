@@ -40,3 +40,11 @@ String getUserDataUri = '$uri/';
 
 String orderUri = '$uri/api/order';
 String placeOrderBuyNowUri = '$uri/api/place-order-buy-now';
+
+//admin
+String adminGetCategoryProductsUri = '$uri/admin/get-category-product';
+String adminDeleteProductUri = '$uri/admin/delete-product';
+String adminGetOrdersUri = '$uri/admin/get-orders';
+String adminChangeOrderStatusUri = '$uri/admin/change-order-status';
+String adminGetAnalyticsUri = '$uri/admin/analytics';
+String adminAddProductsUri = '$uri/admin/add-product';

@@ -5,48 +5,56 @@ class ShipmentStatus extends StatelessWidget {
   const ShipmentStatus({
     super.key,
     required this.currentStep,
-    required this.textSyle,
+    required this.textStyle,
   });
 
   final int currentStep;
-  final TextStyle textSyle;
+  final TextStyle textStyle;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        currentStep == 1 || currentStep == 0
+        currentStep == 0
             ? Text(
-                'Received',
-                style: textSyle.copyWith(
+                'In Process',
+                style: textStyle.copyWith(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                     color: Constants.greenColor),
               )
-            : currentStep == 2
+            : currentStep == 1
                 ? Text(
-                    'Dispatched',
-                    style: textSyle.copyWith(
+                    'Received',
+                    style: textStyle.copyWith(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                         color: Constants.greenColor),
                   )
-                : currentStep == 3
+                : currentStep == 2
                     ? Text(
-                        'In Transit',
-                        style: textSyle.copyWith(
+                        'Dispatched',
+                        style: textStyle.copyWith(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                             color: Constants.greenColor),
                       )
-                    : Text(
-                        'Delivered',
-                        style: textSyle.copyWith(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Constants.greenColor),
-                      ),
+                    : currentStep == 3
+                        ? Text(
+                            'In Transit',
+                            style: textStyle.copyWith(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Constants.greenColor),
+                          )
+                        : Text(
+                            'Delivered',
+                            style: textStyle.copyWith(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Constants.greenColor),
+                          ),
       ],
     );
   }

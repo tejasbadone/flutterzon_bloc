@@ -55,4 +55,14 @@ class AppRouteConstants {
 
   static const trackingDetailsScreenRoute = AppRoute(
       name: 'tracking-details-screen', path: '/tracking-details-screen');
+
+  static const adminBottomBarRoute =
+      AppRoute(name: 'admin-bottom-bar', path: '/admin-bottom-bar');
+
+  static const adminCategoryProductsScreen = AppRoute(
+      name: 'admin-category-products-screen',
+      path: '/admin-category-products-screen');
+
+  static const adminAddProductsScreen = AppRoute(
+      name: 'admin-add-products-screen', path: '/admin-add-products-screen');
 }

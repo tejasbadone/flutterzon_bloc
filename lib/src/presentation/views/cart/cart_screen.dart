@@ -185,8 +185,10 @@ class CartScreen extends StatelessWidget {
                                       ),
                                       const SizedBox(height: 10),
                                       CustomElevatedButton(
-                                        buttonText:
-                                            'Proceed to Buy (${state.cartProducts.length} items)',
+                                        buttonText: state.cartProducts.length ==
+                                                1
+                                            ? 'Proceed to Buy (${state.cartProducts.length} item)'
+                                            : 'Proceed to Buy (${state.cartProducts.length} items)',
                                         onPressed: () {
                                           context.pushNamed(
                                               AppRouteConstants
@@ -290,7 +292,9 @@ class CartScreen extends StatelessWidget {
                                 Padding(
                                   padding: const EdgeInsets.only(left: 12),
                                   child: Text(
-                                    'Saved for later (${state.saveForLaterProducts.length} items)',
+                                    state.saveForLaterProducts.length == 1
+                                        ? 'Saved for later (${state.saveForLaterProducts.length} item)'
+                                        : 'Saved for later (${state.saveForLaterProducts.length} items)',
                                     style: const TextStyle(
                                         fontSize: 20,
                                         fontWeight: FontWeight.bold),

@@ -30,6 +30,7 @@ class BottomBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     BlocProvider.of<UserCubit>(context).getUserData();
+    context.read<CartBloc>().add(GetCartPressed());
 
     return BlocBuilder<BottomBarBloc, BottomBarState>(
         builder: (context, state) {

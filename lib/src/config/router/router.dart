@@ -19,6 +19,9 @@ import 'package:flutter_amazon_clone_bloc/src/presentation/views/account/orders/
 import 'package:flutter_amazon_clone_bloc/src/presentation/views/account/orders/tracking_details_sceen.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/views/account/orders/your_orders.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/views/account/wish_list_screen.dart';
+import 'package:flutter_amazon_clone_bloc/src/presentation/views/admin/admin_add_product_screen.dart';
+import 'package:flutter_amazon_clone_bloc/src/presentation/views/admin/admin_bottom_bar.dart';
+import 'package:flutter_amazon_clone_bloc/src/presentation/views/admin/admin_category_products_screen.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/views/another_screen.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/views/auth/auth_screen.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/views/bottom_navigation_bar/bottom_bar.dart';
@@ -238,4 +241,32 @@ final router = GoRouter(initialLocation: '/', routes: [
           user: user,
         ));
       }),
+
+  // admin
+  GoRoute(
+    path: AppRouteConstants.adminBottomBarRoute.path,
+    name: AppRouteConstants.adminBottomBarRoute.name,
+    pageBuilder: (context, state) {
+      return const MaterialPage(child: AdminBottomBar());
+    },
+  ),
+  GoRoute(
+    path: AppRouteConstants.adminAddProductsScreen.path,
+    name: AppRouteConstants.adminAddProductsScreen.name,
+    pageBuilder: (context, state) {
+      return const MaterialPage(child: AdminAddProductScreen());
+    },
+  ),
+  GoRoute(
+    path: AppRouteConstants.adminCategoryProductsScreen.path,
+    name: AppRouteConstants.adminCategoryProductsScreen.name,
+    pageBuilder: (context, state) {
+      String category = state.extra as String;
+
+      return MaterialPage(
+          child: AdminCategoryProductsScreen(
+        category: category,
+      ));
+    },
+  ),
 ]);

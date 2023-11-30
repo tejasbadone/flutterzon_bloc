@@ -30,13 +30,12 @@ class OrderDetailsScreen extends StatelessWidget {
 
     User user = context.read<UserCubit>().currentUser!;
 
-    int currentStep = 0;
     int totalQuantity = order.products.length;
     final BoxDecoration containerDecoration = BoxDecoration(
         border: Border.all(color: Colors.black12),
         borderRadius: BorderRadius.circular(8));
 
-    const TextStyle textSyle = TextStyle(
+    const TextStyle textStyle = TextStyle(
         color: Colors.black87, fontWeight: FontWeight.w500, fontSize: 15);
 
     const TextStyle headingTextSyle = TextStyle(
@@ -73,12 +72,13 @@ class OrderDetailsScreen extends StatelessWidget {
                     children: [
                       Text(
                         'Order date        ${formatDate(order.orderedAt)}',
-                        style: textSyle,
+                        style: textStyle,
                       ),
-                      Text('Order #              ${order.id}', style: textSyle),
+                      Text('Order #              ${order.id}',
+                          style: textStyle),
                       Text(
                           'Order total        ₹${formatPrice(order.totalPrice)}',
-                          style: textSyle),
+                          style: textStyle),
                     ],
                   ),
                 ),
@@ -97,7 +97,7 @@ class OrderDetailsScreen extends StatelessWidget {
               children: [
                 StandardDeliveryContainer(
                     containerDecoration: containerDecoration,
-                    textSyle: textSyle),
+                    textSyle: textStyle),
                 Container(
                   width: double.infinity,
                   padding:
@@ -111,8 +111,7 @@ class OrderDetailsScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       ShipmentStatus(
-                          currentStep: currentStep, textSyle: textSyle),
-                      const SizedBox(height: 10),
+                          currentStep: order.status, textStyle: textStyle),
                       ListView.builder(
                         shrinkWrap: true,
                         itemCount: order.products.length,
@@ -170,8 +169,8 @@ class OrderDetailsScreen extends StatelessWidget {
                                           const SizedBox(width: 20),
                                           Text(
                                             '₹${formatPrice(order.products[index].price)}',
-                                            style:
-                                                textSyle.copyWith(fontSize: 16),
+                                            style: textStyle.copyWith(
+                                                fontSize: 16),
                                           ),
                                         ],
                                       ),
@@ -275,8 +274,8 @@ class OrderDetailsScreen extends StatelessWidget {
                         ? 'Track shipment'
                         : 'Update shipment (admin)',
                     style: user.type == 'user'
-                        ? textSyle
-                        : textSyle.copyWith(color: Constants.greenColor),
+                        ? textStyle
+                        : textStyle.copyWith(color: Constants.greenColor),
                   ),
                   style: ListTileStyle.list,
                   trailing: Icon(
@@ -325,13 +324,13 @@ class OrderDetailsScreen extends StatelessWidget {
                       children: [
                         Text(
                           'Payment Method',
-                          style: textSyle.copyWith(
+                          style: textStyle.copyWith(
                               color: Colors.black87,
                               fontWeight: FontWeight.w600),
                         ),
                         Text(
                           'Google Pay',
-                          style: textSyle.copyWith(
+                          style: textStyle.copyWith(
                             color: Colors.black87,
                             fontWeight: FontWeight.normal,
                           ),
@@ -352,12 +351,12 @@ class OrderDetailsScreen extends StatelessWidget {
                     children: [
                       Text(
                         'Billing Address',
-                        style: textSyle.copyWith(
+                        style: textStyle.copyWith(
                             color: Colors.black87, fontWeight: FontWeight.w600),
                       ),
                       Text(
                         order.address,
-                        style: textSyle.copyWith(
+                        style: textStyle.copyWith(
                           color: Colors.black87,
                           fontWeight: FontWeight.normal,
                         ),
@@ -384,14 +383,14 @@ class OrderDetailsScreen extends StatelessWidget {
                       children: [
                         Text(
                           capitalizeFirstLetter(string: user.name),
-                          style: textSyle.copyWith(
+                          style: textStyle.copyWith(
                             color: Colors.black87,
                             fontWeight: FontWeight.normal,
                           ),
                         ),
                         Text(
                           order.address,
-                          style: textSyle.copyWith(
+                          style: textStyle.copyWith(
                             color: Colors.black87,
                             fontWeight: FontWeight.normal,
                           ),
@@ -419,18 +418,18 @@ class OrderDetailsScreen extends StatelessWidget {
                         OrderSummaryRow(
                           firstText: 'Items:',
                           secondText: totalQuantity.toString(),
-                          textSyle: textSyle,
+                          textSyle: textStyle,
                         ),
                         const OrderSummaryRow(
                           firstText: 'Postage & Packing:',
                           secondText: '₹0',
-                          textSyle: textSyle,
+                          textSyle: textStyle,
                         ),
                         OrderSummaryRow(
                           firstText: 'Sub total:',
                           secondText:
                               '₹${formatPriceWithDecimal(order.totalPrice)}',
-                          textSyle: textSyle,
+                          textSyle: textStyle,
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_amazon_clone_bloc/src/config/router/router.dart';
 import 'package:flutter_amazon_clone_bloc/src/config/themes/app_theme.dart';
 import 'package:flutter_amazon_clone_bloc/src/data/repositories/account_repository.dart';
+import 'package:flutter_amazon_clone_bloc/src/data/repositories/admin_repository.dart';
 import 'package:flutter_amazon_clone_bloc/src/data/repositories/auth_repository.dart';
 import 'package:flutter_amazon_clone_bloc/src/data/repositories/category_products_repository.dart';
 import 'package:flutter_amazon_clone_bloc/src/data/repositories/products_repository.dart';
@@ -11,6 +12,14 @@ import 'package:flutter_amazon_clone_bloc/src/logic/blocs/account/fetch_orders/f
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/account/keep_shopping_for/cubit/keep_shopping_for_cubit.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/account/product_rating/product_rating_bloc.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/account/wish_list/wish_list_cubit.dart';
+import 'package:flutter_amazon_clone_bloc/src/logic/blocs/admin/admin_add_products/admin_add_products_bloc.dart';
+import 'package:flutter_amazon_clone_bloc/src/logic/blocs/admin/admin_add_products/select_category_cubit/admin_add_select_category_cubit.dart';
+import 'package:flutter_amazon_clone_bloc/src/logic/blocs/admin/admin_add_products/sell_product_cubit/admin_sell_product_cubit.dart';
+import 'package:flutter_amazon_clone_bloc/src/logic/blocs/admin/admin_bottom_bar_cubit/admin_bottom_bar_cubit.dart';
+import 'package:flutter_amazon_clone_bloc/src/logic/blocs/admin/admin_change_order_status/admin_change_order_status_cubit.dart';
+import 'package:flutter_amazon_clone_bloc/src/logic/blocs/admin/admin_fetch_category_products/admin_fetch_category_products_bloc.dart';
+import 'package:flutter_amazon_clone_bloc/src/logic/blocs/admin/admin_fetch_orders/admin_fetch_orders_cubit.dart';
+import 'package:flutter_amazon_clone_bloc/src/logic/blocs/admin/admin_get_analytics/admin_get_analytics_cubit.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/auth_bloc/auth_bloc.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/bottom_bar/bottom_bar_bloc.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/cart/cart_bloc.dart';
@@ -109,6 +118,22 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => AverageRatingCubit(AccountRepository()),
         ),
+        BlocProvider(create: (context) => AdminBottomBarCubit()),
+        BlocProvider(
+            create: (context) =>
+                AdminFetchCategoryProductsBloc(AdminRepository())),
+        BlocProvider(
+            create: (context) => AdminFetchOrdersCubit(AdminRepository())),
+        BlocProvider(
+            create: (context) =>
+                AdminChangeOrderStatusCubit(AdminRepository())),
+        BlocProvider(
+            create: (context) => AdminGetAnalyticsCubit(AdminRepository())),
+        BlocProvider(
+            create: (context) => AdminAddProductsBloc(AdminRepository())),
+        BlocProvider(create: (context) => AdminAddSelectCategoryCubit()),
+        BlocProvider(
+            create: (context) => AdminSellProductCubit(AdminRepository())),
       ],
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,

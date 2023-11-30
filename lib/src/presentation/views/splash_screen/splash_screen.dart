@@ -17,7 +17,7 @@ class SplashScreen extends StatelessWidget {
           listener: (context, state) {
         if (state is PageRedirectionSuccess) {
           if (state.userType == 'admin') {
-            context.goNamed(AppRouteConstants.menuScreenRoute.name);
+            context.goNamed(AppRouteConstants.adminBottomBarRoute.name);
           } else if (state.userType == '' || state.userType == 'invalid') {
             context.goNamed(AppRouteConstants.authRoute.name);
           } else {

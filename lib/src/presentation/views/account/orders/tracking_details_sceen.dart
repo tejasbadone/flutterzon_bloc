@@ -152,14 +152,16 @@ class TrackingDetailsScreen extends StatelessWidget {
                 sB1Height: 20,
                 sB2Height: 15,
               ),
-              YouMightAlsoLikeBlock(
-                productName: order.products[0].name.length >= 30
-                    ? order.products[0].name.substring(0, 30)
-                    : order.products[0].name.substring(
-                        0,
-                        order.products[0].name.length,
-                      ),
-              ),
+              user.type == 'user'
+                  ? YouMightAlsoLikeBlock(
+                      productName: order.products[0].name.length >= 30
+                          ? order.products[0].name.substring(0, 30)
+                          : order.products[0].name.substring(
+                              0,
+                              order.products[0].name.length,
+                            ),
+                    )
+                  : const SizedBox()
             ],
           ),
         ),
