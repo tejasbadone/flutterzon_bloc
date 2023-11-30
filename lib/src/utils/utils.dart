@@ -33,6 +33,17 @@ void precatchedImageMap(
 //   precatchedImageMap(GlobalVariables.multiImageOffer5, context);
 // }
 
+String formatFolderName(String productName) {
+  var formattedName = productName.replaceAll(' ', '-');
+
+  if (formattedName.length > 255) {
+    formattedName = formattedName.substring(0, 255);
+  }
+  formattedName = formattedName.replaceAll(RegExp(r'[^\w\-_]'), '');
+
+  return formattedName;
+}
+
 String getDeliveryDate() {
   final DateTime currentDate = DateTime.now();
   final int randomDay = Random().nextInt(15) + 1;

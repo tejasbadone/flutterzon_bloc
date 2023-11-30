@@ -12,8 +12,6 @@ import 'package:go_router/go_router.dart';
 enum Auth { signIn, signUp }
 
 class AuthScreen extends StatefulWidget {
-  static const String routeName = 'auth-screen';
-
   const AuthScreen({super.key});
 
   @override
@@ -295,8 +293,13 @@ class _AuthScreenState extends State<AuthScreen> {
                                   if (state is SignInSuccessState) {
                                     BlocProvider.of<UserCubit>(context)
                                         .getUserData();
-                                    context.goNamed(
-                                        AppRouteConstants.bottomBarRoute.name);
+                                    if (state.user.type == 'user') {
+                                      context.goNamed(AppRouteConstants
+                                          .bottomBarRoute.name);
+                                    } else {
+                                      context.goNamed(AppRouteConstants
+                                          .adminBottomBarRoute.name);
+                                    }
                                   }
                                   if (state is UpdateUserData) {
                                     BlocProvider.of<UserCubit>(context)

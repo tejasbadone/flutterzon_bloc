@@ -12,7 +12,7 @@ import 'package:flutter_amazon_clone_bloc/src/logic/blocs/account/fetch_orders/f
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/account/keep_shopping_for/cubit/keep_shopping_for_cubit.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/account/product_rating/product_rating_bloc.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/account/wish_list/wish_list_cubit.dart';
-import 'package:flutter_amazon_clone_bloc/src/logic/blocs/admin/admin_add_products/admin_add_products_bloc.dart';
+import 'package:flutter_amazon_clone_bloc/src/logic/blocs/admin/admin_add_products/add_product_images/admin_add_products_images_bloc.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/admin/admin_add_products/select_category_cubit/admin_add_select_category_cubit.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/admin/admin_add_products/sell_product_cubit/admin_sell_product_cubit.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/admin/admin_bottom_bar_cubit/admin_bottom_bar_cubit.dart';
@@ -130,7 +130,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(
             create: (context) => AdminGetAnalyticsCubit(AdminRepository())),
         BlocProvider(
-            create: (context) => AdminAddProductsBloc(AdminRepository())),
+            create: (context) => AdminAddProductsImagesBloc(AdminRepository())),
         BlocProvider(create: (context) => AdminAddSelectCategoryCubit()),
         BlocProvider(
             create: (context) => AdminSellProductCubit(AdminRepository())),

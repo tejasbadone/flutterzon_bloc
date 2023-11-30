@@ -21,4 +21,8 @@ class AdminAddSelectCategoryCubit extends Cubit<AdminAddSelectCategoryState> {
       return null;
     }
   }
+
+  void resetCategory() {
+    emit(AdminAddSelectCategoryInitial());
+  }
 }

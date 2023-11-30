@@ -5,6 +5,7 @@ import 'package:flutter_amazon_clone_bloc/src/data/datasources/api/admin_api.dar
 import 'package:flutter_amazon_clone_bloc/src/data/models/order.dart';
 import 'package:flutter_amazon_clone_bloc/src/data/models/product.dart';
 import 'package:flutter_amazon_clone_bloc/src/data/models/sales.dart';
+import 'package:flutter_amazon_clone_bloc/src/utils/utils.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
@@ -25,13 +26,18 @@ class AdminRepository {
       final String cloudinaryUploadPreset =
           dotenv.env['CLOUDINARY_UPLOADPRESET']!;
 
-      final cloudinary =
-          CloudinaryPublic(cloudinaryCloudName, cloudinaryUploadPreset);
+      final cloudinary = CloudinaryPublic(
+          cloudinaryCloudName, cloudinaryUploadPreset,
+          cache: false);
+
+      String folderName = formatFolderName(name);
+
+      String folder = 'products/$category/$folderName';
 
       for (int i = 0; i < images.length; i++) {
         CloudinaryResponse res = await cloudinary.uploadFile(
             CloudinaryFile.fromFile(images[i].path,
-                folder: 'products/$category/$name'));
+                resourceType: CloudinaryResourceType.Image, folder: folder));
 
         imageUrls.add(res.secureUrl);
       }

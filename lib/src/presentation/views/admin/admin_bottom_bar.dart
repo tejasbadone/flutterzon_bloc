@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_amazon_clone_bloc/src/config/router/app_route_constants.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/admin/admin_bottom_bar_cubit/admin_bottom_bar_cubit.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/user_cubit/user_cubit.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/views/admin/admin_home_screen.dart';
 import 'package:flutter_amazon_clone_bloc/src/utils/constants/constants.dart';
+import 'package:flutter_amazon_clone_bloc/src/utils/utils.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'admin_analytics_screen.dart';
 import 'admin_orders_screen.dart';
@@ -39,10 +43,38 @@ class AdminBottomBar extends StatelessWidget {
                     alignment: Alignment.centerLeft,
                     child: Image.asset('assets/images/amazon_black_logo.png'),
                   ),
-                  const Text(
-                    'Admin',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  )
+                  Row(
+                    children: [
+                      const Text(
+                        'Admin',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(width: 6),
+                      IconButton(
+                          onPressed: () async {
+                            try {
+                              SharedPreferences sharedPreferences =
+                                  await SharedPreferences.getInstance();
+
+                              await sharedPreferences.setString(
+                                  'x-auth-token', '');
+
+                              if (context.mounted) {
+                                context
+                                    .goNamed(AppRouteConstants.authRoute.name);
+                              }
+                            } catch (e) {
+                              if (context.mounted) {
+                                showSnackBar(context, e.toString());
+                              }
+                            }
+                          },
+                          icon: const Icon(
+                            Icons.power_settings_new,
+                            size: 25,
+                          ))
+                    ],
+                  ),
                 ],
               ),
             ),
