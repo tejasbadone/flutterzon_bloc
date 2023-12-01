@@ -42,7 +42,11 @@ class AdminHomeScreen extends StatelessWidget {
               // );
             })),
       ),
-      floatingActionButton: const CustomFloatingActionButton(),
+      floatingActionButton: CustomFloatingActionButton(
+        onPressed: () =>
+            context.pushNamed(AppRouteConstants.adminAddProductsScreen.name),
+        toolTip: 'Add a product',
+      ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
@@ -51,17 +55,20 @@ class AdminHomeScreen extends StatelessWidget {
 class CustomFloatingActionButton extends StatelessWidget {
   const CustomFloatingActionButton({
     super.key,
+    required this.onPressed,
+    required this.toolTip,
   });
+
+  final void Function()? onPressed;
+  final String toolTip;
 
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton(
-      onPressed: () {
-        context.pushNamed(AppRouteConstants.adminAddProductsScreen.name);
-      },
+      onPressed: onPressed,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
       backgroundColor: Constants.selectedNavBarColor,
-      tooltip: 'Add a product',
+      tooltip: toolTip,
       child: const Icon(Icons.add),
     );
   }

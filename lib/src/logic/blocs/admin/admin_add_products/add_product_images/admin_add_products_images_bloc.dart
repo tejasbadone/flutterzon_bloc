@@ -6,7 +6,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter_amazon_clone_bloc/src/data/repositories/admin_repository.dart';
 
 part 'admin_add_products_images_event.dart';
-part 'admin_add_products__images_state.dart';
+part 'admin_add_products_images_state.dart';
 
 class AdminAddProductsImagesBloc
     extends Bloc<AdminAddProductsImagesEvent, AdminAddProductsImagesState> {

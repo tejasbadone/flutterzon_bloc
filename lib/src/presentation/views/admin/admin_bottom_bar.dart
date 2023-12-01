@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_amazon_clone_bloc/src/config/router/app_route_constants.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/admin/admin_bottom_bar_cubit/admin_bottom_bar_cubit.dart';
 import 'package:flutter_amazon_clone_bloc/src/logic/blocs/user_cubit/user_cubit.dart';
+import 'package:flutter_amazon_clone_bloc/src/presentation/views/admin/admin_offers_screen.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/views/admin/admin_home_screen.dart';
 import 'package:flutter_amazon_clone_bloc/src/utils/constants/constants.dart';
 import 'package:flutter_amazon_clone_bloc/src/utils/utils.dart';
@@ -22,6 +23,7 @@ class AdminBottomBar extends StatelessWidget {
     List<Widget> pages = [
       const AdminHomeScreen(),
       const AdminAnalyticsScreen(),
+      const AdminOffersScreen(),
       const AdminOrdersScreen()
     ];
     return BlocBuilder<AdminBottomBarCubit, AdminBottomBarState>(
@@ -84,6 +86,7 @@ class AdminBottomBar extends StatelessWidget {
                 splashColor: Colors.transparent,
                 highlightColor: Colors.transparent),
             child: BottomNavigationBar(
+              type: BottomNavigationBarType.fixed,
               currentIndex: state.index,
               selectedLabelStyle:
                   TextStyle(color: Constants.selectedNavBarColor, fontSize: 13),
@@ -100,18 +103,35 @@ class AdminBottomBar extends StatelessWidget {
               },
               items: [
                 bottomNavBarItem(
-                    icon: const Icon(Icons.home_outlined),
+                    icon: const Icon(
+                      Icons.home_outlined,
+                      size: 26,
+                    ),
                     page: 0,
                     index: state.index,
                     label: 'Home'),
                 bottomNavBarItem(
-                    icon: const Icon(Icons.analytics_outlined),
+                    icon: const Icon(
+                      Icons.analytics_outlined,
+                      size: 26,
+                    ),
                     page: 1,
                     index: state.index,
                     label: 'Analytics'),
                 bottomNavBarItem(
-                    icon: const Icon(Icons.local_shipping_outlined),
+                    icon: const Icon(
+                      Icons.featured_video_outlined,
+                      size: 26,
+                    ),
                     page: 2,
+                    index: state.index,
+                    label: 'Offers'),
+                bottomNavBarItem(
+                    icon: const Icon(
+                      Icons.local_shipping_outlined,
+                      size: 26,
+                    ),
+                    page: 3,
                     index: state.index,
                     label: 'Orders'),
               ],
@@ -146,7 +166,10 @@ class AdminBottomBar extends StatelessWidget {
           const SizedBox(
             height: 2,
           ),
-          icon
+          icon,
+          const SizedBox(
+            height: 2,
+          ),
         ],
       ),
       label: label,

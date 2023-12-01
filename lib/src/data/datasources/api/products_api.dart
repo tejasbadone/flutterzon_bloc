@@ -37,4 +37,19 @@ class ProductsApi {
       throw Exception(e.toString());
     }
   }
+
+  Future<http.Response> getDealOfTheDay() async {
+    String token = await getToken();
+    try {
+      http.Response res =
+          await client.get(Uri.parse(getDealOfTheDayUri), headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+        'x-auth-token': token,
+      });
+
+      return res;
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
 }

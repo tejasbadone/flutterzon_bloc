@@ -49,4 +49,25 @@ class ProductsRepository {
       throw e.toString();
     }
   }
+
+  Future<Product> getDealOfTheDay() async {
+    try {
+      Product product;
+      http.Response res = await productsApi.getDealOfTheDay();
+
+      if (res.statusCode == 200) {
+        product = Product.fromJson(
+          jsonEncode(
+            jsonDecode(res.body),
+          ),
+        );
+
+        return product;
+      } else {
+        throw Exception(jsonDecode(res.body)['msg']);
+      }
+    } catch (e) {
+      throw e.toString();
+    }
+  }
 }

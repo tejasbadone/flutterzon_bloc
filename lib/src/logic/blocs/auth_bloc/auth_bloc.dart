@@ -10,8 +10,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 part 'auth_event.dart';
 part 'auth_state.dart';
 
-enum Auth { signIn, signUp }
-
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AuthRepository authRepository;
 

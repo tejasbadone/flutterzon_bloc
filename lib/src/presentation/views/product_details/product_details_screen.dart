@@ -38,6 +38,7 @@ class ProductDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    BlocProvider.of<CarouselImageBloc>(context).add(ResetCarouselEvent());
     BlocProvider.of<UserRatingCubit>(context).userRating(product);
     BlocProvider.of<AverageRatingCubit>(context)
         .getProductAverageRating(productId: product.id!);
@@ -63,20 +64,17 @@ class ProductDetailsScreen extends StatelessWidget {
                     const SizedBox(height: 10),
                     BlocBuilder<CarouselImageBloc, CarouselImageState>(
                       builder: (context, state) {
-                        return Column(
-                          children: [
-                            CustomCarouselSliderList(
-                                onPageChanged: (index, reason) {
-                                  BlocProvider.of<CarouselImageBloc>(context)
-                                      .add(CarouselImageEvent(index: index));
-                                },
-                                sliderImages: product.images),
-                            DotsIndicatorList(
-                                controller: controller,
-                                current: state.index,
-                                sliderImages: product.images),
-                          ],
-                        );
+                        if (state is CarouselImageChangeState) {
+                          return CarouselWidget(
+                              product: product,
+                              controller: controller,
+                              currentIndex: state.index);
+                        } else {
+                          return CarouselWidget(
+                              product: product,
+                              controller: controller,
+                              currentIndex: 0);
+                        }
                       },
                     ),
                     Positioned(
@@ -502,6 +500,37 @@ class ProductDetailsScreen extends StatelessWidget {
             color: Colors.black,
           ),
         ),
+      ],
+    );
+  }
+}
+
+class CarouselWidget extends StatelessWidget {
+  const CarouselWidget({
+    super.key,
+    required this.currentIndex,
+    required this.product,
+    required this.controller,
+  });
+
+  final int currentIndex;
+  final Product product;
+  final CarouselController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        CustomCarouselSliderList(
+            onPageChanged: (index, reason) {
+              BlocProvider.of<CarouselImageBloc>(context)
+                  .add(CarouselImageChangedEvent(index: index));
+            },
+            sliderImages: product.images),
+        DotsIndicatorList(
+            controller: controller,
+            current: currentIndex,
+            sliderImages: product.images),
       ],
     );
   }

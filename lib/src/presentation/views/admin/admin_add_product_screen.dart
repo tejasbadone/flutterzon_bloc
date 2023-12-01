@@ -24,13 +24,6 @@ class _AdminAddProductScreenState extends State<AdminAddProductScreen> {
   final TextEditingController priceController = TextEditingController();
   final TextEditingController quantityController = TextEditingController();
 
-  final OutlineInputBorder inputBorderStyle = const OutlineInputBorder(
-    borderSide: BorderSide(color: Colors.black38),
-    borderRadius: BorderRadius.all(
-      Radius.circular(5),
-    ),
-  );
-
   final _addProductFormKey = GlobalKey<FormState>();
 
   @override
@@ -41,19 +34,6 @@ class _AdminAddProductScreenState extends State<AdminAddProductScreen> {
     priceController.dispose();
     quantityController.dispose();
   }
-
-  List<String> productCategories = [
-    'Category',
-    'Mobiles',
-    'Fashion',
-    'Electronics',
-    'Home',
-    'Beauty',
-    'Appliances',
-    'Grocery',
-    'Books',
-    'Essentials',
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -243,8 +223,8 @@ class _AdminAddProductScreenState extends State<AdminAddProductScreen> {
                         builder: (context, state) {
                           if (state is AdminAddProductsSelectCategory) {
                             return CustomDropDown(
-                              inputBorderStyle: inputBorderStyle,
-                              productCategories: productCategories,
+                              inputBorderStyle: Constants.inputBorderStyle,
+                              productCategories: Constants.productCategories,
                               currentCategory: state.category,
                               valueStyle: const TextStyle(
                                   color: Colors.black,
@@ -252,9 +232,9 @@ class _AdminAddProductScreenState extends State<AdminAddProductScreen> {
                             );
                           } else {
                             return CustomDropDown(
-                              inputBorderStyle: inputBorderStyle,
-                              productCategories: productCategories,
-                              currentCategory: productCategories[0],
+                              inputBorderStyle: Constants.inputBorderStyle,
+                              productCategories: Constants.productCategories,
+                              currentCategory: Constants.productCategories[0],
                             );
                           }
                         },
@@ -309,8 +289,10 @@ class _AdminAddProductScreenState extends State<AdminAddProductScreen> {
                                       'Error! please make sure you have filled form correctly!');
                                 }
                               } catch (e) {
-                                showSnackBar(
-                                    context, 'Please fill the form correctly!');
+                                if (mounted) {
+                                  showSnackBar(context,
+                                      'Please fill the form correctly!');
+                                }
                               }
                             }
 

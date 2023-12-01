@@ -23,7 +23,11 @@ class AdminCategoryProductsScreen extends StatelessWidget {
         preferredSize: Size.fromHeight(60),
         child: CustomAppBar(),
       ),
-      floatingActionButton: const CustomFloatingActionButton(),
+      floatingActionButton: CustomFloatingActionButton(
+        onPressed: () =>
+            context.pushNamed(AppRouteConstants.adminAddProductsScreen.name),
+        toolTip: 'Add a product',
+      ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       body: Scaffold(
         body: SingleChildScrollView(

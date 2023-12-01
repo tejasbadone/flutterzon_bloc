@@ -19,6 +19,7 @@ import 'package:flutter_amazon_clone_bloc/src/presentation/views/account/orders/
 import 'package:flutter_amazon_clone_bloc/src/presentation/views/account/orders/tracking_details_sceen.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/views/account/orders/your_orders.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/views/account/wish_list_screen.dart';
+import 'package:flutter_amazon_clone_bloc/src/presentation/views/admin/admin_add_offer_screen.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/views/admin/admin_add_product_screen.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/views/admin/admin_bottom_bar.dart';
 import 'package:flutter_amazon_clone_bloc/src/presentation/views/admin/admin_category_products_screen.dart';
@@ -255,6 +256,13 @@ final router = GoRouter(initialLocation: '/', routes: [
     name: AppRouteConstants.adminAddProductsScreen.name,
     pageBuilder: (context, state) {
       return const MaterialPage(child: AdminAddProductScreen());
+    },
+  ),
+  GoRoute(
+    path: AppRouteConstants.adminAddOfferScreen.path,
+    name: AppRouteConstants.adminAddOfferScreen.name,
+    pageBuilder: (context, state) {
+      return const MaterialPage(child: AdminAddOfferScreen());
     },
   ),
   GoRoute(

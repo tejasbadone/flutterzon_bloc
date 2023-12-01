@@ -1,18 +1,22 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_amazon_clone_bloc/src/config/router/app_route_constants.dart';
-import 'package:flutter_amazon_clone_bloc/src/utils/constants/constants.dart';
+import 'package:flutter_amazon_clone_bloc/src/logic/blocs/admin/admin_add_offers/four-images-offer/admin_four_image_offer_cubit.dart';
+import 'package:flutter_amazon_clone_bloc/src/presentation/widgets/common_widgets/divider_with_sizedbox.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-class MultiImageOffer extends StatelessWidget {
-  const MultiImageOffer({
+class AdminFourImagesOffer extends StatelessWidget {
+  const AdminFourImagesOffer({
     super.key,
     required this.title,
+    required this.offerId,
     required this.images,
     required this.labels,
     required this.category,
   });
 
+  final String offerId;
   final String title;
   final List<String> labels;
   final List<String> images;
@@ -28,17 +32,12 @@ class MultiImageOffer extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            title,
-            style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
-          ),
-        ),
         Container(
-          height: 500,
+          padding: const EdgeInsets.all(12),
+          // height: 500,
           decoration: BoxDecoration(
-              color: Colors.white, borderRadius: BorderRadius.circular(5)),
+              color: Colors.grey.shade100.withOpacity(0.6),
+              borderRadius: BorderRadius.circular(5)),
           // width: MediaQuery.sizeOf(context).width,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -90,15 +89,39 @@ class MultiImageOffer extends StatelessWidget {
                   }),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 10, left: 8),
-                child: GestureDetector(
-                  onTap: () => goToCateogryDealsScreen(),
-                  child: Text(
-                    'See all offers',
-                    style: TextStyle(color: Constants.selectedNavBarColor),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    title,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                        fontWeight: FontWeight.normal, fontSize: 16),
                   ),
-                ),
+                  Container(
+                    height: 40,
+                    width: 40,
+                    decoration: BoxDecoration(
+                        color: Colors.grey.shade200,
+                        borderRadius: BorderRadius.circular(25)),
+                    child: IconButton(
+                      onPressed: () {
+                        context
+                            .read<AdminFourImageOfferCubit>()
+                            .adminDeleteFourImagesOffer(offerId: offerId);
+                      },
+                      icon: const Icon(
+                        Icons.delete_outline,
+                        size: 26,
+                        color: Colors.redAccent,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const DividerWithSizedBox(
+                sB2Height: 0,
+                thickness: 0.7,
               )
             ],
           ),

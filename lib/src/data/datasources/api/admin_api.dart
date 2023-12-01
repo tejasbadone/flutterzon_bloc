@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter_amazon_clone_bloc/src/data/models/four_images_offer.dart';
 import 'package:flutter_amazon_clone_bloc/src/data/models/product.dart';
 import 'package:flutter_amazon_clone_bloc/src/utils/constants/strings.dart';
 import 'package:flutter_amazon_clone_bloc/src/utils/utils.dart';
@@ -103,6 +104,60 @@ class AdminApi {
             'x-auth-token': token,
           },
           body: product.toJson());
+      return res;
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<http.Response> addFourImagesOffer(
+      {required FourImagesOffer fourImagesOffer}) async {
+    final String token = await getToken();
+    try {
+      http.Response res = await client.post(
+        Uri.parse(adminAddFourImagesOfferUri),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': token,
+        },
+        body: fourImagesOffer.toJson(),
+      );
+
+      return res;
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<http.Response> adminGetFourImagesOffer() async {
+    final String token = await getToken();
+    try {
+      http.Response res = await client.get(
+        Uri.parse(adminGetFourImagesOfferUri),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': token,
+        },
+      );
+
+      return res;
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<http.Response> adminDeleteFourImagesOffer(
+      {required String offerId}) async {
+    final String token = await getToken();
+    try {
+      http.Response res = await client.get(
+        Uri.parse('$adminDeleteFourImagesOfferUri/$offerId'),
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': token,
+        },
+      );
+
       return res;
     } catch (e) {
       throw Exception(e.toString());

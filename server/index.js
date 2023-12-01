@@ -8,6 +8,7 @@ const authRouter = require('./routes/auth');
 const adminRouter = require('./routes/admin');
 const productRouter = require('./routes/product');
 const userRouter = require('./routes/user');
+const offersRouter = require('./routes/offers');
 const app = express();
 const PORT = process.env.PORT;
 const userName = process.env.DB_USERNAME;
@@ -21,6 +22,7 @@ app.use(authRouter);
 app.use(adminRouter);
 app.use(productRouter);
 app.use(userRouter);
+app.use(offersRouter);
 
 mongoose.connect(DB).then(()=>{
     console.log('Mongoose Connected!');

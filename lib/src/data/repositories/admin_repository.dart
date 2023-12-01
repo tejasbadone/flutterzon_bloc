@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:cloudinary_public/cloudinary_public.dart';
 import 'package:flutter_amazon_clone_bloc/src/data/datasources/api/admin_api.dart';
+import 'package:flutter_amazon_clone_bloc/src/data/models/four_images_offer.dart';
 import 'package:flutter_amazon_clone_bloc/src/data/models/order.dart';
 import 'package:flutter_amazon_clone_bloc/src/data/models/product.dart';
 import 'package:flutter_amazon_clone_bloc/src/data/models/sales.dart';
@@ -12,6 +13,47 @@ import 'package:http/http.dart' as http;
 class AdminRepository {
   final AdminApi adminApi = AdminApi();
 
+  Future<List<String>> uploadImages({
+    String? name,
+    String? title,
+    required String category,
+    required List<File> images,
+    bool isOffer = false,
+  }) async {
+    try {
+      List<String> imageUrls = [];
+      String folder;
+      final String cloudinaryCloudName = dotenv.env['CLOUDINARY_CLOUDNAME']!;
+      final String cloudinaryUploadPreset =
+          dotenv.env['CLOUDINARY_UPLOADPRESET']!;
+
+      final cloudinary = CloudinaryPublic(
+          cloudinaryCloudName, cloudinaryUploadPreset,
+          cache: false);
+
+      if (isOffer) {
+        String folderName = formatFolderName(title!);
+        folder = 'Offers/Four Images Offers/$category/$folderName';
+      } else {
+        String folderName = formatFolderName(name!);
+
+        folder = 'products/$category/$folderName';
+      }
+
+      for (int i = 0; i < images.length; i++) {
+        CloudinaryResponse res = await cloudinary.uploadFile(
+            CloudinaryFile.fromFile(images[i].path,
+                resourceType: CloudinaryResourceType.Image, folder: folder));
+
+        imageUrls.add(res.secureUrl);
+      }
+
+      return imageUrls;
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
   Future<void> adminAddProduct({
     required String name,
     required String description,
@@ -21,26 +63,10 @@ class AdminRepository {
     required List<File> images,
   }) async {
     try {
-      List<String> imageUrls = [];
-      final String cloudinaryCloudName = dotenv.env['CLOUDINARY_CLOUDNAME']!;
-      final String cloudinaryUploadPreset =
-          dotenv.env['CLOUDINARY_UPLOADPRESET']!;
+      List<String> imageUrls;
 
-      final cloudinary = CloudinaryPublic(
-          cloudinaryCloudName, cloudinaryUploadPreset,
-          cache: false);
-
-      String folderName = formatFolderName(name);
-
-      String folder = 'products/$category/$folderName';
-
-      for (int i = 0; i < images.length; i++) {
-        CloudinaryResponse res = await cloudinary.uploadFile(
-            CloudinaryFile.fromFile(images[i].path,
-                resourceType: CloudinaryResourceType.Image, folder: folder));
-
-        imageUrls.add(res.secureUrl);
-      }
+      imageUrls =
+          await uploadImages(name: name, category: category, images: images);
 
       Product product = Product(
           name: name,
@@ -54,6 +80,82 @@ class AdminRepository {
 
       if (res.statusCode != 200) {
         throw Exception(jsonDecode(res.body)['msg']);
+      }
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<void> adminAddFourImagesOffer({
+    required String title,
+    required List<File> images,
+    required List<String> labels,
+    required String category,
+  }) async {
+    try {
+      List<String> imageUrls;
+
+      imageUrls = await uploadImages(
+          title: title, category: category, images: images, isOffer: true);
+
+      FourImagesOffer fourImagesOffer = FourImagesOffer(
+          title: title, images: imageUrls, labels: labels, category: category);
+
+      http.Response res =
+          await adminApi.addFourImagesOffer(fourImagesOffer: fourImagesOffer);
+
+      if (res.statusCode != 200) {
+        throw Exception(jsonDecode(res.body)['error']);
+      }
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<List<FourImagesOffer>> adminGetFourImagesOffer() async {
+    try {
+      List<FourImagesOffer> fourImagesOfferList = [];
+      http.Response res = await adminApi.adminGetFourImagesOffer();
+
+      if (res.statusCode == 200) {
+        for (int i = 0; i < jsonDecode(res.body).length; i++) {
+          fourImagesOfferList.add(
+            FourImagesOffer.fromJson(
+              jsonEncode(
+                jsonDecode(res.body)[i],
+              ),
+            ),
+          );
+        }
+        return fourImagesOfferList;
+      } else {
+        throw Exception(jsonDecode(res.body)['error']);
+      }
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  Future<List<FourImagesOffer>> adminDeleteFourImagesOffer(
+      {required String offerId}) async {
+    try {
+      List<FourImagesOffer> fourImagesOfferList = [];
+      http.Response res =
+          await adminApi.adminDeleteFourImagesOffer(offerId: offerId);
+
+      if (res.statusCode == 200) {
+        for (int i = 0; i < jsonDecode(res.body).length; i++) {
+          fourImagesOfferList.add(
+            FourImagesOffer.fromJson(
+              jsonEncode(
+                jsonDecode(res.body)[i],
+              ),
+            ),
+          );
+        }
+        return fourImagesOfferList;
+      } else {
+        throw Exception(jsonDecode(res.body)['error']);
       }
     } catch (e) {
       throw Exception(e.toString());

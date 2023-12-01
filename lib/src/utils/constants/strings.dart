@@ -15,6 +15,7 @@ String getProductRatingUri = '$uri/api/get-product-rating';
 String getAverageRatingUri = '$uri/api/get-ratings-average';
 String rateProductUri = '$uri/api/rate-product';
 String getAverageRatingLengthUri = '$uri/api/get-average-ratings-length';
+String getDealOfTheDayUri = '$uri/api/deal-of-the-day';
 
 String addKeepShoppingForUri = '$uri/api/add-keep-shopping-for';
 String getKeepShoppingForUri = '$uri/api/get-keep-shopping-for';
@@ -48,3 +49,6 @@ String adminGetOrdersUri = '$uri/admin/get-orders';
 String adminChangeOrderStatusUri = '$uri/admin/change-order-status';
 String adminGetAnalyticsUri = '$uri/admin/analytics';
 String adminAddProductsUri = '$uri/admin/add-product';
+String adminAddFourImagesOfferUri = '$uri/admin/add-four-images-offer';
+String adminGetFourImagesOfferUri = '$uri/api/get-four-images-offer';
+String adminDeleteFourImagesOfferUri = '$uri/admin/delete-four-images-offer';

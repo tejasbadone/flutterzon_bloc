@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_amazon_clone_bloc/src/config/router/app_route_constants.dart';
+import 'package:go_router/go_router.dart';
 
 class CustomCarouselSliderMap extends StatelessWidget {
   const CustomCarouselSliderMap(
@@ -17,8 +19,9 @@ class CustomCarouselSliderMap extends StatelessWidget {
         return Builder(builder: (context) {
           return GestureDetector(
             onTap: () {
-              // Navigator.pushNamed(context, CategoryDealsScreen.routeName,
-              //     arguments: i['category']);
+              context.pushNamed(
+                  AppRouteConstants.categoryproductsScreenRoute.name,
+                  pathParameters: {'category': i['category']!});
             },
             child: CachedNetworkImage(
               imageUrl: i['image']!,
@@ -31,7 +34,10 @@ class CustomCarouselSliderMap extends StatelessWidget {
         });
       }).toList(),
       options: CarouselOptions(
-          height: 450, viewportFraction: 1, onPageChanged: onPageChanged),
+          autoPlay: true,
+          height: 450,
+          viewportFraction: 1,
+          onPageChanged: onPageChanged),
     );
   }
 }

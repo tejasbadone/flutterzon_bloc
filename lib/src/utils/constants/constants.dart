@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_amazon_clone_bloc/src/presentation/widgets/home/single_image_offer.dart';
 
 class Constants {
 // COLORS
@@ -28,6 +29,27 @@ class Constants {
   static const Color greyBackgroundColor = Color(0xffF6F6F6);
   static var selectedNavBarColor = Colors.cyan[800]!;
   static const unselectedNavBarColor = Colors.black87;
+
+  // categories
+  static List<String> productCategories = [
+    'Category',
+    'Mobiles',
+    'Fashion',
+    'Electronics',
+    'Home',
+    'Beauty',
+    'Appliances',
+    'Grocery',
+    'Books',
+    'Essentials',
+  ];
+
+  static OutlineInputBorder inputBorderStyle = const OutlineInputBorder(
+    borderSide: BorderSide(color: Colors.black38),
+    borderRadius: BorderRadius.all(
+      Radius.circular(5),
+    ),
+  );
 
   // category images
   static const List<Map<String, String>> categoryImages = [
@@ -99,6 +121,13 @@ class Constants {
           'https://res.cloudinary.com/dthljz11q/image/upload/v1699265354/carousel_images/tb0uzkote4twcczih8xj.jpg',
     },
   ];
+
+  static List<Map<String, String>> shuffledCarouselImages(
+      List<Map<String, String>> carouselImages) {
+    carouselImages.shuffle();
+
+    return carouselImages;
+  }
 
   //Bottom offers amazon pay
   static const List<Map<String, String>> bottomOffersAmazonPay = [
@@ -387,3 +416,41 @@ class Constants {
     },
   ];
 }
+
+List<SingleImageOffer> singleImageOffers = const [
+  SingleImageOffer(
+    headTitle: 'Limited period offers on best-selling TVs | Starting ₹8,999',
+    subTitle: 'Up to 18 months No Cost EMI',
+    image:
+        'https://res.cloudinary.com/dthljz11q/image/upload/v1699881799/single_image_offers/ulrpitq6hf4rocgo0m8w.jpg',
+    productCategory: 'Electronics',
+  ),
+  SingleImageOffer(
+    headTitle: 'Top deals on headsets',
+    subTitle: 'Up to 80% off',
+    image:
+        'https://res.cloudinary.com/dthljz11q/image/upload/v1699881798/single_image_offers/x5gqgg5ynbjkslyvefpk.jpg',
+    productCategory: 'Mobiles',
+  ),
+  SingleImageOffer(
+    headTitle: 'Buy 2 Get 10% off, freebies & more offers',
+    subTitle: 'See all offers',
+    image:
+        'https://res.cloudinary.com/dthljz11q/image/upload/v1699881798/single_image_offers/u0ozqtcnhnl1eqoht85j.jpg',
+    productCategory: 'Home',
+  ),
+  SingleImageOffer(
+    headTitle: 'Price crash | Amazon Brands & more',
+    subTitle: 'Under ₹499 | T-shirts & shirts',
+    image:
+        'https://res.cloudinary.com/dthljz11q/image/upload/v1699881800/single_image_offers/kwfypkjyfqjsipniefav.png',
+    productCategory: 'Fashion',
+  ),
+  SingleImageOffer(
+    headTitle: 'Amazon coupons | Smartphones & accessories',
+    subTitle: 'Extra up to ₹2000 off with coupons',
+    image:
+        'https://res.cloudinary.com/dthljz11q/image/upload/v1699881799/single_image_offers/rmtbk89pmenhd3mulcus.jpg',
+    productCategory: 'Mobiles',
+  ),
+];
