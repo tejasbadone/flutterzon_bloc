@@ -51,7 +51,7 @@ class WishListCubit extends Cubit<WishListState> {
     }
   }
 
-  void addToWishList({required Product product}) async {
+  Future<void> addToWishList({required Product product}) async {
     try {
       accountRepository.addToWishList(product: product);
 

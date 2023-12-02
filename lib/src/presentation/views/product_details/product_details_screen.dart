@@ -330,14 +330,17 @@ class ProductDetailsScreen extends StatelessWidget {
                 BlocBuilder<WishListCubit, WishListState>(
                   builder: (context, state) {
                     return InkWell(
-                      onTap: () {
+                      onTap: () async {
                         if (state is AddedToWishListS) {
                           return showSnackBar(context,
                               'This product is already in your wish list');
                         } else {
-                          context
+                          await context
                               .read<WishListCubit>()
                               .addToWishList(product: product);
+                          if (context.mounted) {
+                            showSnackBar(context, ' Added to wishlist!');
+                          }
                         }
                       },
                       child: Text(
