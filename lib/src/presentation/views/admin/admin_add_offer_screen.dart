@@ -47,9 +47,8 @@ class AdminAddOfferScreen extends StatelessWidget {
             }
 
             if (state is AdminAddFourImageOfferSuccessS) {
-              showSnackBar(context, 'Offer added successfully!');
-
               Navigator.pop(context);
+              showSnackBar(context, 'Offer added successfully!');
             }
           },
           builder: (context, state) {
@@ -88,7 +87,7 @@ class AdminAddOfferScreen extends StatelessWidget {
                           AdminAddProductsImagesState>(
                         listener: (context, state) {
                           if (state is AdminAddProductsErrorS) {
-                            showSnackBar(context, state.errorString);
+                            showSnackBar(context, 'Please add offer images');
                           }
                         },
                         builder: (context, state) {
@@ -143,8 +142,8 @@ class AdminAddOfferScreen extends StatelessWidget {
                                                   width: 1,
                                                   color: Constants
                                                       .secondaryColor))),
-                                      icon: const Icon(Icons.edit),
-                                      label: const Text('Edit images'))
+                                      icon: const Icon(Icons.add),
+                                      label: const Text('Select images'))
                                 ],
                               ),
                             );

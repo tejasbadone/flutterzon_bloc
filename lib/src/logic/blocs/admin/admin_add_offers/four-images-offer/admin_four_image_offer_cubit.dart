@@ -22,8 +22,8 @@ class AdminFourImageOfferCubit extends Cubit<AdminFourImageOfferState> {
     required String category,
   }) async {
     try {
-      List<String> labels = [label1, label2, label3, label4];
       emit(AdminFourImageOfferLoadingS());
+      List<String> labels = [label1, label2, label3, label4];
 
       await adminRepository.adminAddFourImagesOffer(
           title: title, images: images, labels: labels, category: category);

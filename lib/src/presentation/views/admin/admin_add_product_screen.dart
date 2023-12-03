@@ -94,7 +94,7 @@ class _AdminAddProductScreenState extends State<AdminAddProductScreen> {
                         AdminAddProductsImagesState>(
                       listener: (context, state) {
                         if (state is AdminAddProductsErrorS) {
-                          showSnackBar(context, state.errorString);
+                          showSnackBar(context, 'Please select product images');
                         }
                       },
                       builder: (context, state) {
@@ -145,7 +145,7 @@ class _AdminAddProductScreenState extends State<AdminAddProductScreen> {
                                           width: 1,
                                           color: Constants.secondaryColor))),
                                   icon: const Icon(Icons.add),
-                                  label: const Text('Add photos'))
+                                  label: const Text('Select images'))
                             ],
                           );
                         } else {

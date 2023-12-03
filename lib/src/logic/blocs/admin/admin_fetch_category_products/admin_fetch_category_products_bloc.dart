@@ -19,10 +19,13 @@ class AdminFetchCategoryProductsBloc extends Bloc<
   void _onAdminFetchCategoryProductsHandler(event, emit) async {
     try {
       List<Product> categoryProducts;
+      List<Product> tempCategoryProducts;
       emit(AdminFetchCategoryProductsLoadingS());
 
-      categoryProducts = await adminRepository.adminGetCategoryProducts(
+      tempCategoryProducts = await adminRepository.adminGetCategoryProducts(
           category: event.category);
+
+      categoryProducts = tempCategoryProducts.reversed.toList();
 
       emit(AdminFetchCategoryProductsSuccessS(
           categoryProducts: categoryProducts));

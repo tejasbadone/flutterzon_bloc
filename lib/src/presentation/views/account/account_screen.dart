@@ -376,10 +376,6 @@ class _AccountScreenState extends State<AccountScreen> {
                                             ? 4
                                             : state.wishListProducts.length,
                                     itemBuilder: (context, index) {
-                                      if (state.wishListProducts.length >= 6) {
-                                        index = getUniqueRandomInt(
-                                            max: state.wishListProducts.length);
-                                      }
                                       return InkWell(
                                         onTap: () {
                                           context.pushNamed(
