@@ -1,7 +1,7 @@
 const express = require("express");
 const path = require("path");
 const mongoose = require("mongoose");
-require("dotenv").config({path : path.join(__dirname, '..' , 'config.env')});
+require("dotenv").config();
 
 
 const authRouter = require('./routes/auth');
