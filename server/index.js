@@ -1,7 +1,7 @@
 const express = require("express");
 const path = require("path");
 const mongoose = require("mongoose");
-require("dotenv").config();
+require("dotenv").config({path : path.join(__dirname, '..' , 'config.env')});
 
 
 const authRouter = require('./routes/auth');
@@ -31,10 +31,9 @@ mongoose.connect(DB).then(()=>{
 })
 
 
-app.get("/" , (req, res) => {
-    res.send('amazon_flutter_clone_bloc!');
-});
-
+app.get("/flutterzon" , (req, res) => {
+    res.send("Welcome to Flutterzon!");
+})
 
 app.listen(PORT, "0.0.0.0",() => {
     console.log(`Connected at PORT : ${PORT}`)
