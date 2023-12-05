@@ -48,7 +48,7 @@ class _AdminAddProductScreenState extends State<AdminAddProductScreen> {
           flexibleSpace: Container(
             decoration: const BoxDecoration(gradient: Constants.appBarGradient),
           ),
-          title: const Text('Add product'),
+          title: const Text('Add Product'),
         ),
       ),
       body: SingleChildScrollView(

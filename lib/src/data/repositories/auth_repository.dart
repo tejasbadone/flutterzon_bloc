@@ -40,8 +40,6 @@ class AuthRepository {
     try {
       http.Response res = await AuthAPI().isTokenValid(token: token);
 
-      print(jsonDecode(res.body));
-
       if (res.statusCode == 200) {
         bool isTokenValid = jsonDecode(res.body);
 

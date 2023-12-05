@@ -24,19 +24,16 @@ class PageRedirectionCubit extends Cubit<PageRedirectionState> {
         prefs.setString('x-auth-token', '');
         token = '';
       }
-      print('about to run token');
       isValid = await authRepository.isTokenValid(token: token);
 
       if (isValid == true) {
         User user = await userRepository.getUserDataInitial(token);
         userType = user.type;
-        print(userType);
         emit(PageRedirectionSuccess(isValid: isValid, userType: userType));
       } else {
         emit(PageRedirectionInvalid(isValid: isValid, userType: 'invalid'));
       }
     } catch (e) {
-      print(e);
       throw Exception(e.toString());
     }
   }
