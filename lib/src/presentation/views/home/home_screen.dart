@@ -23,7 +23,9 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     BlocProvider.of<CarouselImageBloc>(context).add(ResetCarouselEvent());
-    context.read<AdminFourImageOfferCubit>().adminGetFourImagesOffer();
+    context
+        .read<AdminFourImageOfferCubit>()
+        .adminGetFourImagesOffer(isUser: true);
 
     return Scaffold(
         appBar: const PreferredSize(
@@ -83,7 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           } else {
                             context
                                 .read<AdminFourImageOfferCubit>()
-                                .adminGetFourImagesOffer();
+                                .adminGetFourImagesOffer(isUser: true);
                             return SizedBox(
                               height: MediaQuery.sizeOf(context).height / 1.2,
                               child: const Center(

@@ -12,7 +12,9 @@ class AdminOffersScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.read<AdminFourImageOfferCubit>().adminGetFourImagesOffer();
+    context
+        .read<AdminFourImageOfferCubit>()
+        .adminGetFourImagesOffer(isUser: false);
     return Scaffold(
       floatingActionButton: CustomFloatingActionButton(
         onPressed: () =>
@@ -62,7 +64,7 @@ class AdminOffersScreen extends StatelessWidget {
             } else {
               context
                   .read<AdminFourImageOfferCubit>()
-                  .adminGetFourImagesOffer();
+                  .adminGetFourImagesOffer(isUser: false);
               return SizedBox(
                 height: MediaQuery.sizeOf(context).height / 1.2,
                 child: const Center(

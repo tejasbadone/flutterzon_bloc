@@ -360,36 +360,43 @@ class CartScreen extends StatelessWidget {
                       BlocBuilder<CartOffersCubit1, CartOffersState1>(
                           builder: (context, state) {
                         if (state is CartOffersSuccessS1) {
-                          return AddToCartWidget(
-                            title: 'Top picks for you',
-                            isTitleLong: false,
-                            productList: state.productList,
-                            averageRating: state.averageRatingList,
-                          );
+                          return state.productList.isEmpty
+                              ? const SizedBox()
+                              : AddToCartWidget(
+                                  title: 'Top picks for you',
+                                  isTitleLong: false,
+                                  productList: state.productList,
+                                  averageRating: state.averageRatingList,
+                                );
                         }
                         return const SizedBox();
                       }),
                       BlocBuilder<CartOffersCubit2, CartOffersState2>(
                           builder: (context, state) {
                         if (state is CartOffersSuccessS2) {
-                          return AddToCartWidget(
-                            title: 'Frequently viewed with items in your cart',
-                            isTitleLong: true,
-                            productList: state.productList,
-                            averageRating: state.averageRatingList,
-                          );
+                          return state.productList.isEmpty
+                              ? const SizedBox()
+                              : AddToCartWidget(
+                                  title:
+                                      'Frequently viewed with items in your cart',
+                                  isTitleLong: true,
+                                  productList: state.productList,
+                                  averageRating: state.averageRatingList,
+                                );
                         }
                         return const SizedBox();
                       }),
                       BlocBuilder<CartOffersCubit3, CartOffersState3>(
                           builder: (context, state) {
                         if (state is CartOffersSuccessS3) {
-                          return AddToCartWidget(
-                            title: 'Recommendations for you',
-                            isTitleLong: false,
-                            productList: state.productList,
-                            averageRating: state.averageRatingList,
-                          );
+                          return state.productList.isEmpty
+                              ? const SizedBox()
+                              : AddToCartWidget(
+                                  title: 'Recommendations for you',
+                                  isTitleLong: false,
+                                  productList: state.productList,
+                                  averageRating: state.averageRatingList,
+                                );
                         }
                         return const SizedBox();
                       }),

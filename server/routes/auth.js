@@ -70,9 +70,11 @@ authRouter.post('/api/signin', async (req, res ) => {
     }
 })
 
-authRouter.post('/IsTokenValid', async (req, res) => {
+authRouter.get('/IsTokenValid', async (req, res) => {
     try {
+        console.log('inside istokenValid');
         const token = req.header('x-auth-token');
+
 
         if(token == '') return res.json(false);
         if(!token) return res.json(false);

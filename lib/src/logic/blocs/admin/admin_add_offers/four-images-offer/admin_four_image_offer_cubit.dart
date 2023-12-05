@@ -34,7 +34,7 @@ class AdminFourImageOfferCubit extends Cubit<AdminFourImageOfferState> {
     }
   }
 
-  Future<void> adminGetFourImagesOffer() async {
+  Future<void> adminGetFourImagesOffer({required bool isUser}) async {
     try {
       emit(AdminFourImageOfferLoadingS());
 
@@ -43,7 +43,12 @@ class AdminFourImageOfferCubit extends Cubit<AdminFourImageOfferState> {
 
       tempFourImagesOfferList = await adminRepository.adminGetFourImagesOffer();
 
-      fourImagesOfferList = tempFourImagesOfferList.reversed.toList();
+      if (isUser) {
+        tempFourImagesOfferList.shuffle();
+        fourImagesOfferList = tempFourImagesOfferList;
+      } else {
+        fourImagesOfferList = tempFourImagesOfferList.reversed.toList();
+      }
 
       emit(AdminGetFourImageOfferSuccessS(
           fourImagesOfferList: fourImagesOfferList));
