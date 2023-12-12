@@ -134,6 +134,8 @@ Flutterzon is a purpose-driven initiative, with the primary goal of creating an 
 
   ![Admin](https://res.cloudinary.com/dthljz11q/image/upload/v1701778276/app%20screenshots/unkzi75wyhw7dq96nuis.png)
 
+- **Video Link** - [https://drive.google.com/uc?id=1XwgXe3bwy-LK_AiMJoD60q6w9Lf8A_oj](https://drive.google.com/uc?id=1XwgXe3bwy-LK_AiMJoD60q6w9Lf8A_oj)
+
 ## Run Locally
 
 - Clone this repository
@@ -161,6 +163,7 @@ Flutterzon is a purpose-driven initiative, with the primary goal of creating an 
   OR
   npm start (to run index.js)
   ```
+  Please star⭐ the repo if you like what you see😉.
 
 ## Download
 

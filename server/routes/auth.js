@@ -36,8 +36,7 @@ authRouter.post("/api/signup", async (req, res) => {
         res.json(user);
 
     } catch (e) {
-        console.log(e);
-        res.status(500).json({error : `${e.message} from server`});
+        res.status(500).json({msg : `${e.message}`});
     }
 
 })
@@ -66,7 +65,7 @@ authRouter.post('/api/signin', async (req, res ) => {
 
 
     } catch (e) {
-        res.status(500).json({error: e.message});
+        res.status(500).json({msg: e.message});
     }
 })
 
@@ -86,8 +85,7 @@ authRouter.get('/IsTokenValid', async (req, res) => {
         res.json(true);
 
     } catch (e) {
-        console.log(e);
-        res.status(500).json({error : e.message})    
+        res.status(500).json({msg : e.message})    
     }
 })
 

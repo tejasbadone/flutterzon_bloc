@@ -25,7 +25,7 @@ const userSchema = mongoose.Schema({
         validate : {
             validator : (value) => {
                 if(value.length < 6){
-                    return 'Password must have at least 6 characters from model';
+                    return 'Password must have at least 6 characters';
                 }
             },
         }

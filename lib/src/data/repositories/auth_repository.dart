@@ -14,7 +14,7 @@ class AuthRepository {
         User user = User.fromMap(jsonDecode(res.body));
         return user;
       } else {
-        throw Exception(jsonDecode(res.body)['msg']);
+        throw jsonDecode(res.body)['msg'];
       }
     } catch (e) {
       throw e.toString();
@@ -29,7 +29,7 @@ class AuthRepository {
         User user = User.fromMap(jsonDecode(res.body));
         return user;
       } else {
-        throw Exception(jsonDecode(res.body)['msg']);
+        throw jsonDecode(res.body)['msg'];
       }
     } catch (e) {
       throw e.toString();
@@ -45,7 +45,7 @@ class AuthRepository {
 
         return isTokenValid;
       } else {
-        throw Exception(jsonDecode(res.body)['msg']);
+        throw jsonDecode(res.body)['msg'];
       }
     } catch (e) {
       throw Exception(e.toString());
