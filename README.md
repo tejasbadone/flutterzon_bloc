@@ -150,7 +150,18 @@ Flutterzon is a purpose-driven initiative, with the primary goal of creating an 
   ```
 - Create MongoDB Project & Cluster
 - Connect to the cluster using Drivers and get the connection string.
-- I've created a `config.env` file at the root directory of the project, containing the essential details for the setup, you could also create one or update the necessary values directly, it's totally up to you.
+- I've created a `config.env` file at the root directory of the project, containing the essential details for the setup, you could also create one or update the necessary values directly, it's totally up to you. demo of `config.env` file -
+    ```
+    PORT=PORTHERE
+    DB_USERNAME='usernameHere'
+    DB_PASSWORD='passwordHere'
+
+    URI='uriHere'
+
+    CLOUDINARY_CLOUDNAME='cloudname'
+    CLOUDINARY_UPLOADPRESET='uploadpreset'
+    ```
+
 - Head to `server/index.js` and replace the userName, password, and connection string.
 - Head to `lib/src/utils/constants/strings.dart` and replace the `uri` with your IP address.
 - Create Cloudinary Project, and enable the unsigned operation in settings.

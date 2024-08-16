@@ -21,10 +21,10 @@ class AccountButton extends StatelessWidget {
             onPressed: onPressed,
             style: ButtonStyle(
                 splashFactory: NoSplash.splashFactory,
-                overlayColor: MaterialStatePropertyAll(Colors.grey.shade100),
-                backgroundColor: MaterialStatePropertyAll(
+                overlayColor: WidgetStatePropertyAll(Colors.grey.shade100),
+                backgroundColor: WidgetStatePropertyAll(
                     Colors.grey.shade100.withOpacity(0.40)),
-                side: const MaterialStatePropertyAll(
+                side: const WidgetStatePropertyAll(
                     BorderSide(color: Constants.greyBackgroundColor))),
             child: Text(
               buttonName,

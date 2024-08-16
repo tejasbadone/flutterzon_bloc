@@ -46,9 +46,9 @@ class AdminAnalyticsScreen extends StatelessWidget {
                     height: MediaQuery.sizeOf(context).height * 0.7,
                     width: double.infinity,
                     child: SfCartesianChart(
-                      primaryXAxis: CategoryAxis(
+                      primaryXAxis: const CategoryAxis(
                         labelRotation: 270,
-                        majorGridLines: const MajorGridLines(width: 0),
+                        majorGridLines: MajorGridLines(width: 0),
                       ),
                       primaryYAxis: NumericAxis(
                         isVisible: true,

@@ -46,12 +46,12 @@ dependencies:
   go_router: ^12.1.1
   http: ^1.1.0
   hydrated_bloc: ^9.1.2
-  intl: ^0.18.0
+  intl: ^0.19.0
   path_provider: ^2.1.1
   pay: ^1.1.2
   rename: ^3.0.1
   shared_preferences: ^2.2.2
-  syncfusion_flutter_charts: ^23.1.42
+  syncfusion_flutter_charts: ^26.2.9
 
 dev_dependencies:
   flutter_lints: ^2.0.0

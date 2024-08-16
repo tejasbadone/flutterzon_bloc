@@ -141,7 +141,7 @@ class _AdminAddProductScreenState extends State<AdminAddProductScreen> {
                                       .read<AdminAddProductsImagesBloc>()
                                       .add(SelectImagesPressedE()),
                                   style: const ButtonStyle(
-                                      side: MaterialStatePropertyAll(BorderSide(
+                                      side: WidgetStatePropertyAll(BorderSide(
                                           width: 1,
                                           color: Constants.secondaryColor))),
                                   icon: const Icon(Icons.add),
@@ -290,6 +290,7 @@ class _AdminAddProductScreenState extends State<AdminAddProductScreen> {
                                 }
                               } catch (e) {
                                 if (mounted) {
+                                  // ignore: use_build_context_synchronously
                                   showSnackBar(context,
                                       'Please fill the form correctly!');
                                 }
